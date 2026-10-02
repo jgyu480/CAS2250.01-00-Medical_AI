@@ -1,0 +1,3 @@
+[submodule "external/benchmark-ssl-pathology"]
+	path = external/benchmark-ssl-pathology
+	url = https://github.com/lunit-io/benchmark-ssl-pathology.git

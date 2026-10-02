@@ -1,0 +1,5 @@
+
+# Downloaded datasets and model weights
+/data/
+/weights/
+.DS_Store
