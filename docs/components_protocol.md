@@ -28,3 +28,12 @@ M0~M3 정보 교환은 이후 단계에서 구현한다.
 https://github.com/lunit-io/benchmark-ssl-pathology
 https://arxiv.org/abs/2303.13110
 https://arxiv.org/abs/1802.02611
+
+
+## 정규화 설정 업데이트
+
+RGB를 0~1로 바꾸고 Lunit 공식 릴리스의 평균·표준편차로 정규화한다.
+RGB mean: [0.70322989, 0.53606487, 0.66096631]
+RGB std: [0.21716536, 0.26081574, 0.20723464]
+모든 모델에 동일하게 적용한다.
+출처: https://github.com/lunit-io/benchmark-ssl-pathology/releases/tag/pretrained-weights

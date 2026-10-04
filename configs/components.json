@@ -13,16 +13,17 @@
   "decoder_low_channels": 48,
   "normalization": {
     "mean": [
-      0.485,
-      0.456,
-      0.406
+      0.70322989,
+      0.53606487,
+      0.66096631
     ],
     "std": [
-      0.229,
-      0.224,
-      0.225
+      0.21716536,
+      0.26081574,
+      0.20723464
     ],
-    "status": "project_common_choice_not_verified_pretraining_recipe"
+    "status": "verified_official_release",
+    "source": "https://github.com/lunit-io/benchmark-ssl-pathology/releases/tag/pretrained-weights"
   },
   "cell_loss_classes": [
     1,

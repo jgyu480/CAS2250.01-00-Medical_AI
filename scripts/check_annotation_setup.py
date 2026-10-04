@@ -124,18 +124,28 @@ def main():
         f'reviewed={reviewed_done}/{len(selection)}'
     )
 
-    progress = {
-        'total_steps': 10,
-        'completed_steps': [1, 2, 3],
-        'current_step': 4,
-        'status': 'annotation_preparation_complete',
-        'training_started': False,
-        'annotation': {
-            'selected': len(selection),
-            'draft_complete': draft_done,
-            'reviewed_complete': reviewed_done
-        }
-    }
+    # 어노테이션 검사 시 기존 단계 진행률을 보존한다.
+    progress_path = ROOT / 'docs/progress.json'
+    progress = (
+        json.loads(progress_path.read_text(encoding='utf-8'))
+        if progress_path.exists() else {}
+    )
+    completed = set(progress.get('completed_steps', []))
+    later_stage = (
+        any(step > 3 for step in completed)
+        or progress.get('current_step', 1) > 4
+    )
+    progress.setdefault('total_steps', 10)
+    progress['completed_steps'] = sorted(completed | {1, 2, 3})
+    progress['current_step'] = max(progress.get('current_step', 1), 4)
+    if not later_stage:
+        progress['status'] = 'annotation_preparation_complete'
+    progress.setdefault('training_started', False)
+    progress.setdefault('annotation', {}).update(
+        selected=len(selection),
+        draft_complete=draft_done,
+        reviewed_complete=reviewed_done
+    )
     previous_path = ROOT / 'docs/progress.json'
     previous = json.loads(previous_path.read_text(encoding='utf-8')) if previous_path.exists() else {}
     progress['completed_steps'] = sorted(set(previous.get('completed_steps', [])) | {1, 2, 3})
