@@ -1,0 +1,18 @@
+{
+  "total_steps": 10,
+  "completed_steps": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "current_step": 6,
+  "status": "ssl_and_components_checks_passed",
+  "training_started": false,
+  "annotation": {
+    "selected": 24,
+    "draft_complete": 0,
+    "reviewed_complete": 0
+  }
+}

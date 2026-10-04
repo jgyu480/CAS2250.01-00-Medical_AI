@@ -1,0 +1,23 @@
+{
+  "model": "M1",
+  "status": "not_implemented",
+  "common_config": "configs/common.json",
+  "tissue_to_cell": {
+    "after_aspp": "global_cross_attention",
+    "after_decoder": "coordinate_crop"
+  },
+  "cell_to_tissue": {
+    "after_encoder": "none",
+    "coverage_mask": false
+  },
+  "attention": {
+    "query": "cell",
+    "key_value": "full_tissue",
+    "token_grid": [
+      16,
+      16
+    ],
+    "use_coordinates": true
+  },
+  "gradient_method": "sum"
+}

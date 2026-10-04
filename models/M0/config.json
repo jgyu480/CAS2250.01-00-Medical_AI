@@ -1,0 +1,15 @@
+{
+  "model": "M0",
+  "status": "not_implemented",
+  "common_config": "configs/common.json",
+  "tissue_to_cell": {
+    "after_aspp": "coordinate_crop",
+    "after_decoder": "coordinate_crop"
+  },
+  "cell_to_tissue": {
+    "after_encoder": "coordinate_place",
+    "coverage_mask": true
+  },
+  "attention": null,
+  "gradient_method": "sum"
+}

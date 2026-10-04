@@ -1,0 +1,15 @@
+{
+  "seed": 42,
+  "per_organ": 4,
+  "selection_csv": "annotations/selection.csv",
+  "tracking_csv": "annotations/tracking.csv",
+  "draft_root": "annotations/manual/draft",
+  "reviewed_root": "annotations/manual/reviewed",
+  "training_policy": {
+    "main_experiment": "reviewed_overrides_official_train",
+    "annotation_quality_experiment": "draft_overrides_official_train",
+    "unselected_train_labels": "official",
+    "require_all_selected_pairs_complete": true,
+    "allow_partial_cell_annotation": false
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "cell_radius_px": 7,
+  "cell_target_classes": {"empty": 0, "BC": 1, "TC": 2},
+  "tissue_target_classes": {"BG": 0, "CA": 1, "UNK": 2},
+  "tissue_ignore_index": 2,
+  "disk_overlap_rule": "nearest_center_then_sorted_coordinates",
+  "geometric_augmentation": ["horizontal_flip", "quarter_turn_rotation"],
+  "photometric_augmentation": "deferred_to_training_configuration",
+  "training_started": false
+}

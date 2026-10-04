@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "paths": {
+    "data_root": "data/raw/ocelot2023_v1.0.1",
+    "ssl_weights": "weights/bt_rn50_ep200.torch",
+    "outputs": "outputs"
+  },
+  "backbone": {
+    "name": "resnet50",
+    "ssl_method": "BarlowTwins",
+    "output_stride": 16,
+    "branches": "separate_parameters_same_ssl_initialization"
+  },
+  "tasks": {
+    "cell_classes": {
+      "empty_pixel": 0,
+      "BC": 1,
+      "TC": 2
+    },
+    "tissue_classes": {
+      "BG": 1,
+      "CA": 2,
+      "UNK": 255
+    },
+    "tissue_output_channels": 3,
+    "ignore_tissue_unknown": true,
+    "cell_target": "fixed_radius_disks",
+    "cell_target_radius_px": 7,
+    "tissue_target_classes": {
+      "BG": 0,
+      "CA": 1,
+      "UNK": 2
+    },
+    "tissue_ignore_index": 2
+  },
+  "training_plan": {
+    "epochs": 50,
+    "encoder_freeze_epochs": 3,
+    "optimizer": "AdamW",
+    "encoder_lr": 1e-05,
+    "new_modules_lr": 0.0001,
+    "scheduler": "cosine",
+    "tissue_loss_weight": 1.0,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "batch_size": null,
+    "gradient_accumulation_steps": null,
+    "checkpoint_selection": "validation_cell_mean_f1"
+  },
+  "execution": {
+    "device": "auto",
+    "training_authorized": false
+  }
+}

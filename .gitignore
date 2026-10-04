@@ -3,3 +3,12 @@
 /data/
 /weights/
 .DS_Store
+
+# Local files
+/outputs/
+/.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+/.env
+/.env.*
