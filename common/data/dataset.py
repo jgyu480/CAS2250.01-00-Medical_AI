@@ -11,6 +11,12 @@ from .labels import tissue_to_target
 from .geometry import cell_box
 from .targets import read_points, points_to_target
 from .augment import transform_pair
+from .photometric import (
+    load_augmentation, load_stain_stats, sample_photometric, apply_photometric
+)
+from .annotators import (
+    parse_label_source, load_annotation_config, label_paths, require_complete
+)
 
 
 def read_table(path):
@@ -23,13 +29,21 @@ def read_table(path):
 
 class OcelotDataset:
     def __init__(
-        self, split='train', label_source='official', augment=False, seed=42
+        self, split='train', label_source='official', augment=False, seed=42,
+        augmentation='default'
     ):
         if split not in ('train', 'val', 'test'):
             raise ValueError('split은 train/val/test 중 하나입니다.')
 
-        if label_source not in ('official', 'draft', 'reviewed'):
-            raise ValueError('label_source는 official/draft/reviewed입니다.')
+        # annotator:<작성자ID>는 해당 작성자가 독립 작성한 라벨을 쓴다.
+        self.annotator = parse_label_source(label_source)
+        if (
+            label_source not in ('official', 'draft', 'reviewed')
+            and self.annotator is None
+        ):
+            raise ValueError(
+                'label_source는 official/draft/reviewed/annotator:<ID>입니다.'
+            )
 
         if split != 'train' and (augment or label_source != 'official'):
             raise ValueError('val/test는 공식 라벨과 원본 사진만 사용합니다.')
@@ -69,9 +83,33 @@ class OcelotDataset:
             raise ValueError('학습용 클래스 설정이 공통 정의와 다릅니다.')
 
         self.label_source, self.augment = label_source, augment
+
+        # augment=True일 때 configs/augmentation.json의 preset을 사용한다.
+        self.aug_config, self.stain_stats = None, None
+        if augment:
+            self.aug_config = load_augmentation(augmentation)
+            if self.aug_config['randstainna']['enabled']:
+                self.stain_stats = load_stain_stats(
+                    self.aug_config['randstainna']['stats_file']
+                )
         self.seed, self.epoch, self.manual_ids = seed, 0, set()
 
-        if label_source != 'official':
+        if self.annotator is not None:
+            annotation = load_annotation_config()
+            selected = read_table(PROJECT_ROOT / annotation['selection_csv'])
+            self.manual_ids = {row['pair_id'] for row in selected}
+
+            if (
+                len(selected) != annotation['per_organ'] * 6
+                or len(self.manual_ids) != len(selected)
+                or not self.manual_ids <= {r['pair_id'] for r in self.rows}
+            ):
+                raise ValueError('직접 어노테이션 목록이 manifest와 다릅니다.')
+
+            # 선택한 24쌍 전체가 완료돼야 한다. 공식 라벨로 대체하지 않는다.
+            require_complete(self.annotator, self.manual_ids, annotation)
+
+        elif label_source != 'official':
             annotation = json.loads(
                 (PROJECT_ROOT / 'configs/annotation.json').read_text(
                     encoding='utf-8'
@@ -153,7 +191,11 @@ class OcelotDataset:
         used_source = 'official'
 
         # 직접 라벨 대상만 교체하고 나머지는 공식 라벨을 사용한다.
-        if pair_id in self.manual_ids:
+        if pair_id in self.manual_ids and self.annotator is not None:
+            manual = label_paths(self.annotator, pair_id)
+            cell_path, mask_path = manual['cell'], manual['tissue']
+            used_source = self.label_source
+        elif pair_id in self.manual_ids:
             cell_path = self.manual_root / 'cell' / f'{pair_id}.csv'
             mask_path = self.manual_root / 'tissue' / f'{pair_id}.png'
             used_source = self.label_source
@@ -166,14 +208,33 @@ class OcelotDataset:
             raise ValueError(f'{pair_id}: 조직 라벨 크기가 다릅니다.')
 
         box = cell_box(record)
-        flip, turns = False, 0
+        flip, turns, color = False, 0, {}
 
         if self.augment:
             rng = np.random.default_rng(
                 np.random.SeedSequence([self.seed, self.epoch, index])
             )
+            # 기존 뒤집기·회전 난수 순서를 유지한다. 꺼진 증강도 난수는 소모한다.
             flip = bool(rng.integers(2))
             turns = int(rng.integers(4))
+            geometric = self.aug_config['geometric']
+            flip = flip and geometric['horizontal_flip']
+            turns = turns if geometric['quarter_turn_rotation'] else 0
+
+            # 색 증강은 사진만 바꾼다. 점·마스크·위치 상자는 그대로다.
+            order = self.aug_config['order']
+            color['cell'] = sample_photometric(
+                rng, self.aug_config, self.stain_stats
+            )
+            color['tissue'] = (
+                color['cell']
+                if self.aug_config['shared_photometric_between_fovs']
+                else sample_photometric(rng, self.aug_config, self.stain_stats)
+            )
+            images = [
+                apply_photometric(images[0], color['cell'], order),
+                apply_photometric(images[1], color['tissue'], order)
+            ]
 
         cell, tissue, tissue_target, points, box = transform_pair(
             *images, tissue_target, points, box, flip, turns
@@ -191,5 +252,9 @@ class OcelotDataset:
             tissue_target=tissue_target,
             cell_box=box,
             label_source=used_source,
-            transform=dict(horizontal_flip=flip, quarter_turns=turns)
+            transform=dict(
+                horizontal_flip=flip, quarter_turns=turns,
+                preset=self.aug_config['preset'] if self.augment else None,
+                photometric=color
+            )
         )
