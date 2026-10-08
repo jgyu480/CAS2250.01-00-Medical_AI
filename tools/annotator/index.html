@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OCELOT 라벨링 도구</title>
+<style>
+  :root {
+    --bg: #f4f2ee; --panel: #ffffff; --ink: #1d1d1f; --muted: #6b6b70;
+    --line: #dcd8d0; --accent: #1f5fbf; --warn: #b4441c;
+    --bc: #ffd400; --tc: #1e78ff; --ca: #00c853; --unk: #e040fb; --note: #ff7a00;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink);
+    font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+  body { display: grid; grid-template-columns: 300px 1fr; height: 100vh; }
+  aside { background: var(--panel); border-right: 1px solid var(--line); overflow-y: auto; padding: 12px 14px 40px; }
+  main { position: relative; overflow: hidden; background: #2a2a2c; }
+  canvas#view { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; }
+  h1 { font-size: 15px; margin: 0 0 2px; }
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 16px 0 6px; }
+  .sub { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+  label.row, .row { display: flex; align-items: center; gap: 6px; margin: 4px 0; }
+  input[type=text] { flex: 1; padding: 4px 6px; border: 1px solid var(--line); border-radius: 4px; font: inherit; }
+  button, .filebtn { font: inherit; padding: 5px 9px; border: 1px solid var(--line); border-radius: 5px;
+    background: #fafafa; cursor: pointer; color: var(--ink); }
+  button:hover, .filebtn:hover { border-color: #aaa; }
+  button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .filebtn input { display: none; }
+  .seg { display: flex; gap: 0; }
+  .seg button { border-radius: 0; flex: 1; }
+  .seg button:first-child { border-radius: 5px 0 0 5px; }
+  .seg button:last-child { border-radius: 0 5px 5px 0; }
+  .sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; margin-right: 3px; }
+  .stat { font-variant-numeric: tabular-nums; }
+  .warn { color: var(--warn); }
+  #context { width: 100%; aspect-ratio: 1; display: block; border: 1px solid var(--line); border-radius: 4px; background: #eee; }
+  #notes li { margin: 3px 0; }
+  #notes button { padding: 0 5px; font-size: 11px; }
+  kbd { font: 11px ui-monospace, monospace; background: #eee; border: 1px solid #ccc; border-radius: 3px; padding: 0 4px; color: #333; }
+  button.on kbd { background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.45); color: #fff; }
+  button { white-space: nowrap; }
+  .row { flex-wrap: wrap; }
+  .keys { color: var(--muted); font-size: 12px; }
+  .keys div { margin: 2px 0; }
+  #toast { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); background: rgba(0,0,0,.8);
+    color: #fff; padding: 6px 12px; border-radius: 6px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  #hud { position: absolute; left: 10px; top: 8px; color: #fff; background: rgba(0,0,0,.55); padding: 4px 8px;
+    border-radius: 5px; font-size: 12px; pointer-events: none; }
+  #empty { position: absolute; inset: 0; display: grid; place-items: center; color: #ccc; text-align: center; padding: 20px; }
+  details summary { cursor: pointer; color: var(--muted); }
+  input[type=range] { flex: 1; }
+</style>
+</head>
+<body>
+<aside>
+  <h1>OCELOT 라벨링 도구</h1>
+  <div class="sub">세포 점(TC/BC)과 조직 마스크(CA/BG/UNK)를 공식 형식으로 저장합니다. 공식 정답은 열지 마세요.</div>
+
+  <h2>1. 작업 정보</h2>
+  <label class="row">작성자 <input type="text" id="annotator" placeholder="jinho 또는 sangwoo"></label>
+  <div class="row">
+    <label class="filebtn">작업 폴더 열기<input type="file" id="folder" webkitdirectory multiple></label>
+    <label class="filebtn">파일 선택<input type="file" id="files" multiple accept=".jpg,.jpeg,.png,.json,.csv"></label>
+  </div>
+  <div class="sub" id="pairinfo">outputs/annotation_packets/&lt;샘플ID&gt; 폴더를 여세요.</div>
+  <label class="filebtn">이어서 하기: 저장했던 라벨 불러오기<input type="file" id="resume" multiple accept=".csv,.png"></label>
+
+  <h2>2. 작업</h2>
+  <div class="seg" id="modeSeg">
+    <button data-mode="cell" class="on">세포 (점)</button>
+    <button data-mode="tissue">조직 (마스크)</button>
+  </div>
+
+  <div id="cellTools">
+    <div class="seg" style="margin-top:8px">
+      <button data-cls="2" class="on"><span class="sw" style="background:var(--tc)"></span>TC 암세포 <kbd>2</kbd></button>
+      <button data-cls="1"><span class="sw" style="background:var(--bc)"></span>BC 배경세포 <kbd>1</kbd></button>
+    </div>
+    <label class="row"><input type="checkbox" id="showMaskInCell" checked> 세포 사진 위에 내 조직 마스크 표시</label>
+    <h2>조직 맥락 (빨간 상자 = 지금 보는 세포 사진)</h2>
+    <canvas id="context" width="300" height="300"></canvas>
+  </div>
+
+  <div id="tissueTools" hidden>
+    <div class="seg" style="margin-top:8px">
+      <button data-tcls="2" class="on"><span class="sw" style="background:var(--ca)"></span>CA <kbd>2</kbd></button>
+      <button data-tcls="1"><span class="sw" style="background:#999"></span>BG <kbd>1</kbd></button>
+      <button data-tcls="255"><span class="sw" style="background:var(--unk)"></span>UNK <kbd>3</kbd></button>
+    </div>
+    <div class="seg" style="margin-top:6px">
+      <button data-tool="polygon" class="on">다각형 <kbd>P</kbd></button>
+      <button data-tool="brush">붓 <kbd>B</kbd></button>
+    </div>
+    <label class="row">붓 크기 <input type="range" id="brush" min="2" max="80" value="16"><span id="brushVal" class="stat">16</span>px</label>
+    <div class="sub">시작 상태는 전부 BG입니다. 암 영역을 CA로, 판정이 불가능한 곳(흐림·접힘·이물질)만 UNK로 칠하세요.</div>
+  </div>
+
+  <label class="row">라벨 투명도 <input type="range" id="opacity" min="0" max="100" value="45"></label>
+  <div class="row">
+    <button id="noteBtn" title="판단이 어려운 위치에 이유를 남깁니다">? 메모 <kbd>N</kbd></button>
+    <button id="undo">되돌리기</button>
+    <button id="redo">다시</button>
+    <button id="fit">맞춤 <kbd>F</kbd></button>
+  </div>
+
+  <h2>3. 현황</h2>
+  <div id="stats" class="stat">-</div>
+
+  <h2>판단이 어려웠던 위치</h2>
+  <ul id="notes" style="padding-left:16px;margin:0"></ul>
+
+  <h2>4. 저장</h2>
+  <div class="row"><button class="primary" id="saveAll">모두 저장</button><button id="pickDir">저장 폴더 지정</button></div>
+  <div class="sub" id="saveinfo">저장 폴더를 지정하지 않으면 다운로드 폴더에 &lt;ID&gt;.csv, &lt;ID&gt;.png, &lt;ID&gt;_notes.csv로 저장됩니다.
+  저장 후 <code>python scripts/import_annotation.py --annotator &lt;ID&gt; --from-dir &lt;폴더&gt;</code>로 가져옵니다.</div>
+
+  <h2>조작법</h2>
+  <div class="keys">
+    <div>휠: 확대/축소 · <kbd>Space</kbd>+드래그 또는 가운데 버튼: 이동</div>
+    <div>세포: 클릭=점 추가(점 위 클릭=현재 클래스로 변경) · 드래그=점 이동 · 우클릭=삭제 · <kbd>Q</kbd> TC↔BC</div>
+    <div>조직 다각형: 클릭으로 꼭짓점 · 더블클릭/<kbd>Enter</kbd> 채우기 · <kbd>Backspace</kbd> 마지막 점 · <kbd>Esc</kbd> 취소</div>
+    <div>조직 붓: 드래그로 칠하기 · <kbd>[</kbd> <kbd>]</kbd> 크기</div>
+    <div><kbd>H</kbd> 라벨 숨기기 · <kbd>Tab</kbd> 세포/조직 전환 · <kbd>Ctrl/⌘+Z</kbd> 되돌리기 · <kbd>Ctrl/⌘+S</kbd> 저장</div>
+  </div>
+
+  <details style="margin-top:12px"><summary>분류 기준 요약 (수업 자료)</summary>
+    <div class="keys">
+      <div><b>TC</b>: 핵이 크고 모양이 불규칙(다형성), 매우 짙은 보라(과염색), 핵/세포질 비율 큼, 둥지·샘 구조로 밀집.</div>
+      <div><b>BC</b>: 림프구(작고 둥근 짙은 핵), 섬유아세포(길쭉한 방추형), 내피세포(납작), 대식세포·정상 상피.</div>
+      <div><b>CA</b>: 종양 세포가 밀집한 암 조직 실질. <b>BG</b>: 정상 상피·간질·결합조직·림프·지방·혈관.</div>
+      <div><b>UNK</b>: 흐림·접힘·이물질 등 판정 불가. 작업하지 않은 곳을 UNK로 두지 않습니다.</div>
+      <div>판단이 어려운 세포를 자동으로 BC로 정하지 말고 <kbd>N</kbd> 메모로 이유를 남기세요.</div>
+    </div>
+  </details>
+</aside>
+
+<main>
+  <canvas id="view"></canvas>
+  <div id="empty">작업 폴더를 열면 사진이 표시됩니다.<br>(cell.jpg, tissue.jpg, metadata.json)</div>
+  <div id="hud" hidden></div>
+  <div id="toast"></div>
+</main>
+
+<script>
+'use strict';
+const SIZE = 1024;
+const COLORS = { 1: [255, 212, 0], 2: [30, 120, 255] };          // BC, TC
+const MASK_COLORS = { 2: [0, 200, 83], 255: [224, 64, 251] };    // CA, UNK (BG는 투명)
+
+const S = {
+  pair: null, cellImg: null, tissueImg: null, box: null,
+  points: [], notes: [], mask: new Uint8Array(SIZE * SIZE).fill(1),
+  mode: 'cell', cls: 2, tcls: 2, tool: 'polygon', brush: 16, opacity: 0.45,
+  showLabels: true, noteMode: false, poly: [], dirHandle: null,
+  view: { scale: 1, x: 0, y: 0 }, undo: [], redo: [], dirty: false,
+};
+
+const $ = (id) => document.getElementById(id);
+const canvas = $('view'), ctx = canvas.getContext('2d');
+const maskCanvas = document.createElement('canvas');
+maskCanvas.width = maskCanvas.height = SIZE;
+const maskCtx = maskCanvas.getContext('2d');
+const maskImage = maskCtx.createImageData(SIZE, SIZE);
+
+function toast(text) {
+  const t = $('toast'); t.textContent = text; t.style.opacity = 1;
+  clearTimeout(toast.timer); toast.timer = setTimeout(() => (t.style.opacity = 0), 2200);
+}
+
+/* ------------------------------------------------------------ 마스크 그리기 */
+function refreshMask(x0 = 0, y0 = 0, x1 = SIZE, y1 = SIZE) {
+  x0 = Math.max(0, x0 | 0); y0 = Math.max(0, y0 | 0);
+  x1 = Math.min(SIZE, Math.ceil(x1)); y1 = Math.min(SIZE, Math.ceil(y1));
+  const d = maskImage.data;
+  for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) {
+    const i = y * SIZE + x, c = MASK_COLORS[S.mask[i]], o = i * 4;
+    if (c) { d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; d[o + 3] = 255; } else d[o + 3] = 0;
+  }
+  maskCtx.putImageData(maskImage, 0, 0, x0, y0, x1 - x0, y1 - y0);
+}
+
+function paintCircle(cx, cy, r, value) {
+  const r2 = r * r;
+  for (let y = Math.max(0, Math.floor(cy - r)); y <= Math.min(SIZE - 1, Math.ceil(cy + r)); y++)
+    for (let x = Math.max(0, Math.floor(cx - r)); x <= Math.min(SIZE - 1, Math.ceil(cx + r)); x++)
+      if ((x + 0.5 - cx) ** 2 + (y + 0.5 - cy) ** 2 <= r2) S.mask[y * SIZE + x] = value;
+  refreshMask(cx - r - 1, cy - r - 1, cx + r + 2, cy + r + 2);
+}
+
+function paintLine(a, b, r, value) {
+  const steps = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) / (r / 3)));
+  for (let k = 1; k <= steps; k++)
+    paintCircle(a.x + (b.x - a.x) * k / steps, a.y + (b.y - a.y) * k / steps, r, value);
+}
+
+function fillPolygon(poly, value) {
+  const c = document.createElement('canvas'); c.width = c.height = SIZE;
+  const g = c.getContext('2d');
+  g.beginPath(); poly.forEach((p, i) => (i ? g.lineTo(p.x, p.y) : g.moveTo(p.x, p.y)));
+  g.closePath(); g.fillStyle = '#000'; g.fill();
+  const a = g.getImageData(0, 0, SIZE, SIZE).data;
+  let n = 0;
+  for (let i = 0; i < SIZE * SIZE; i++) if (a[i * 4 + 3] >= 128) { S.mask[i] = value; n++; }
+  const xs = poly.map(p => p.x), ys = poly.map(p => p.y);
+  refreshMask(Math.min(...xs) - 2, Math.min(...ys) - 2, Math.max(...xs) + 3, Math.max(...ys) + 3);
+  return n;
+}
+
+/* ------------------------------------------------------------ 되돌리기 */
+function snapshot() {
+  return S.mode === 'cell'
+    ? { mode: 'cell', points: S.points.map(p => ({ ...p })), notes: S.notes.map(n => ({ ...n })) }
+    : { mode: 'tissue', mask: S.mask.slice(), notes: S.notes.map(n => ({ ...n })) };
+}
+function pushUndo() {
+  S.undo.push(snapshot()); if (S.undo.length > 40) S.undo.shift(); S.redo = []; markDirty();
+}
+function restore(snap) {
+  if (snap.points) S.points = snap.points;
+  if (snap.mask) { S.mask = snap.mask; refreshMask(); }
+  S.notes = snap.notes;
+}
+function undo(redo = false) {
+  const from = redo ? S.redo : S.undo, to = redo ? S.undo : S.redo;
+  if (!from.length) return;
+  const snap = from.pop();
+  const cur = snap.mode === 'cell'
+    ? { mode: 'cell', points: S.points, notes: S.notes }
+    : { mode: 'tissue', mask: S.mask, notes: S.notes };
+  to.push(cur); restore(snap);
+  if (snap.mode !== S.mode) setMode(snap.mode);
+  markDirty(); render();
+}
+
+/* ------------------------------------------------------------ 보기 변환 */
+function screenToImage(ev) {
+  const r = canvas.getBoundingClientRect();
+  return { x: (ev.clientX - r.left - S.view.x) / S.view.scale, y: (ev.clientY - r.top - S.view.y) / S.view.scale };
+}
+function fit() {
+  const r = canvas.getBoundingClientRect();
+  S.view.scale = Math.min(r.width, r.height) / SIZE * 0.96;
+  S.view.x = (r.width - SIZE * S.view.scale) / 2;
+  S.view.y = (r.height - SIZE * S.view.scale) / 2;
+  render();
+}
+function resize() {
+  const r = canvas.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  canvas.width = r.width * dpr; canvas.height = r.height * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); render();
+}
+
+/* ------------------------------------------------------------ 화면 그리기 */
+function render() {
+  const r = canvas.getBoundingClientRect();
+  ctx.clearRect(0, 0, r.width, r.height);
+  const img = S.mode === 'cell' ? S.cellImg : S.tissueImg;
+  $('empty').hidden = !!img;
+  $('hud').hidden = !img;
+  if (!img) return;
+
+  const { scale, x, y } = S.view;
+  ctx.save();
+  ctx.translate(x, y); ctx.scale(scale, scale);
+  ctx.imageSmoothingEnabled = scale < 2;
+  ctx.drawImage(img, 0, 0, SIZE, SIZE);
+
+  if (S.showLabels) {
+    ctx.globalAlpha = S.opacity;
+    if (S.mode === 'tissue') ctx.drawImage(maskCanvas, 0, 0);
+    else if ($('showMaskInCell').checked && S.box) {
+      const [bx0, by0, bx1, by1] = S.box.map(v => v * SIZE);
+      ctx.globalAlpha = S.opacity * 0.6;
+      ctx.drawImage(maskCanvas, bx0, by0, bx1 - bx0, by1 - by0, 0, 0, SIZE, SIZE);
+    }
+    ctx.globalAlpha = 1;
+  }
+  if (S.mode === 'tissue' && S.box) {
+    const [bx0, by0, bx1, by1] = S.box.map(v => v * SIZE);
+    ctx.strokeStyle = '#ff2a2a'; ctx.lineWidth = 2 / scale; ctx.strokeRect(bx0, by0, bx1 - bx0, by1 - by0);
+  }
+  ctx.restore();
+
+  if (S.showLabels && S.mode === 'cell') {
+    const rad = Math.max(2.5, Math.min(7, 3.5 * scale));
+    for (const p of S.points) {
+      const sx = x + (p.x + 0.5) * scale, sy = y + (p.y + 0.5) * scale;
+      ctx.beginPath(); ctx.arc(sx, sy, rad, 0, Math.PI * 2);
+      ctx.fillStyle = `rgb(${COLORS[p.c]})`; ctx.fill();
+      ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(0,0,0,.7)'; ctx.stroke();
+    }
+  }
+  for (const n of S.notes) {
+    if (n.task !== S.mode) continue;
+    const sx = x + (n.x + 0.5) * scale, sy = y + (n.y + 0.5) * scale;
+    ctx.fillStyle = '#ff7a00'; ctx.font = 'bold 16px sans-serif'; ctx.fillText('?', sx - 4, sy - 6);
+    ctx.strokeStyle = '#ff7a00'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(sx, sy, 9, 0, Math.PI * 2); ctx.stroke();
+  }
+  if (S.mode === 'tissue' && S.poly.length) {
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.setLineDash([5, 4]); ctx.beginPath();
+    S.poly.forEach((p, i) => { const sx = x + p.x * scale, sy = y + p.y * scale; i ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy); });
+    if (S.hover) ctx.lineTo(x + S.hover.x * scale, y + S.hover.y * scale);
+    ctx.stroke(); ctx.setLineDash([]);
+    for (const p of S.poly) { ctx.fillStyle = '#fff'; ctx.fillRect(x + p.x * scale - 3, y + p.y * scale - 3, 6, 6); }
+  }
+  if (S.mode === 'tissue' && S.tool === 'brush' && S.hover) {
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.beginPath();
+    ctx.arc(x + S.hover.x * scale, y + S.hover.y * scale, S.brush * scale, 0, Math.PI * 2); ctx.stroke();
+  }
+  const name = { 1: 'BC', 2: 'TC' }[S.cls], tname = { 1: 'BG', 2: 'CA', 255: 'UNK' }[S.tcls];
+  $('hud').textContent = `${S.pair || ''} · ${S.mode === 'cell' ? '세포 · ' + name : '조직 · ' + tname + ' · ' + (S.tool === 'brush' ? '붓' : '다각형')}`
+    + `${S.noteMode ? ' · 메모 모드' : ''} · ${(S.view.scale * 100).toFixed(0)}%`;
+  renderContext(); renderStats();
+}
+
+function renderContext() {
+  const c = $('context'), g = c.getContext('2d');
+  g.clearRect(0, 0, c.width, c.height);
+  if (!S.tissueImg) return;
+  g.drawImage(S.tissueImg, 0, 0, c.width, c.height);
+  g.globalAlpha = 0.35; g.drawImage(maskCanvas, 0, 0, c.width, c.height); g.globalAlpha = 1;
+  if (S.box) {
+    const k = c.width; g.strokeStyle = '#ff2a2a'; g.lineWidth = 2;
+    g.strokeRect(S.box[0] * k, S.box[1] * k, (S.box[2] - S.box[0]) * k, (S.box[3] - S.box[1]) * k);
+  }
+}
+
+function maskShares() {
+  let ca = 0, unk = 0;
+  for (let i = 0; i < S.mask.length; i++) { if (S.mask[i] === 2) ca++; else if (S.mask[i] === 255) unk++; }
+  return { ca: ca / S.mask.length, unk: unk / S.mask.length };
+}
+let statsTimer;
+function renderStats() {
+  clearTimeout(statsTimer);
+  statsTimer = setTimeout(() => {
+    const tc = S.points.filter(p => p.c === 2).length, bc = S.points.length - tc;
+    const m = maskShares();
+    $('stats').innerHTML =
+      `세포 ${S.points.length}개 (TC ${tc} / BC ${bc})<br>` +
+      `조직 CA ${(m.ca * 100).toFixed(1)}% · UNK <span class="${m.unk > .3 ? 'warn' : ''}">${(m.unk * 100).toFixed(1)}%</span> · BG ${((1 - m.ca - m.unk) * 100).toFixed(1)}%<br>` +
+      `메모 ${S.notes.length}개 ${S.dirty ? '<span class="warn">· 저장 안 됨</span>' : ''}`;
+    $('notes').innerHTML = S.notes.map((n, i) =>
+      `<li>[${n.task === 'cell' ? '세포' : '조직'} ${n.x},${n.y}] ${escapeHtml(n.comment)} <button data-goto="${i}">보기</button> <button data-del="${i}">삭제</button></li>`).join('');
+  }, 60);
+}
+function escapeHtml(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+/* ------------------------------------------------------------ 입력 */
+let drag = null, spaceDown = false;
+
+function nearestPoint(pt, maxScreen = 9) {
+  let best = -1, bd = (maxScreen / S.view.scale) ** 2;
+  S.points.forEach((p, i) => { const d = (p.x + 0.5 - pt.x) ** 2 + (p.y + 0.5 - pt.y) ** 2; if (d < bd) { bd = d; best = i; } });
+  return best;
+}
+const clampPix = (v) => Math.min(SIZE - 1, Math.max(0, Math.floor(v)));
+
+canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+canvas.addEventListener('mousedown', (ev) => {
+  if (!(S.mode === 'cell' ? S.cellImg : S.tissueImg)) return;
+  const pt = screenToImage(ev);
+  if (ev.button === 1 || spaceDown) { drag = { kind: 'pan', sx: ev.clientX, sy: ev.clientY, vx: S.view.x, vy: S.view.y }; return; }
+  if (S.noteMode && ev.button === 0) {
+    const comment = prompt('판단이 어려운 이유 (예: 핵이 크지만 고립돼 TC/BC 애매)');
+    if (comment) { pushUndo(); S.notes.push({ x: clampPix(pt.x), y: clampPix(pt.y), task: S.mode, comment }); }
+    S.noteMode = false; $('noteBtn').classList.remove('on'); render(); return;
+  }
+  if (S.mode === 'cell') {
+    const i = nearestPoint(pt);
+    if (ev.button === 2) { if (i >= 0) { pushUndo(); S.points.splice(i, 1); render(); } return; }
+    if (i >= 0) { pushUndo(); drag = { kind: 'point', i, moved: false }; return; }
+    if (pt.x < 0 || pt.y < 0 || pt.x >= SIZE || pt.y >= SIZE) return;
+    const x = clampPix(pt.x), y = clampPix(pt.y);
+    if (S.points.some(p => p.x === x && p.y === y)) return;
+    pushUndo(); S.points.push({ x, y, c: S.cls }); render();
+  } else if (ev.button === 0) {
+    if (S.tool === 'brush') { pushUndo(); paintCircle(pt.x, pt.y, S.brush, S.tcls); drag = { kind: 'brush', last: pt }; render(); }
+    else { S.poly.push({ x: Math.min(SIZE, Math.max(0, pt.x)), y: Math.min(SIZE, Math.max(0, pt.y)) }); render(); }
+  }
+});
+window.addEventListener('mousemove', (ev) => {
+  if (ev.target === canvas) S.hover = screenToImage(ev);
+  if (!drag) { if (S.mode === 'tissue') render(); return; }
+  if (drag.kind === 'pan') { S.view.x = drag.vx + ev.clientX - drag.sx; S.view.y = drag.vy + ev.clientY - drag.sy; }
+  else if (drag.kind === 'point') {
+    const pt = screenToImage(ev), p = S.points[drag.i];
+    const nx = clampPix(pt.x), ny = clampPix(pt.y);
+    if (nx !== p.x || ny !== p.y) { if (!S.points.some(q => q !== p && q.x === nx && q.y === ny)) { p.x = nx; p.y = ny; drag.moved = true; } }
+  } else if (drag.kind === 'brush') { const pt = screenToImage(ev); paintLine(drag.last, pt, S.brush, S.tcls); drag.last = pt; }
+  render();
+});
+window.addEventListener('mouseup', () => {
+  if (drag && drag.kind === 'point' && !drag.moved) {
+    const p = S.points[drag.i];
+    if (p.c === S.cls) S.undo.pop(); else p.c = S.cls;   // 같은 클래스면 기록 취소
+  }
+  if (drag && drag.kind !== 'pan') markDirty();
+  drag = null; render();
+});
+canvas.addEventListener('dblclick', () => { if (S.mode === 'tissue' && S.tool === 'polygon') closePolygon(); });
+canvas.addEventListener('wheel', (ev) => {
+  ev.preventDefault();
+  const r = canvas.getBoundingClientRect(), mx = ev.clientX - r.left, my = ev.clientY - r.top;
+  const k = Math.exp(-ev.deltaY * 0.0015), ns = Math.min(24, Math.max(0.2, S.view.scale * k));
+  S.view.x = mx - (mx - S.view.x) * ns / S.view.scale; S.view.y = my - (my - S.view.y) * ns / S.view.scale;
+  S.view.scale = ns; render();
+}, { passive: false });
+
+function closePolygon() {
+  // dblclick이 마지막 점을 두 번 추가하므로 같은 점은 하나로 합친다.
+  const poly = S.poly.filter((p, i, a) => !i || Math.hypot(p.x - a[i - 1].x, p.y - a[i - 1].y) > 0.5);
+  if (poly.length >= 3) { pushUndo(); const n = fillPolygon(poly, S.tcls); toast(`${n.toLocaleString()} 픽셀을 칠했습니다`); }
+  S.poly = []; render();
+}
+
+window.addEventListener('keydown', (ev) => {
+  if (ev.target.tagName === 'INPUT' && ev.target.type === 'text') return;
+  const k = ev.key, mod = ev.ctrlKey || ev.metaKey;
+  if (k === ' ') { spaceDown = true; canvas.style.cursor = 'grab'; ev.preventDefault(); return; }
+  if (mod && (k === 'z' || k === 'Z')) { ev.preventDefault(); undo(ev.shiftKey); return; }
+  if (mod && k === 'y') { ev.preventDefault(); undo(true); return; }
+  if (mod && k === 's') { ev.preventDefault(); saveAll(); return; }
+  if (k === 'Tab') { ev.preventDefault(); setMode(S.mode === 'cell' ? 'tissue' : 'cell'); return; }
+  if (k === 'f' || k === 'F') fit();
+  if (k === 'h' || k === 'H') { S.showLabels = !S.showLabels; render(); }
+  if (k === 'n' || k === 'N') toggleNote();
+  if (S.mode === 'cell') {
+    if (k === '1') setCls(1); if (k === '2') setCls(2); if (k === 'q' || k === 'Q') setCls(3 - S.cls);
+  } else {
+    if (k === '1') setTcls(1); if (k === '2') setTcls(2); if (k === '3') setTcls(255);
+    if (k === 'p' || k === 'P') setTool('polygon'); if (k === 'b' || k === 'B') setTool('brush');
+    if (k === '[') setBrush(S.brush - 2); if (k === ']') setBrush(S.brush + 2);
+    if (k === 'Enter') closePolygon();
+    if (k === 'Escape') { S.poly = []; render(); }
+    if (k === 'Backspace' && S.poly.length) { S.poly.pop(); render(); ev.preventDefault(); }
+  }
+});
+window.addEventListener('keyup', (ev) => { if (ev.key === ' ') { spaceDown = false; canvas.style.cursor = 'crosshair'; } });
+
+/* ------------------------------------------------------------ 패널 */
+function setMode(mode) {
+  S.mode = mode; S.poly = [];
+  document.querySelectorAll('#modeSeg button').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
+  $('cellTools').hidden = mode !== 'cell'; $('tissueTools').hidden = mode !== 'tissue'; render();
+}
+function setCls(c) { S.cls = c; document.querySelectorAll('[data-cls]').forEach(b => b.classList.toggle('on', +b.dataset.cls === c)); render(); }
+function setTcls(c) { S.tcls = c; document.querySelectorAll('[data-tcls]').forEach(b => b.classList.toggle('on', +b.dataset.tcls === c)); render(); }
+function setTool(t) { S.tool = t; S.poly = []; document.querySelectorAll('[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t)); render(); }
+function setBrush(v) { S.brush = Math.max(2, Math.min(80, v)); $('brush').value = S.brush; $('brushVal').textContent = S.brush; render(); }
+function toggleNote() { S.noteMode = !S.noteMode; $('noteBtn').classList.toggle('on', S.noteMode); if (S.noteMode) toast('메모할 위치를 클릭하세요'); render(); }
+
+document.querySelectorAll('#modeSeg button').forEach(b => b.onclick = () => setMode(b.dataset.mode));
+document.querySelectorAll('[data-cls]').forEach(b => b.onclick = () => setCls(+b.dataset.cls));
+document.querySelectorAll('[data-tcls]').forEach(b => b.onclick = () => setTcls(+b.dataset.tcls));
+document.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => setTool(b.dataset.tool));
+$('brush').oninput = (e) => setBrush(+e.target.value);
+$('opacity').oninput = (e) => { S.opacity = e.target.value / 100; render(); };
+$('showMaskInCell').onchange = render;
+$('noteBtn').onclick = toggleNote;
+$('undo').onclick = () => undo(false);
+$('redo').onclick = () => undo(true);
+$('fit').onclick = fit;
+$('notes').onclick = (e) => {
+  const del = e.target.dataset.del, go = e.target.dataset.goto;
+  if (del !== undefined) { pushUndo(); S.notes.splice(+del, 1); render(); }
+  if (go !== undefined) {
+    const n = S.notes[+go]; setMode(n.task);
+    const r = canvas.getBoundingClientRect(); S.view.scale = 4;
+    S.view.x = r.width / 2 - n.x * 4; S.view.y = r.height / 2 - n.y * 4; render();
+  }
+};
+const savedName = (() => { try { return localStorage.getItem('ocelot-annotator') || ''; } catch { return ''; } })();
+$('annotator').value = savedName;
+$('annotator').onchange = (e) => { try { localStorage.setItem('ocelot-annotator', e.target.value.trim()); } catch {} };
+
+/* ------------------------------------------------------------ 불러오기 */
+const readText = (f) => f.text();
+function loadImage(file) {
+  return new Promise((res, rej) => {
+    const img = new Image(); img.onload = () => res(img); img.onerror = rej; img.src = URL.createObjectURL(file);
+  });
+}
+function computeBox(meta) {
+  const c = meta.cell, t = meta.tissue;
+  const w = t.x_end - t.x_start, h = t.y_end - t.y_start;
+  return [(c.x_start - t.x_start) / w, (c.y_start - t.y_start) / h, (c.x_end - t.x_start) / w, (c.y_end - t.y_start) / h];
+}
+
+async function openPacket(files) {
+  if (S.dirty && !confirm('저장하지 않은 변경이 있습니다. 새 샘플을 열까요?')) return;
+  const byName = {};
+  for (const f of files) byName[f.name.toLowerCase()] = f;
+  if (!byName['cell.jpg'] || !byName['tissue.jpg']) { alert('cell.jpg와 tissue.jpg가 필요합니다.'); return; }
+  const rel = files[0].webkitRelativePath || '';
+  let pair = rel.split('/').length > 1 ? rel.split('/').slice(-2, -1)[0] : '';
+  if (!/^\d{3}$/.test(pair)) pair = prompt('샘플 ID (세 자리, 예: 224)', pair) || '';
+  if (!/^\d{3}$/.test(pair)) { alert('샘플 ID는 세 자리 숫자입니다.'); return; }
+
+  const [cellImg, tissueImg] = await Promise.all([loadImage(byName['cell.jpg']), loadImage(byName['tissue.jpg'])]);
+  if (cellImg.naturalWidth !== SIZE || tissueImg.naturalWidth !== SIZE) { alert('사진이 1024×1024가 아닙니다.'); return; }
+  S.box = null;
+  if (byName['metadata.json']) { try { S.box = computeBox(JSON.parse(await readText(byName['metadata.json']))); } catch (e) { toast('metadata.json을 읽지 못했습니다'); } }
+
+  Object.assign(S, { pair, cellImg, tissueImg, points: [], notes: [], mask: new Uint8Array(SIZE * SIZE).fill(1), undo: [], redo: [], poly: [], dirty: false });
+  refreshMask();
+  $('pairinfo').innerHTML = `샘플 <b>${pair}</b>${S.box ? ' · 세포 위치 확인됨' : ' · <span class="warn">metadata 없음(위치 상자 미표시)</span>'}`;
+  if (!restoreAutosave()) toast(`${pair} 열림`);
+  // 함께 선택한 기존 라벨 파일이 있으면 이어서 연다.
+  const resume = files.filter(f => /^\d{3}(_notes)?\.(csv|png)$/i.test(f.name));
+  if (resume.length) await loadLabels(resume);
+  setMode('cell'); fit();
+}
+
+async function loadLabels(files) {
+  if (!S.pair) { alert('먼저 작업 폴더를 여세요.'); return; }
+  for (const f of files) {
+    const name = f.name.toLowerCase();
+    if (!name.startsWith(S.pair)) { alert(`${f.name}: 현재 샘플(${S.pair})의 파일이 아닙니다.`); continue; }
+    if (name.endsWith('_notes.csv')) {
+      const rows = (await readText(f)).trim().split(/\r?\n/).slice(1).filter(Boolean);
+      S.notes = rows.map(r => { const [x, y, task, ...c] = parseCsvRow(r); return { x: +x, y: +y, task, comment: c.join(',') }; });
+    } else if (name.endsWith('.csv')) {
+      const rows = (await readText(f)).trim().split(/\r?\n/).filter(Boolean);
+      S.points = rows.map(r => r.split(',').map(Number)).map(([x, y, c]) => ({ x: Math.round(x), y: Math.round(y), c }));
+      if (S.points.some(p => !(p.c === 1 || p.c === 2) || isNaN(p.x))) { alert('세포 CSV 형식이 다릅니다 (x,y,label)'); S.points = []; }
+    } else if (name.endsWith('.png')) {
+      const img = await loadImage(f);
+      const c = document.createElement('canvas'); c.width = c.height = SIZE;
+      const g = c.getContext('2d'); g.drawImage(img, 0, 0);
+      const d = g.getImageData(0, 0, SIZE, SIZE).data, bad = new Set();
+      for (let i = 0; i < SIZE * SIZE; i++) { const v = d[i * 4]; if (v === 1 || v === 2 || v === 255) S.mask[i] = v; else bad.add(v); }
+      if (bad.size) alert(`마스크에 예상 밖 값이 있습니다: ${[...bad].slice(0, 5)}`);
+      refreshMask();
+    }
+  }
+  S.undo = []; S.redo = []; S.dirty = false; toast('저장했던 라벨을 불러왔습니다'); render();
+}
+function parseCsvRow(row) {
+  const out = []; let cur = '', q = false;
+  for (let i = 0; i < row.length; i++) {
+    const ch = row[i];
+    if (q) { if (ch === '"' && row[i + 1] === '"') { cur += '"'; i++; } else if (ch === '"') q = false; else cur += ch; }
+    else if (ch === '"') q = true; else if (ch === ',') { out.push(cur); cur = ''; } else cur += ch;
+  }
+  out.push(cur); return out;
+}
+
+$('folder').onchange = (e) => { openPacket([...e.target.files]); e.target.value = ''; };
+$('files').onchange = (e) => { openPacket([...e.target.files]); e.target.value = ''; };
+$('resume').onchange = (e) => { loadLabels([...e.target.files]); e.target.value = ''; };
+
+/* ------------------------------------------------------------ 자동 임시 저장 */
+function rle(mask) { const out = []; let v = mask[0], n = 0; for (const x of mask) { if (x === v) n++; else { out.push(v, n); v = x; n = 1; } } out.push(v, n); return out; }
+function unrle(runs) { const m = new Uint8Array(SIZE * SIZE); let o = 0; for (let i = 0; i < runs.length; i += 2) { m.fill(runs[i], o, o + runs[i + 1]); o += runs[i + 1]; } return m; }
+const autoKey = () => `ocelot-autosave:${$('annotator').value.trim() || 'anon'}:${S.pair}`;
+let autoTimer;
+function markDirty() {
+  S.dirty = true; clearTimeout(autoTimer);
+  autoTimer = setTimeout(() => {
+    try { localStorage.setItem(autoKey(), JSON.stringify({ t: Date.now(), points: S.points, notes: S.notes, mask: rle(S.mask) })); } catch (e) { /* 저장 공간 부족 등은 무시 */ }
+  }, 1200);
+}
+function restoreAutosave() {
+  try {
+    const raw = localStorage.getItem(autoKey()); if (!raw) return false;
+    const d = JSON.parse(raw);
+    if (!confirm(`${S.pair}의 임시 저장본이 있습니다 (${new Date(d.t).toLocaleString()}). 불러올까요?`)) return false;
+    S.points = d.points; S.notes = d.notes; S.mask = unrle(d.mask); refreshMask(); S.dirty = true; toast('임시 저장본을 불러왔습니다'); return true;
+  } catch (e) { return false; }
+}
+window.addEventListener('beforeunload', (e) => { if (S.dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+/* ------------------------------------------------------------ PNG 저장 (단일 채널 8bit) */
+const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+function crc32(bytes) { let c = 0xffffffff; for (const b of bytes) c = CRC[(c ^ b) & 255] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; }
+function adler32(bytes) { let a = 1, b = 0; for (const x of bytes) { a = (a + x) % 65521; b = (b + a) % 65521; } return ((b << 16) | a) >>> 0; }
+function u32(n) { return [(n >>> 24) & 255, (n >>> 16) & 255, (n >>> 8) & 255, n & 255]; }
+function chunk(type, data) {
+  const t = [...type].map(c => c.charCodeAt(0)), body = new Uint8Array(t.length + data.length);
+  body.set(t); body.set(data, t.length);
+  const out = new Uint8Array(12 + data.length);
+  out.set(u32(data.length)); out.set(body, 4); out.set(u32(crc32(body)), 8 + data.length); return out;
+}
+async function zlib(raw) {
+  if (typeof CompressionStream !== 'undefined') {
+    const s = new Blob([raw]).stream().pipeThrough(new CompressionStream('deflate'));
+    return new Uint8Array(await new Response(s).arrayBuffer());
+  }
+  // 압축 미지원 브라우저: 무압축 deflate 블록
+  const blocks = [], n = Math.ceil(raw.length / 65535); blocks.push(0x78, 0x01);
+  for (let i = 0; i < n; i++) {
+    const part = raw.subarray(i * 65535, (i + 1) * 65535), len = part.length;
+    blocks.push(i === n - 1 ? 1 : 0, len & 255, len >> 8, ~len & 255, (~len >> 8) & 255, ...part);
+  }
+  blocks.push(...u32(adler32(raw))); return new Uint8Array(blocks);
+}
+async function encodeGrayPNG(pixels, w, h) {
+  const raw = new Uint8Array((w + 1) * h);
+  for (let y = 0; y < h; y++) { raw[y * (w + 1)] = 0; raw.set(pixels.subarray(y * w, (y + 1) * w), y * (w + 1) + 1); }
+  const ihdr = new Uint8Array([...u32(w), ...u32(h), 8, 0, 0, 0, 0]);
+  const parts = [new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]), chunk('IHDR', ihdr), chunk('IDAT', await zlib(raw)), chunk('IEND', new Uint8Array())];
+  return new Blob(parts, { type: 'image/png' });
+}
+
+/* ------------------------------------------------------------ 저장 */
+function cellCsv() { return S.points.slice().sort((a, b) => a.y - b.y || a.x - b.x).map(p => `${p.x},${p.y},${p.c}`).join('\n') + (S.points.length ? '\n' : ''); }
+function notesCsv() {
+  const q = (s) => /[",\n]/.test(s) ? `"${String(s).replace(/"/g, '""')}"` : s;
+  return 'x,y,task,comment\n' + S.notes.map(n => `${n.x},${n.y},${n.task},${q(n.comment)}`).join('\n') + (S.notes.length ? '\n' : '');
+}
+async function writeFile(name, blob) {
+  if (S.dirHandle) {
+    const fh = await S.dirHandle.getFileHandle(name, { create: true });
+    const w = await fh.createWritable(); await w.write(blob); await w.close(); return;
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+async function saveAll() {
+  if (!S.pair) { alert('열린 샘플이 없습니다.'); return; }
+  if (!$('annotator').value.trim()) { alert('작성자를 입력하세요 (jinho 또는 sangwoo).'); $('annotator').focus(); return; }
+  const m = maskShares(), warn = [];
+  if (!S.points.length) warn.push('세포 점이 0개입니다.');
+  if (m.ca === 0) warn.push('CA 영역이 없습니다 (정말 암 영역이 없다면 괜찮습니다).');
+  if (m.unk > 0.3) warn.push(`UNK가 ${(m.unk * 100).toFixed(0)}%입니다. 작업하지 않은 곳을 UNK로 두지 않았는지 확인하세요.`);
+  if (warn.length && !confirm('확인해 주세요:\n- ' + warn.join('\n- ') + '\n\n그래도 저장할까요?')) return;
+  try {
+    await writeFile(`${S.pair}.csv`, new Blob([cellCsv()], { type: 'text/csv' }));
+    await writeFile(`${S.pair}.png`, await encodeGrayPNG(S.mask, SIZE, SIZE));
+    if (S.notes.length) await writeFile(`${S.pair}_notes.csv`, new Blob(['﻿' + notesCsv()], { type: 'text/csv' }));
+    S.dirty = false; renderStats();
+    toast(S.dirHandle ? `${S.dirHandle.name} 폴더에 저장했습니다` : '다운로드 폴더에 저장했습니다');
+  } catch (e) { alert('저장 실패: ' + e.message); }
+}
+$('saveAll').onclick = saveAll;
+$('pickDir').onclick = async () => {
+  if (!window.showDirectoryPicker) { alert('이 브라우저는 폴더 지정을 지원하지 않습니다(Chrome/Edge 권장). 다운로드로 저장됩니다.'); return; }
+  try { S.dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' }); $('saveinfo').textContent = `저장 폴더: ${S.dirHandle.name}`; } catch (e) { /* 취소 */ }
+};
+
+window.addEventListener('resize', resize);
+resize();
+window.__ocelot = { encodeGrayPNG, rle, unrle, cellCsv, notesCsv, S };  // 검사용
+</script>
+</body>
+</html>
