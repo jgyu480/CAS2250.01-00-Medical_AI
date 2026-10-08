@@ -5,6 +5,6 @@
   "tissue_ignore_index": 2,
   "disk_overlap_rule": "nearest_center_then_sorted_coordinates",
   "geometric_augmentation": ["horizontal_flip", "quarter_turn_rotation"],
-  "photometric_augmentation": "deferred_to_training_configuration",
+  "photometric_augmentation": "configs/augmentation.json",
   "training_started": false
 }

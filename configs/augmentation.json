@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "description": "학습용 증강 설정. Dataset(augment=True, augmentation='<preset>')로 사용. val/test에는 적용하지 않는다.",
+  "geometric": {
+    "horizontal_flip": true,
+    "quarter_turn_rotation": true
+  },
+  "shared_photometric_between_fovs": true,
+  "order": ["randstainna", "hed_jitter", "color_jitter", "gaussian_blur"],
+  "randstainna": {
+    "enabled": true,
+    "p": 1.0,
+    "std_scale": 1.0,
+    "stats_file": "configs/randstainna_lab_stats.json"
+  },
+  "hed_jitter": {
+    "enabled": false,
+    "p": 0.5,
+    "sigma": 0.03
+  },
+  "color_jitter": {
+    "enabled": true,
+    "p": 0.8,
+    "brightness": 0.1,
+    "contrast": 0.1,
+    "saturation": 0.1,
+    "hue": 0.02
+  },
+  "gaussian_blur": {
+    "enabled": false,
+    "p": 0.2,
+    "sigma_max": 1.0
+  },
+  "presets": {
+    "default": {},
+    "none": {
+      "geometric": {"horizontal_flip": false, "quarter_turn_rotation": false},
+      "randstainna": {"enabled": false},
+      "color_jitter": {"enabled": false}
+    },
+    "geometric_only": {
+      "randstainna": {"enabled": false},
+      "color_jitter": {"enabled": false}
+    },
+    "no_geometric": {
+      "geometric": {"horizontal_flip": false, "quarter_turn_rotation": false}
+    },
+    "no_randstainna": {
+      "randstainna": {"enabled": false}
+    },
+    "no_color_jitter": {
+      "color_jitter": {"enabled": false}
+    },
+    "plus_hed_jitter": {
+      "hed_jitter": {"enabled": true}
+    },
+    "plus_blur": {
+      "gaussian_blur": {"enabled": true}
+    },
+    "randstainna_weak": {
+      "randstainna": {"std_scale": 0.5}
+    }
+  }
+}

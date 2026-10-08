@@ -32,13 +32,21 @@ def main():
         '--split', choices=['train', 'val', 'test'], default='train'
     )
     parser.add_argument(
-        '--labels', choices=['official', 'draft', 'reviewed'],
-        default='official'
+        '--labels', default='official',
+        help='official/draft/reviewed/annotator:<ID>'
     )
     parser.add_argument('--augment', action='store_true')
+    parser.add_argument(
+        '--preset', default='default',
+        help='configs/augmentation.json의 preset 이름'
+    )
+    parser.add_argument('--epoch', type=int, default=0)
     args = parser.parse_args()
 
-    dataset = OcelotDataset(args.split, args.labels, args.augment)
+    dataset = OcelotDataset(
+        args.split, args.labels, args.augment, augmentation=args.preset
+    )
+    dataset.set_epoch(args.epoch)
     pair_id = args.id.zfill(3)
     indices = [
         i for i, row in enumerate(dataset.rows)
@@ -90,8 +98,9 @@ def main():
 
     folder = resolve_paths()['outputs'] / 'previews'
     folder.mkdir(parents=True, exist_ok=True)
-    suffix = 'augmented' if args.augment else 'original'
-    path = folder / f'{pair_id}_{args.labels}_{suffix}.png'
+    suffix = f'aug-{args.preset}-e{args.epoch}' if args.augment else 'original'
+    labels = args.labels.replace(':', '-')
+    path = folder / f'{pair_id}_{labels}_{suffix}.png'
     canvas.save(path)
 
     info = dict(
@@ -108,7 +117,7 @@ def main():
     print('[저장]', path)
     print('[위치]', sample['cell_box'].tolist())
     print('[변환]', sample['transform'])
-    print('[안내] 공식 라벨 미리보기이며 직접 작성한 어노테이션은 아닙니다.')
+    print(f"[라벨] {sample['label_source']}")
 
 
 if __name__ == '__main__':
