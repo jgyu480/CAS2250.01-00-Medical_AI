@@ -9,3 +9,7 @@ manual/reviewed: 검토 후 확정한 세포 CSV와 조직 PNG.
 입력 사진은 outputs/annotation_packets에 준비된다.
 저장 형식과 작업 절차는 docs/annotation_protocol.md를 따른다.
 실제 정답 파일은 사람이 라벨링한 뒤 저장한다.
+
+annotator_tracking.csv: 두 작성자 독립 라벨의 작업 기록(샘플 × 작성자).
+manual/annotators/<작성자>/: 작성자별 세포 CSV, 조직 PNG, 판단이 어려운 위치 메모.
+작업 방법은 docs/annotator_protocol.md를 따른다.

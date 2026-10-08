@@ -10,6 +10,14 @@
     "annotation_quality_experiment": "draft_overrides_official_train",
     "unselected_train_labels": "official",
     "require_all_selected_pairs_complete": true,
-    "allow_partial_cell_annotation": false
-  }
+    "allow_partial_cell_annotation": false,
+    "annotator_experiment": "annotator_overrides_official_train",
+    "annotator_label_source_format": "annotator:<id>"
+  },
+  "annotators": {
+    "jinho": "이진호",
+    "sangwoo": "신상우"
+  },
+  "annotator_root": "annotations/manual/annotators",
+  "annotator_tracking_csv": "annotations/annotator_tracking.csv"
 }
