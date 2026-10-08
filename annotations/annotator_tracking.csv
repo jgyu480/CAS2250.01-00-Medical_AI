@@ -1,49 +1,49 @@
 pair_id,organ,annotator,status,started_at,finished_at,notes
-037,kidney,jinho,not_started,,,
+037,kidney,jinho,completed,2026-10-08T16:40:17+00:00,2026-10-08T16:40:17+00:00,"Local desk: 163 cells, 0 notes; saved 2026-10-08T16:40:17+00:00"
 037,kidney,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-051,kidney,jinho,not_started,,,
+051,kidney,jinho,completed,2026-10-08T16:42:10+00:00,2026-10-08T16:42:10+00:00,"Local desk: 79 cells, 0 notes; saved 2026-10-08T16:42:10+00:00"
 051,kidney,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-062,kidney,jinho,not_started,,,
+062,kidney,jinho,completed,2026-10-08T16:44:51+00:00,2026-10-08T16:44:51+00:00,"Local desk: 120 cells, 0 notes; saved 2026-10-08T16:44:51+00:00"
 062,kidney,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-108,kidney,jinho,not_started,,,
+108,kidney,jinho,completed,2026-10-08T16:46:05+00:00,2026-10-08T16:46:05+00:00,"Local desk: 42 cells, 0 notes; saved 2026-10-08T16:46:05+00:00"
 108,kidney,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-166,endometrium,jinho,not_started,,,
+166,endometrium,jinho,completed,2026-10-08T16:16:15+00:00,2026-10-08T16:16:15+00:00,"Local desk: 247 cells, 0 notes; saved 2026-10-08T16:16:15+00:00"
 166,endometrium,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-178,endometrium,jinho,not_started,,,
+178,endometrium,jinho,completed,2026-10-08T16:20:10+00:00,2026-10-08T16:20:10+00:00,"Local desk: 149 cells, 0 notes; saved 2026-10-08T16:20:10+00:00"
 178,endometrium,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-180,endometrium,jinho,not_started,,,
+180,endometrium,jinho,completed,2026-10-08T16:24:42+00:00,2026-10-08T16:24:47+00:00,"Local desk: 90 cells, 0 notes; saved 2026-10-08T16:24:47+00:00"
 180,endometrium,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-189,endometrium,jinho,not_started,,,
+189,endometrium,jinho,completed,2026-10-08T16:28:05+00:00,2026-10-08T16:28:22+00:00,"Local desk: 144 cells, 0 notes; saved 2026-10-08T16:28:22+00:00"
 189,endometrium,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-224,bladder,jinho,not_started,,,
+224,bladder,jinho,completed,2026-10-08T02:32:37+00:00,2026-10-08T02:52:31+00:00,"Local desk: 170 cells, 1 notes; saved 2026-10-08T02:52:31+00:00"
 224,bladder,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-241,bladder,jinho,not_started,,,
+241,bladder,jinho,completed,2026-10-08T02:45:51+00:00,2026-10-08T02:45:51+00:00,"Local desk: 58 cells, 0 notes; saved 2026-10-08T02:45:51+00:00"
 241,bladder,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-258,bladder,jinho,not_started,,,
+258,bladder,jinho,completed,2026-10-08T02:51:53+00:00,2026-10-08T02:51:53+00:00,"Local desk: 200 cells, 1 notes; saved 2026-10-08T02:51:53+00:00"
 258,bladder,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-266,bladder,jinho,not_started,,,
+266,bladder,jinho,completed,2026-10-08T02:54:50+00:00,2026-10-08T07:10:28+00:00,"Local desk: 138 cells, 0 notes; saved 2026-10-08T07:10:28+00:00"
 266,bladder,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-304,prostate,jinho,not_started,,,
+304,prostate,jinho,completed,2026-10-08T16:50:49+00:00,2026-10-08T16:50:49+00:00,"Local desk: 231 cells, 0 notes; saved 2026-10-08T16:50:49+00:00"
 304,prostate,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-321,prostate,jinho,not_started,,,
+321,prostate,jinho,completed,2026-10-08T16:52:20+00:00,2026-10-08T16:52:20+00:00,"Local desk: 74 cells, 0 notes; saved 2026-10-08T16:52:20+00:00"
 321,prostate,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-325,prostate,jinho,not_started,,,
+325,prostate,jinho,completed,2026-10-08T16:54:47+00:00,2026-10-08T16:54:47+00:00,"Local desk: 167 cells, 0 notes; saved 2026-10-08T16:54:47+00:00"
 325,prostate,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-337,prostate,jinho,not_started,,,
+337,prostate,jinho,completed,2026-10-08T16:57:04+00:00,2026-10-08T16:57:04+00:00,"Local desk: 146 cells, 0 notes; saved 2026-10-08T16:57:04+00:00"
 337,prostate,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-343,stomach,jinho,not_started,,,
+343,stomach,jinho,completed,2026-10-08T17:01:20+00:00,2026-10-08T17:01:20+00:00,"Local desk: 327 cells, 0 notes; saved 2026-10-08T17:01:20+00:00"
 343,stomach,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-352,stomach,jinho,not_started,,,
+352,stomach,jinho,completed,2026-10-08T17:02:50+00:00,2026-10-08T17:02:50+00:00,"Local desk: 61 cells, 0 notes; saved 2026-10-08T17:02:50+00:00"
 352,stomach,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-362,stomach,jinho,not_started,,,
+362,stomach,jinho,completed,2026-10-08T17:04:54+00:00,2026-10-08T17:04:54+00:00,"Local desk: 128 cells, 0 notes; saved 2026-10-08T17:04:54+00:00"
 362,stomach,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-369,stomach,jinho,not_started,,,
+369,stomach,jinho,completed,2026-10-08T17:06:12+00:00,2026-10-08T17:06:12+00:00,"Local desk: 81 cells, 0 notes; saved 2026-10-08T17:06:12+00:00"
 369,stomach,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-380,head-and-neck,jinho,not_started,,,
+380,head-and-neck,jinho,completed,2026-10-08T16:30:17+00:00,2026-10-08T16:30:53+00:00,"Local desk: 49 cells, 0 notes; saved 2026-10-08T16:30:53+00:00"
 380,head-and-neck,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-388,head-and-neck,jinho,not_started,,,
+388,head-and-neck,jinho,completed,2026-10-08T16:32:17+00:00,2026-10-08T16:32:17+00:00,"Local desk: 59 cells, 0 notes; saved 2026-10-08T16:32:17+00:00"
 388,head-and-neck,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-398,head-and-neck,jinho,not_started,,,
+398,head-and-neck,jinho,completed,2026-10-08T16:33:29+00:00,2026-10-08T16:33:29+00:00,"Local desk: 19 cells, 0 notes; saved 2026-10-08T16:33:29+00:00"
 398,head-and-neck,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
-399,head-and-neck,jinho,not_started,,,
+399,head-and-neck,jinho,completed,2026-10-08T16:37:09+00:00,2026-10-08T16:37:09+00:00,"Local desk: 142 cells, 0 notes; saved 2026-10-08T16:37:09+00:00"
 399,head-and-neck,sangwoo,completed,2026-10-08 23:19,2026-10-08 23:19,
