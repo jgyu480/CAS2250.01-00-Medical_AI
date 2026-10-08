@@ -190,3 +190,55 @@ M0~M3가 공통으로 사용할 데이터 로더를 준비한다.
 데이터와 결과 경로는 기존 공통 경로 설정을 사용한다.
 VESSL에서는 OCELOT_DATA_ROOT와 OUTPUT_ROOT로 경로를 바꿀 수 있다.
 <!-- DATASET_STEP4_END -->
+
+<!-- ANNOTATOR_AUGMENT_START -->
+## 어노테이션(두 작성자)과 데이터 증강 — 담당: 이진호, 신상우
+
+### 변경 내용
+
+- 작성자별 라벨 저장: `annotations/manual/annotators/<jinho|sangwoo>/{cell,tissue,notes}/`,
+  작업 기록 `annotations/annotator_tracking.csv`. 기존 draft/reviewed 구조는 그대로 둠.
+- Dataset 라벨 선택: `label_source='annotator:jinho'` 또는 `'annotator:sangwoo'`.
+- 라벨링 도구: `tools/annotator/index.html` (브라우저, 공식 형식 CSV/PNG 저장, 애매한 위치 메모).
+- 작성자 간 비교: `scripts/compare_annotations.py` (세포 위치·누락·클래스, 조직 경계·UNK).
+  모델 예측 폴더(`dir:<경로>`)도 같은 방식으로 각 작성자 정답과 비교 가능(M0 추가 기록용).
+- 증강: `configs/augmentation.json` + `common/data/photometric.py`.
+  기본 = Flip/90°Rotate + RandStainNA(Random Stain Normalization) + 약한 Color Jitter.
+  HED Jitter, Blur는 후보(기본 꺼짐). ablation preset 포함.
+- `configs/dataset.json`의 photometric_augmentation이 위 설정 파일을 가리키도록 수정.
+
+### 실행
+
+```
+# 어노테이션
+python scripts/prepare_annotators.py
+# tools/annotator/index.html 을 Chrome/Edge로 열어 라벨링 → 저장
+python scripts/import_annotation.py --annotator sangwoo --from-dir ~/Downloads --status completed
+python scripts/check_annotators.py
+python scripts/compare_annotations.py --a annotator:jinho --b annotator:sangwoo   # 둘 다 끝난 뒤
+
+# 증강
+python scripts/fit_randstainna.py              # 처음 한 번, train만 사용
+python scripts/check_augmentation.py --id 001  # 자기 검사 + 그림
+python scripts/export_augmented.py --preset default --ids 001 --copies 4
+```
+
+학습 코드에서는 `OcelotDataset('train', label_source=..., augment=True, augmentation='default')`,
+매 epoch `set_epoch(epoch)`.
+
+### 확인한 결과
+
+- 합성 데이터(가짜 OCELOT 구조)로 준비 → 도구 저장 → 가져오기 → 점검 → 비교 → Dataset(작성자 라벨 + 증강)
+  → 내보내기까지 실행. 도구는 headless Chrome에서 점 찍기·다각형·붓·메모·저장·이어하기를 확인했고,
+  저장한 PNG가 Pillow에서 단일 채널 1/2/255로 읽힘.
+- 색 증강 전후 점·마스크·위치 상자 동일, 재현성, ablation 파라미터 고정, 기존 Dataset 기하 검사 통과.
+
+### 남은 작업
+
+- 두 사람의 실제 라벨링 24쌍 × 2 (사람이 직접).
+- 실제 데이터에서 `fit_randstainna.py` 실행 후 `configs/randstainna_lab_stats.json` push.
+- 실제 사진으로 `check_augmentation.py --id ...` 그림 확인, 강도 조정 필요 여부 판단.
+- 두 사람 완료 후 비교 결과와 판단이 어려웠던 부분 정리.
+
+자세한 내용: [두 작성자 어노테이션](docs/annotator_protocol.md), [데이터 증강](docs/augmentation_protocol.md)
+<!-- ANNOTATOR_AUGMENT_END -->
