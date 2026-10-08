@@ -226,19 +226,22 @@ python scripts/export_augmented.py --preset default --ids 001 --copies 4
 학습 코드에서는 `OcelotDataset('train', label_source=..., augment=True, augmentation='default')`,
 매 epoch `set_epoch(epoch)`.
 
-### 확인한 결과
+### 확인한 결과 (10/8)
 
-- 합성 데이터(가짜 OCELOT 구조)로 준비 → 도구 저장 → 가져오기 → 점검 → 비교 → Dataset(작성자 라벨 + 증강)
-  → 내보내기까지 실행. 도구는 headless Chrome에서 점 찍기·다각형·붓·메모·저장·이어하기를 확인했고,
-  저장한 PNG가 Pillow에서 단일 채널 1/2/255로 읽힘.
-- 색 증강 전후 점·마스크·위치 상자 동일, 재현성, ablation 파라미터 고정, 기존 Dataset 기하 검사 통과.
+- 신상우 어노테이션 24쌍 완료: `check_annotators.py` PASS (sangwoo 24/24).
+- RandStainNA 통계: train 400쌍(800장)의 조직 픽셀로 계산 → `configs/randstainna_lab_stats.json`.
+- 실제 사진(037, 380)으로 증강 확인: 뒤집기·회전 후 점·CA 경계·세포 위치 상자가 사진과 일치.
+- 처음 RandStainNA 설정(사진 전체 통계, 분포 폭 1.0)은 빈 유리가 회색·청록으로 물들고
+  일부 사진이 갈색·청록으로 어두워져, 조직 픽셀만 사용하고 분포 폭을 0.5로 줄였다.
+  수정 후 배경은 흰색 유지, 색 변화는 H&E 범위 안. 원래 강도는 `randstainna_strong` preset.
+- Color Jitter, HED Jitter, Blur는 약하게 적용되어 형태 변화 없음.
+- 합성 데이터와 headless Chrome으로 라벨링 도구 저장·불러오기, 비교 스크립트 동작 확인.
 
 ### 남은 작업
 
-- 두 사람의 실제 라벨링 24쌍 × 2 (사람이 직접).
-- 실제 데이터에서 `fit_randstainna.py` 실행 후 `configs/randstainna_lab_stats.json` push.
-- 실제 사진으로 `check_augmentation.py --id ...` 그림 확인, 강도 조정 필요 여부 판단.
-- 두 사람 완료 후 비교 결과와 판단이 어려웠던 부분 정리.
+- 이진호 어노테이션 24쌍 완료 후 두 사람 라벨 push, `compare_annotations.py`로 차이 비교·정리.
+- M0 실험 담당자: 증강별 비교 실험(`none`, `geometric_only`, `no_randstainna`, `no_color_jitter`,
+  `plus_hed_jitter`, `plus_blur`, `randstainna_strong`)과 두 작성자 정답 기준 평가.
 
 자세한 내용: [두 작성자 어노테이션](docs/annotator_protocol.md), [데이터 증강](docs/augmentation_protocol.md)
 <!-- ANNOTATOR_AUGMENT_END -->
