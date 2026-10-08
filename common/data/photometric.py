@@ -47,20 +47,40 @@ def lab_to_rgb(lab):
     return np.clip(np.rint(rgb * 255), 0, 255).astype(np.uint8)
 
 
-def lab_stats(image):
-    lab = rgb_to_lab(image).reshape(-1, 3)
-    return lab.mean(0), lab.std(0)
+def tissue_weight(image, low=205.0, high=235.0):
+    """조직=1, 빈 유리(밝고 무채색)=0, 그 사이는 부드럽게. 염색 변환을 조직에만 적용한다."""
+    rgb = image.astype(np.float32)
+    gray = rgb.mean(-1)
+    chroma = rgb.max(-1) - rgb.min(-1)
+    w = np.clip((high - gray) / (high - low), 0, 1)
+    # 밝더라도 색이 뚜렷하면(연한 분홍 조직) 조직으로 본다.
+    return np.maximum(w, np.clip((chroma - 15) / 20, 0, 1))
+
+
+def lab_stats(image, lab=None):
+    """조직 픽셀만으로 LAB 채널 평균/표준편차를 구한다(빈 유리 제외)."""
+    lab = rgb_to_lab(image) if lab is None else lab
+    w = tissue_weight(image) > 0.5
+    pix = lab[w] if w.mean() > 0.05 else lab.reshape(-1, 3)
+    return pix.mean(0), pix.std(0)
 
 
 # ---------------------------------------------------------- RandStainNA
 
 def reinhard(image, target_mean, target_std):
+    """조직 픽셀 통계로 Reinhard 변환을 하고, 빈 유리는 원래 색을 유지한다.
+
+    빈 유리까지 통계에 넣으면 유리 비율에 따라 결과가 크게 달라지고
+    흰 배경이 회색·청록으로 물드는 문제가 생겨 조직만 사용한다.
+    """
     lab = rgb_to_lab(image)
-    mean = lab.reshape(-1, 3).mean(0)
-    std = np.maximum(lab.reshape(-1, 3).std(0), 1e-3)
-    lab = (lab - mean) / std * np.asarray(target_std, np.float32) + np.asarray(
+    mean, std = lab_stats(image, lab)
+    std = np.maximum(std, 1e-3)
+    new = (lab - mean) / std * np.asarray(target_std, np.float32) + np.asarray(
         target_mean, np.float32)
-    return lab_to_rgb(lab)
+    out = lab_to_rgb(new).astype(np.float32)
+    w = tissue_weight(image)[..., None]
+    return np.clip(np.rint(w * out + (1 - w) * image), 0, 255).astype(np.uint8)
 
 
 def load_stain_stats(path):
@@ -77,9 +97,16 @@ def load_stain_stats(path):
 
 
 def sample_template(rng, stats, std_scale=1.0):
-    """채널별 독립 정규분포(대각 공분산)에서 가상 템플릿을 뽑는다."""
-    mean = rng.normal(stats['mean']['mu'], np.multiply(stats['mean']['sigma'], std_scale))
-    std = rng.normal(stats['std']['mu'], np.multiply(stats['std']['sigma'], std_scale))
+    """채널별 독립 정규분포(대각 공분산)에서 가상 템플릿을 뽑는다.
+
+    극단값으로 비현실적인 색이 나오지 않게 평균에서 ±2σ(축소 후) 안으로 자른다.
+    """
+    out = []
+    for key in ('mean', 'std'):
+        mu = np.asarray(stats[key]['mu'], float)
+        sd = np.asarray(stats[key]['sigma'], float) * std_scale
+        out.append(np.clip(rng.normal(mu, sd), mu - 2 * sd, mu + 2 * sd))
+    mean, std = out
     # 표준편차는 양수여야 한다. 평균값의 20% 아래로 내려가지 않게 자른다.
     std = np.maximum(std, 0.2 * np.asarray(stats['std']['mu']))
     return mean.astype(float).tolist(), std.astype(float).tolist()

@@ -6,11 +6,16 @@
     "quarter_turn_rotation": true
   },
   "shared_photometric_between_fovs": true,
-  "order": ["randstainna", "hed_jitter", "color_jitter", "gaussian_blur"],
+  "order": [
+    "randstainna",
+    "hed_jitter",
+    "color_jitter",
+    "gaussian_blur"
+  ],
   "randstainna": {
     "enabled": true,
     "p": 1.0,
-    "std_scale": 1.0,
+    "std_scale": 0.5,
     "stats_file": "configs/randstainna_lab_stats.json"
   },
   "hed_jitter": {
@@ -34,31 +39,55 @@
   "presets": {
     "default": {},
     "none": {
-      "geometric": {"horizontal_flip": false, "quarter_turn_rotation": false},
-      "randstainna": {"enabled": false},
-      "color_jitter": {"enabled": false}
+      "geometric": {
+        "horizontal_flip": false,
+        "quarter_turn_rotation": false
+      },
+      "randstainna": {
+        "enabled": false
+      },
+      "color_jitter": {
+        "enabled": false
+      }
     },
     "geometric_only": {
-      "randstainna": {"enabled": false},
-      "color_jitter": {"enabled": false}
+      "randstainna": {
+        "enabled": false
+      },
+      "color_jitter": {
+        "enabled": false
+      }
     },
     "no_geometric": {
-      "geometric": {"horizontal_flip": false, "quarter_turn_rotation": false}
+      "geometric": {
+        "horizontal_flip": false,
+        "quarter_turn_rotation": false
+      }
     },
     "no_randstainna": {
-      "randstainna": {"enabled": false}
+      "randstainna": {
+        "enabled": false
+      }
     },
     "no_color_jitter": {
-      "color_jitter": {"enabled": false}
+      "color_jitter": {
+        "enabled": false
+      }
     },
     "plus_hed_jitter": {
-      "hed_jitter": {"enabled": true}
+      "hed_jitter": {
+        "enabled": true
+      }
     },
     "plus_blur": {
-      "gaussian_blur": {"enabled": true}
+      "gaussian_blur": {
+        "enabled": true
+      }
     },
-    "randstainna_weak": {
-      "randstainna": {"std_scale": 0.5}
+    "randstainna_strong": {
+      "randstainna": {
+        "std_scale": 1.0
+      }
     }
   }
 }

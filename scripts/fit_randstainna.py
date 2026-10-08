@@ -7,7 +7,7 @@ python scripts/fit_randstainna.py --max 200  # 일부만 무작위로 사용(빠
 val/test 사진은 사용하지 않는다(정보 누출 방지).
 
 방법(Shen et al., MICCAI 2022):
-  사진마다 LAB 채널별 평균 a_i, 표준편차 d_i를 구하고,
+  사진마다 조직 픽셀(빈 유리 제외)의 LAB 채널별 평균 a_i, 표준편차 d_i를 구하고,
   여러 사진에 걸친 a, d의 분포를 채널별 정규분포로 근사한다.
   학습 때 이 분포에서 가상 템플릿을 뽑아 Reinhard 변환으로 맞춘다.
 """
@@ -63,7 +63,7 @@ def main():
 
     means, stds = np.array(means, float), np.array(stds, float)
     stats = dict(
-        method='RandStainNA (Shen et al., MICCAI 2022), Gaussian, diagonal',
+        method='RandStainNA (Shen et al., MICCAI 2022), Gaussian, diagonal, tissue pixels only',
         color_space='lab', channels=['L', 'a', 'b'], split='train',
         images=len(means), pairs=len(rows), fovs=['cell', 'tissue'],
         downsample=args.downsample, created=str(date.today()),

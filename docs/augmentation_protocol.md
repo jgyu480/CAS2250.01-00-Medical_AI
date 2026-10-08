@@ -21,7 +21,7 @@ train = OcelotDataset('train', augment=True, seed=42, augmentation='default')
 train.set_epoch(epoch)   # 매 epoch 호출 → epoch마다 다른, 재현 가능한 증강
 ```
 
-처음 한 번 RandStainNA 통계를 만든다(train 400쌍만 사용, 몇 분):
+처음 한 번 RandStainNA 통계를 만든다(train 400쌍만 사용, 빈 유리 제외, 몇 분). 코드가 바뀌면 다시 만든다:
 
 ```
 python scripts/fit_randstainna.py
@@ -48,7 +48,7 @@ python scripts/export_augmented.py --preset default --ids 001 224 --copies 4
 | geometric_only | Flip/Rotate만 |
 | no_geometric / no_randstainna / no_color_jitter | 해당 증강만 제외 |
 | plus_hed_jitter / plus_blur | 후보 증강 추가 |
-| randstainna_weak | RandStainNA 분포 폭 절반 |
+| randstainna_strong | RandStainNA 분포 폭 2배(논문 기본값 1.0) |
 
 공정한 비교를 위해 다음을 지켰다.
 - 모델·데이터 분할·나머지 증강·학습 설정·seed가 같으면, 한 증강을 꺼도
@@ -79,6 +79,17 @@ python scripts/check_augmentation.py --id 001 --repeat 6
 매번 뽑아 Reinhard 변환으로 맞춘다. 두 접근을 합친 방법이며 논문에서 조직 분류와 핵 분할 모두에서
 고정 정규화보다 좋거나 비슷했다. 논문 설정을 따라 LAB, 채널별 독립 정규분포를 쓴다.
 템플릿 표준편차가 0 이하가 되지 않도록 평균의 20% 아래는 자른다(우리 구현 선택).
+
+**RandStainNA를 조직에만, 약하게 적용(10/8 실제 사진 확인 후 수정).**
+처음 구현(사진 전체 통계, 분포 폭 1.0)을 실제 OCELOT 사진에 적용해 보니
+빈 유리가 많은 사진(예: 037)에서 흰 배경이 회색·청록으로 물들고,
+일부 템플릿에서 사진 전체가 갈색·청록으로 어두워지는 비현실적인 색이 나왔다.
+원인은 (1) 통계에 빈 유리 픽셀이 섞여 유리 비율에 따라 통계가 크게 흔들리고,
+(2) 분포 폭이 넓어 극단 템플릿이 자주 뽑히기 때문이었다. 다음과 같이 고쳤다.
+- 통계 계산과 Reinhard 변환을 조직 픽셀에만 적용하고, 빈 유리는 원래 색을 유지한다.
+- 분포 폭(std_scale)을 0.5로 줄이고, 뽑은 값은 평균 ±2σ 안으로 자른다.
+- 논문 기본 폭(1.0)은 `randstainna_strong` preset으로 남겨 비교 실험에 쓸 수 있게 했다.
+수정 후 037·380·343에서 배경은 흰색으로 유지되고 H&E 범위 안에서 색만 바뀌는 것을 확인했다.
 
 **cell/tissue 사진에 같은 색 파라미터.** 두 사진은 같은 슬라이드·같은 스캔에서 나와 염색이 같다.
 같은 가상 템플릿에 각자 맞추므로 두 시야의 색 관계가 유지된다. 이것도 우리 판단이며
