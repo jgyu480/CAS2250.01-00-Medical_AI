@@ -1,0 +1,16 @@
+{
+  "model": "M0",
+  "status": "ablation",
+  "common_config": "configs/common.json",
+  "tissue_to_cell": {
+    "after_aspp": "coordinate_crop",
+    "after_decoder": "coordinate_crop"
+  },
+  "cell_to_tissue": {
+    "after_encoder": "none",
+    "coverage_mask": false
+  },
+  "attention": null,
+  "gradient_method": "sum",
+  "ablation": "① encoder 뒤 세포→조직 끔 (나머지는 models/M0/config.json과 동일)"
+}

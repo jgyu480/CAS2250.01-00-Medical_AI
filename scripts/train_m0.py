@@ -60,6 +60,17 @@ def parse_args():
     parser.add_argument("--run-name")
     parser.add_argument("--resume", help="last.pt 경로")
     parser.add_argument("--no-amp", action="store_true")
+    # 꺼보기(ablation)·fine-tuning용
+    parser.add_argument("--model-config",
+                        help="모델 설정 파일 (기본: configs/m0_train.json의 model_config)")
+    parser.add_argument("--init-from",
+                        help="이 checkpoint의 모델 가중치로 시작 (fine-tuning)")
+    parser.add_argument("--lr-scale", type=float, default=1.0,
+                        help="encoder·새 부품 학습률에 곱할 값 (fine-tuning은 0.1 권장)")
+    parser.add_argument("--freeze-epochs", type=int,
+                        help="처음 몇 epoch 백본을 고정할지 (기본: 설정 파일 값)")
+    parser.add_argument("--eval-init", action="store_true",
+                        help="학습 전 상태를 validation으로 평가해 epoch 0으로 기록")
     # 점검용
     parser.add_argument("--size", type=int, default=1024,
                         choices=[128, 256, 512, 1024])
@@ -78,6 +89,14 @@ def build_settings(args):
         "grad_accum_steps": args.grad_accum, "num_workers": args.num_workers
     }
     settings.update({k: v for k, v in overrides.items() if v is not None})
+    if args.model_config:
+        settings["model_config"] = args.model_config
+    if args.freeze_epochs is not None:
+        settings["encoder_freeze_epochs"] = args.freeze_epochs
+    if args.lr_scale != 1.0:
+        settings["encoder_lr"] *= args.lr_scale
+        settings["new_modules_lr"] *= args.lr_scale
+    settings.update(init_from=args.init_from, lr_scale=args.lr_scale)
     settings.update(seed=args.seed, size=args.size,
                     limit_train=args.limit_train, limit_val=args.limit_val,
                     amp=settings["amp"] and not args.no_amp)
@@ -149,6 +168,20 @@ def main():
                        s["cell_loss"].get("min_foreground_fraction", 0.0)}
     organs = {k: v["organ"] for k, v in val_set.source.metadata.items()}
 
+    if args.init_from and not args.resume:
+        # 꺼진 연결의 가중치는 모델에 자리가 없으므로 건너뛴다.
+        # 모델에 있는 가중치가 checkpoint에 없으면 중단한다 (잘못된 파일 방지).
+        source = torch.load(args.init_from, map_location="cpu",
+                            weights_only=False)["model"]
+        own = model.state_dict()
+        missing = [k for k in own if k not in source]
+        if missing:
+            raise SystemExit(f"[중단] checkpoint에 없는 가중치: {missing[:5]}")
+        skipped = sorted({k.split(".")[0] for k in source if k not in own})
+        model.load_state_dict({k: v for k, v in source.items() if k in own})
+        log(f"[시작 가중치] {args.init_from} | 건너뛴 부품: "
+            f"{', '.join(skipped) if skipped else '없음'}")
+
     start_epoch, step, best = 0, 0, -1.0
     if args.resume:
         state = torch.load(args.resume, map_location="cpu",
@@ -181,6 +214,30 @@ def main():
     if not history_path.exists():
         with history_path.open("w", newline="", encoding="utf-8") as f:
             csv.DictWriter(f, fields).writeheader()
+
+    if args.eval_init and start_epoch == 0:
+        # 학습 없이 지금 상태를 평가한다 (꺼보기: 끄자마자 얼마나 떨어지는지).
+        began = time.time()
+        val, _, _ = evaluate(
+            model, val_loader, device, s["postprocess_during_training"],
+            size=s["size"], amp=s["amp"],
+            tissue_weight=s["tissue_loss_weight"], loss_kwargs=loss_kwargs,
+            organs=organs
+        )
+        row = {"epoch": 0, "encoder_frozen": "",
+               "val_cell": val["loss_cell"], "val_tissue": val["loss_tissue"],
+               "val_total": val["loss_total"], "val_mF1": val["mF1"],
+               "val_f1_BC": val["f1_BC"], "val_f1_TC": val["f1_TC"],
+               "val_mIoU": val["mIoU"], "val_iou_BG": val["iou_BG"],
+               "val_iou_CA": val["iou_CA"],
+               "seconds": round(time.time() - began, 1)}
+        with history_path.open("a", newline="", encoding="utf-8") as f:
+            csv.DictWriter(f, fields).writerow(
+                {k: round(v, 6) if isinstance(v, float) else v
+                 for k, v in row.items()})
+        log(f"[epoch 0 (학습 전)] val {val['loss_total']:.4f} | "
+            f"mF1 {val['mF1']:.4f} (BC {val['f1_BC']:.4f}, "
+            f"TC {val['f1_TC']:.4f}) | mIoU {val['mIoU']:.4f}")
 
     for epoch in range(start_epoch, s["epochs"]):
         began = time.time()
