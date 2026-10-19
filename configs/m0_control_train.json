@@ -1,0 +1,65 @@
+{
+  "description": "Matched M0/M0-1 backbone warm-start comparison",
+  "model_config": "models/M0/config.json",
+  "label_source": "official",
+  "augmentation": "default",
+  "epochs": 30,
+  "encoder_freeze_epochs": 0,
+  "optimizer": "AdamW",
+  "encoder_lr": 1e-05,
+  "new_modules_lr": 0.0001,
+  "weight_decay": 0.01,
+  "scheduler": "cosine",
+  "tissue_loss_weight": 1.0,
+  "cell_loss": {
+    "type": "focal",
+    "gamma": 2.0,
+    "normalize": "foreground",
+    "min_foreground_fraction": 0.005
+  },
+  "grad_clip_norm": 10.0,
+  "tissue_loss": {
+    "type": "cross_entropy+dice",
+    "ignore": "UNK"
+  },
+  "batch_size": 2,
+  "grad_accum_steps": 1,
+  "num_workers": 4,
+  "amp": true,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "checkpoint_selection": "val_cell_mF1",
+  "postprocess_during_training": {
+    "sigma": 3.0,
+    "min_distance": 3,
+    "threshold": 0.0
+  },
+  "postprocess_search": {
+    "sigma": [
+      2.0,
+      3.0,
+      4.0
+    ],
+    "min_distance": [
+      3,
+      5,
+      7
+    ],
+    "threshold": [
+      0.0,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5
+    ]
+  },
+  "notes": [
+    "weight_decay 0.01\uc740 PyTorch AdamW \uae30\ubcf8\uac12\uc774\ub2e4 (\ubbf8\uc9c0\uc815 \ud56d\ubaa9).",
+    "batch_size\u00b7grad_accum_steps\ub294 VESSL GPU \uba54\ubaa8\ub9ac\ub97c \ud655\uc778\ud55c \ub4a4 \uc815\ud55c\ub2e4.",
+    "\ud559\uc2b5 \uc911 \uac80\uc99d F1\uc740 \uace0\uc815 \ud6c4\ucc98\ub9ac\ub85c \uacc4\uc0b0\ud55c\ub2e4. \ucd5c\uc885 \ud6c4\ucc98\ub9ac \uac12\uc740 best checkpoint\ub85c validation\uc5d0\uc11c \ub530\ub85c \uace0\ub978\ub2e4 (scripts/eval_m0.py --tune)."
+  ]
+}

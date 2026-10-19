@@ -1,0 +1,6 @@
+{
+  "model": "M0_1",
+  "decoder_width": 256,
+  "description": "M0 SSL ResNet-50 + SegFormer-style four-stage linear decoder; GN; three exchange ports",
+  "source": "https://arxiv.org/abs/2105.15203"
+}
