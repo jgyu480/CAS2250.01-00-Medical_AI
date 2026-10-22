@@ -90,12 +90,17 @@ class GradientConflictMonitor:
                 writer.writeheader()
             writer.writerows(rows)
 
-    def observe(self, cell_loss, tissue_loss, batch_index, pair_ids):
-        parameters = [p for _, p in self.named]
-        gc = torch.autograd.grad(cell_loss, parameters, retain_graph=True,
-                                 allow_unused=True)
-        gt = torch.autograd.grad(tissue_loss, parameters, retain_graph=True,
-                                 allow_unused=True)
+    def observe(self, cell_loss, tissue_loss, batch_index, pair_ids,
+                precomputed_gradients=None):
+        if precomputed_gradients is None:
+            parameters = [p for _, p in self.named]
+            gc = torch.autograd.grad(cell_loss, parameters, retain_graph=True,
+                                     allow_unused=True)
+            gt = torch.autograd.grad(tissue_loss, parameters, retain_graph=True,
+                                     allow_unused=True)
+        else:
+            pairs = [precomputed_gradients[n] for n, _ in self.named]
+            gc, gt = zip(*pairs)
         stats = {}
         # Three reductions per tensor; no giant flattened gradient concatenation.
         for (name, _), c, t in zip(self.named, gc, gt):
