@@ -1,0 +1,17 @@
+{
+  "model": "M1_1",
+  "status": "implemented",
+  "base_model": "M1",
+  "freeze_m1": true,
+  "cell_only": "separate_decoder_and_head_from_pre_attention_context",
+  "tissue_aware": "frozen_M1_global_cross_attention_plus_decoder_coordinate_crop",
+  "tissue_segmentation": "unchanged_frozen_M1",
+  "mixture": "pixelwise_probability_mixture",
+  "gate": {
+    "channels": 256,
+    "projection_channels": 16,
+    "hidden_channels": 32,
+    "initial_value": 0.5,
+    "output_channels": 1
+  }
+}
