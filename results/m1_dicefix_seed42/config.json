@@ -1,0 +1,79 @@
+{
+  "description": "M1: M0와 동일한 데이터/증강/손실/optimizer 및 일정으로 Cross-Attention 비교",
+  "model_config": "models/M1/config.json",
+  "label_source": "official",
+  "augmentation": "default",
+  "epochs": 50,
+  "encoder_freeze_epochs": 3,
+  "optimizer": "AdamW",
+  "encoder_lr": 1e-05,
+  "new_modules_lr": 0.0001,
+  "weight_decay": 0.01,
+  "scheduler": "cosine",
+  "tissue_loss_weight": 1.0,
+  "cell_loss": {
+    "type": "focal",
+    "gamma": 2.0,
+    "normalize": "foreground",
+    "min_foreground_fraction": 0.005
+  },
+  "grad_clip_norm": 10.0,
+  "tissue_loss": {
+    "type": "cross_entropy+dice",
+    "ignore": "UNK"
+  },
+  "batch_size": 2,
+  "grad_accum_steps": 1,
+  "num_workers": 4,
+  "amp": true,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "checkpoint_selection": "val_cell_mF1",
+  "postprocess_during_training": {
+    "sigma": 3.0,
+    "min_distance": 3,
+    "threshold": 0.0
+  },
+  "postprocess_search": {
+    "sigma": [
+      2.0,
+      3.0,
+      4.0
+    ],
+    "min_distance": [
+      3,
+      5,
+      7
+    ],
+    "threshold": [
+      0.0,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5
+    ]
+  },
+  "notes": [
+    "M0와 동일한 공통 손실 함수 사용 (수정 Dice 포함).",
+    "M0 베이스라인은 변경하지 않으며 M1 전용 모델과 출력 폴더 사용.",
+    "Validation cell mF1 최고 epoch의 best.pt 저장."
+  ],
+  "init_from": null,
+  "lr_scale": 1.0,
+  "seed": 42,
+  "size": 1024,
+  "limit_train": null,
+  "limit_val": null,
+  "device": "cuda",
+  "amp_dtype": "torch.bfloat16",
+  "git_commit": "557e2df",
+  "torch": "2.3.1+cu121",
+  "python": "3.10.12",
+  "train_pairs": 400,
+  "val_pairs": 137,
+  "steps_per_epoch": 200
+}
