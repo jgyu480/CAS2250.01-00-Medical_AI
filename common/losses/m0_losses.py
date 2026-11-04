@@ -61,7 +61,10 @@ def cross_entropy_dice(logits, target, classes=(0, 1), ignore_index=2):
     ce = F.cross_entropy(
         logits.float(), target, ignore_index=ignore_index
     )
-    return ce + dice_loss(logits, target, classes, ignore_index=ignore_index)
+    return ce + dice_loss(
+        logits, target, classes, ignore_index=ignore_index,
+        ignore_empty_classes=True
+    )
 
 
 def m0_task_losses(
