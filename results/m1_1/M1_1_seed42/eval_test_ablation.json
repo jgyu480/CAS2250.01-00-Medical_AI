@@ -1,0 +1,326 @@
+{
+  "split": "test",
+  "shared_postprocess": {
+    "sigma": 2.0,
+    "min_distance": 5,
+    "threshold": 0.0
+  },
+  "variants": {
+    "dynamic": {
+      "overall": {
+        "loss_cell": 1.2902,
+        "loss_tissue": 0.3906,
+        "loss_total": 1.6808,
+        "precision_BC": 0.7557,
+        "recall_BC": 0.5424,
+        "f1_BC": 0.6315,
+        "precision_TC": 0.7853,
+        "recall_TC": 0.7038,
+        "f1_TC": 0.7423,
+        "mF1": 0.6869,
+        "iou_BG": 0.8721,
+        "iou_CA": 0.8542,
+        "mIoU": 0.8631
+      },
+      "by_organ": {
+        "bladder": {
+          "pairs": 24,
+          "precision_BC": 0.638,
+          "recall_BC": 0.4849,
+          "f1_BC": 0.551,
+          "precision_TC": 0.7515,
+          "recall_TC": 0.69,
+          "f1_TC": 0.7194,
+          "mF1": 0.6352
+        },
+        "endometrium": {
+          "pairs": 23,
+          "precision_BC": 0.8594,
+          "recall_BC": 0.5387,
+          "f1_BC": 0.6623,
+          "precision_TC": 0.7939,
+          "recall_TC": 0.6391,
+          "f1_TC": 0.7082,
+          "mF1": 0.6852
+        },
+        "head-and-neck": {
+          "pairs": 10,
+          "precision_BC": 0.7644,
+          "recall_BC": 0.6186,
+          "f1_BC": 0.6838,
+          "precision_TC": 0.8407,
+          "recall_TC": 0.6182,
+          "f1_TC": 0.7125,
+          "mF1": 0.6982
+        },
+        "kidney": {
+          "pairs": 41,
+          "precision_BC": 0.7461,
+          "recall_BC": 0.5668,
+          "f1_BC": 0.6442,
+          "precision_TC": 0.8197,
+          "recall_TC": 0.8345,
+          "f1_TC": 0.8271,
+          "mF1": 0.7356
+        },
+        "prostate": {
+          "pairs": 16,
+          "precision_BC": 0.6829,
+          "recall_BC": 0.4751,
+          "f1_BC": 0.5604,
+          "precision_TC": 0.7095,
+          "recall_TC": 0.6378,
+          "f1_TC": 0.6717,
+          "mF1": 0.6161
+        },
+        "stomach": {
+          "pairs": 12,
+          "precision_BC": 0.7762,
+          "recall_BC": 0.6043,
+          "f1_BC": 0.6795,
+          "precision_TC": 0.7528,
+          "recall_TC": 0.7397,
+          "f1_TC": 0.7462,
+          "mF1": 0.7128
+        }
+      }
+    },
+    "local": {
+      "overall": {
+        "loss_cell": 1.1795,
+        "loss_tissue": 0.3906,
+        "loss_total": 1.5701,
+        "precision_BC": 0.7166,
+        "recall_BC": 0.5429,
+        "f1_BC": 0.6177,
+        "precision_TC": 0.771,
+        "recall_TC": 0.6277,
+        "f1_TC": 0.692,
+        "mF1": 0.6549,
+        "iou_BG": 0.8721,
+        "iou_CA": 0.8542,
+        "mIoU": 0.8631
+      },
+      "by_organ": {
+        "bladder": {
+          "pairs": 24,
+          "precision_BC": 0.5869,
+          "recall_BC": 0.5726,
+          "f1_BC": 0.5796,
+          "precision_TC": 0.76,
+          "recall_TC": 0.5988,
+          "f1_TC": 0.6698,
+          "mF1": 0.6247
+        },
+        "endometrium": {
+          "pairs": 23,
+          "precision_BC": 0.852,
+          "recall_BC": 0.5432,
+          "f1_BC": 0.6634,
+          "precision_TC": 0.7813,
+          "recall_TC": 0.5556,
+          "f1_TC": 0.6494,
+          "mF1": 0.6564
+        },
+        "head-and-neck": {
+          "pairs": 10,
+          "precision_BC": 0.7448,
+          "recall_BC": 0.6002,
+          "f1_BC": 0.6647,
+          "precision_TC": 0.8158,
+          "recall_TC": 0.5582,
+          "f1_TC": 0.6629,
+          "mF1": 0.6638
+        },
+        "kidney": {
+          "pairs": 41,
+          "precision_BC": 0.6508,
+          "recall_BC": 0.5037,
+          "f1_BC": 0.5679,
+          "precision_TC": 0.7975,
+          "recall_TC": 0.7853,
+          "f1_TC": 0.7913,
+          "mF1": 0.6796
+        },
+        "prostate": {
+          "pairs": 16,
+          "precision_BC": 0.6514,
+          "recall_BC": 0.4818,
+          "f1_BC": 0.5539,
+          "precision_TC": 0.6703,
+          "recall_TC": 0.5565,
+          "f1_TC": 0.6081,
+          "mF1": 0.581
+        },
+        "stomach": {
+          "pairs": 12,
+          "precision_BC": 0.7854,
+          "recall_BC": 0.5867,
+          "f1_BC": 0.6716,
+          "precision_TC": 0.7288,
+          "recall_TC": 0.6264,
+          "f1_TC": 0.6737,
+          "mF1": 0.6727
+        }
+      }
+    },
+    "m1": {
+      "overall": {
+        "loss_cell": 1.3539,
+        "loss_tissue": 0.3906,
+        "loss_total": 1.7445,
+        "precision_BC": 0.7542,
+        "recall_BC": 0.5391,
+        "f1_BC": 0.6288,
+        "precision_TC": 0.7841,
+        "recall_TC": 0.7026,
+        "f1_TC": 0.7411,
+        "mF1": 0.6849,
+        "iou_BG": 0.8721,
+        "iou_CA": 0.8542,
+        "mIoU": 0.8631
+      },
+      "by_organ": {
+        "bladder": {
+          "pairs": 24,
+          "precision_BC": 0.6372,
+          "recall_BC": 0.482,
+          "f1_BC": 0.5489,
+          "precision_TC": 0.749,
+          "recall_TC": 0.6882,
+          "f1_TC": 0.7173,
+          "mF1": 0.6331
+        },
+        "endometrium": {
+          "pairs": 23,
+          "precision_BC": 0.8564,
+          "recall_BC": 0.5338,
+          "f1_BC": 0.6577,
+          "precision_TC": 0.7929,
+          "recall_TC": 0.6406,
+          "f1_TC": 0.7086,
+          "mF1": 0.6832
+        },
+        "head-and-neck": {
+          "pairs": 10,
+          "precision_BC": 0.7634,
+          "recall_BC": 0.6151,
+          "f1_BC": 0.6813,
+          "precision_TC": 0.8407,
+          "recall_TC": 0.6182,
+          "f1_TC": 0.7125,
+          "mF1": 0.6969
+        },
+        "kidney": {
+          "pairs": 41,
+          "precision_BC": 0.7461,
+          "recall_BC": 0.5649,
+          "f1_BC": 0.643,
+          "precision_TC": 0.8186,
+          "recall_TC": 0.8323,
+          "f1_TC": 0.8254,
+          "mF1": 0.7342
+        },
+        "prostate": {
+          "pairs": 16,
+          "precision_BC": 0.6816,
+          "recall_BC": 0.4738,
+          "f1_BC": 0.559,
+          "precision_TC": 0.708,
+          "recall_TC": 0.635,
+          "f1_TC": 0.6695,
+          "mF1": 0.6143
+        },
+        "stomach": {
+          "pairs": 12,
+          "precision_BC": 0.7749,
+          "recall_BC": 0.5996,
+          "f1_BC": 0.6761,
+          "precision_TC": 0.7536,
+          "recall_TC": 0.7331,
+          "f1_TC": 0.7432,
+          "mF1": 0.7097
+        }
+      }
+    },
+    "fixed_0_5": {
+      "overall": {
+        "loss_cell": 1.1514,
+        "loss_tissue": 0.3906,
+        "loss_total": 1.542,
+        "precision_BC": 0.7638,
+        "recall_BC": 0.5452,
+        "f1_BC": 0.6363,
+        "precision_TC": 0.7986,
+        "recall_TC": 0.6716,
+        "f1_TC": 0.7296,
+        "mF1": 0.6829,
+        "iou_BG": 0.8721,
+        "iou_CA": 0.8542,
+        "mIoU": 0.8631
+      },
+      "by_organ": {
+        "bladder": {
+          "pairs": 24,
+          "precision_BC": 0.6483,
+          "recall_BC": 0.5244,
+          "f1_BC": 0.5798,
+          "precision_TC": 0.7769,
+          "recall_TC": 0.6548,
+          "f1_TC": 0.7107,
+          "mF1": 0.6453
+        },
+        "endometrium": {
+          "pairs": 23,
+          "precision_BC": 0.8727,
+          "recall_BC": 0.5397,
+          "f1_BC": 0.667,
+          "precision_TC": 0.8022,
+          "recall_TC": 0.604,
+          "f1_TC": 0.6891,
+          "mF1": 0.678
+        },
+        "head-and-neck": {
+          "pairs": 10,
+          "precision_BC": 0.7688,
+          "recall_BC": 0.6107,
+          "f1_BC": 0.6807,
+          "precision_TC": 0.851,
+          "recall_TC": 0.5841,
+          "f1_TC": 0.6927,
+          "mF1": 0.6867
+        },
+        "kidney": {
+          "pairs": 41,
+          "precision_BC": 0.7481,
+          "recall_BC": 0.5599,
+          "f1_BC": 0.6405,
+          "precision_TC": 0.8307,
+          "recall_TC": 0.8149,
+          "f1_TC": 0.8227,
+          "mF1": 0.7316
+        },
+        "prostate": {
+          "pairs": 16,
+          "precision_BC": 0.6899,
+          "recall_BC": 0.4718,
+          "f1_BC": 0.5604,
+          "precision_TC": 0.7237,
+          "recall_TC": 0.6079,
+          "f1_TC": 0.6608,
+          "mF1": 0.6106
+        },
+        "stomach": {
+          "pairs": 12,
+          "precision_BC": 0.7965,
+          "recall_BC": 0.5987,
+          "f1_BC": 0.6836,
+          "precision_TC": 0.7527,
+          "recall_TC": 0.683,
+          "f1_TC": 0.7162,
+          "mF1": 0.6999
+        }
+      }
+    }
+  }
+}

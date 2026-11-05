@@ -1,0 +1,77 @@
+{
+  "description": "M1-1: frozen M1 + cell-only decoder/head + learnable spatial probability gate",
+  "model_config": "models/M1_1/config.json",
+  "label_source": "official",
+  "augmentation": "default",
+  "epochs": 25,
+  "local_warmup_epochs": 5,
+  "gate_epochs": 20,
+  "optimizer": "AdamW",
+  "new_modules_lr": 0.0001,
+  "weight_decay": 0.01,
+  "scheduler": "cosine_per_stage",
+  "local_aux_weight": 0.2,
+  "cell_loss": {
+    "type": "focal",
+    "gamma": 2.0,
+    "normalize": "foreground",
+    "min_foreground_fraction": 0.005
+  },
+  "grad_clip_norm": 10.0,
+  "tissue_loss_weight": 1.0,
+  "batch_size": 2,
+  "grad_accum_steps": 1,
+  "num_workers": 4,
+  "amp": true,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "checkpoint_selection": "val_cell_mF1_after_stage_B",
+  "postprocess_during_training": {
+    "sigma": 3.0,
+    "min_distance": 3,
+    "threshold": 0.0
+  },
+  "postprocess_search": {
+    "sigma": [
+      2.0,
+      3.0,
+      4.0
+    ],
+    "min_distance": [
+      3,
+      5,
+      7
+    ],
+    "threshold": [
+      0.0,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5
+    ]
+  },
+  "notes": [
+    "Stage A: five epochs of local decoder/head only, gate frozen",
+    "Stage B: 20 epochs of local decoder/head and gate; M1 always frozen",
+    "Stage B objective: focal(final) + 0.2 * focal(local)",
+    "No ground truth tissue mask is supplied to gate",
+    "Stage B checkpoints selected by fixed-postprocess validation mF1; postprocess tuning is separate"
+  ],
+  "seed": 42,
+  "size": 1024,
+  "limit_train": null,
+  "limit_val": null,
+  "m1_checkpoint": "/tmp/ocelot_training/m1/M1_dicefix_seed42/best.pt",
+  "m1_checkpoint_sha256": "85c36dcac0d94366c4cc982792adb06a1756d9b4adb3c970661aebb9f96cf96e",
+  "git_commit": "a2aca00",
+  "torch": "2.3.1+cu121",
+  "python": "3.10.12",
+  "train_pairs": 400,
+  "val_pairs": 137,
+  "device": "cuda",
+  "amp_dtype": "torch.bfloat16"
+}
