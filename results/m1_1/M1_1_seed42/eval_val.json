@@ -1,0 +1,88 @@
+{
+  "checkpoint": "/tmp/ocelot_training/m1_1/M1_1_seed42/best.pt",
+  "epoch": 15,
+  "split": "val",
+  "pairs": 137,
+  "postprocess": {
+    "sigma": 2.0,
+    "min_distance": 5,
+    "threshold": 0.0
+  },
+  "overall": {
+    "loss_cell": 1.2206,
+    "loss_tissue": 0.5773,
+    "loss_total": 1.7978,
+    "precision_BC": 0.6623,
+    "recall_BC": 0.5504,
+    "f1_BC": 0.6012,
+    "precision_TC": 0.8393,
+    "recall_TC": 0.7109,
+    "f1_TC": 0.7698,
+    "mF1": 0.6855,
+    "iou_BG": 0.8523,
+    "iou_CA": 0.7946,
+    "mIoU": 0.8234
+  },
+  "by_organ": {
+    "bladder": {
+      "pairs": 29,
+      "precision_BC": 0.5963,
+      "recall_BC": 0.541,
+      "f1_BC": 0.5673,
+      "precision_TC": 0.7003,
+      "recall_TC": 0.6051,
+      "f1_TC": 0.6493,
+      "mF1": 0.6083
+    },
+    "endometrium": {
+      "pairs": 29,
+      "precision_BC": 0.7006,
+      "recall_BC": 0.5781,
+      "f1_BC": 0.6335,
+      "precision_TC": 0.8771,
+      "recall_TC": 0.6738,
+      "f1_TC": 0.7621,
+      "mF1": 0.6978
+    },
+    "head-and-neck": {
+      "pairs": 9,
+      "precision_BC": 0.7944,
+      "recall_BC": 0.3956,
+      "f1_BC": 0.5282,
+      "precision_TC": 0.7449,
+      "recall_TC": 0.653,
+      "f1_TC": 0.6959,
+      "mF1": 0.612
+    },
+    "kidney": {
+      "pairs": 41,
+      "precision_BC": 0.5819,
+      "recall_BC": 0.6115,
+      "f1_BC": 0.5963,
+      "precision_TC": 0.9021,
+      "recall_TC": 0.7888,
+      "f1_TC": 0.8417,
+      "mF1": 0.719
+    },
+    "prostate": {
+      "pairs": 17,
+      "precision_BC": 0.6191,
+      "recall_BC": 0.4376,
+      "f1_BC": 0.5128,
+      "precision_TC": 0.7747,
+      "recall_TC": 0.7156,
+      "f1_TC": 0.744,
+      "mF1": 0.6284
+    },
+    "stomach": {
+      "pairs": 12,
+      "precision_BC": 0.8081,
+      "recall_BC": 0.6262,
+      "f1_BC": 0.7056,
+      "precision_TC": 0.8209,
+      "recall_TC": 0.7051,
+      "f1_TC": 0.7586,
+      "mF1": 0.7321
+    }
+  }
+}

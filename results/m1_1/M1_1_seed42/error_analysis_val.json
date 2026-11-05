@@ -1,0 +1,1079 @@
+{
+  "checkpoint": "/tmp/ocelot_training/m1_1/M1_1_seed42/best.pt",
+  "split": "val",
+  "matching": "diagnostic, class-agnostic, greedy score-first within 15px",
+  "groups": {
+    "BC_in_BG": {
+      "GT": 6739,
+      "m1_correct": 3793,
+      "m1_wrong": 641,
+      "m1_missed": 2305,
+      "gate_correct": 3810,
+      "gate_wrong": 643,
+      "gate_missed": 2286,
+      "rescued": 27,
+      "harmed": 10,
+      "m1_misclassification_rate_among_detected": 0.14456,
+      "m1_miss_rate": 0.34204,
+      "gate_misclassification_rate_among_detected": 0.1444,
+      "gate_miss_rate": 0.33922
+    },
+    "BC_in_CA": {
+      "GT": 1152,
+      "m1_correct": 453,
+      "m1_wrong": 347,
+      "m1_missed": 352,
+      "gate_correct": 451,
+      "gate_wrong": 349,
+      "gate_missed": 352,
+      "rescued": 0,
+      "harmed": 2,
+      "m1_misclassification_rate_among_detected": 0.43375,
+      "m1_miss_rate": 0.30556,
+      "gate_misclassification_rate_among_detected": 0.43625,
+      "gate_miss_rate": 0.30556
+    },
+    "BC_in_UNK": {
+      "GT": 509,
+      "m1_correct": 361,
+      "m1_wrong": 42,
+      "m1_missed": 106,
+      "gate_correct": 362,
+      "gate_wrong": 42,
+      "gate_missed": 105,
+      "rescued": 1,
+      "harmed": 0,
+      "m1_misclassification_rate_among_detected": 0.10422,
+      "m1_miss_rate": 0.20825,
+      "gate_misclassification_rate_among_detected": 0.10396,
+      "gate_miss_rate": 0.20629
+    },
+    "TC_in_BG": {
+      "GT": 784,
+      "m1_correct": 322,
+      "m1_wrong": 266,
+      "m1_missed": 196,
+      "gate_correct": 320,
+      "gate_wrong": 266,
+      "gate_missed": 198,
+      "rescued": 0,
+      "harmed": 2,
+      "m1_misclassification_rate_among_detected": 0.45238,
+      "m1_miss_rate": 0.25,
+      "gate_misclassification_rate_among_detected": 0.45392,
+      "gate_miss_rate": 0.25255
+    },
+    "TC_in_CA": {
+      "GT": 15315,
+      "m1_correct": 11205,
+      "m1_wrong": 699,
+      "m1_missed": 3411,
+      "gate_correct": 11198,
+      "gate_wrong": 698,
+      "gate_missed": 3419,
+      "rescued": 34,
+      "harmed": 41,
+      "m1_misclassification_rate_among_detected": 0.05872,
+      "m1_miss_rate": 0.22272,
+      "gate_misclassification_rate_among_detected": 0.05868,
+      "gate_miss_rate": 0.22325
+    },
+    "TC_in_UNK": {
+      "GT": 213,
+      "m1_correct": 77,
+      "m1_wrong": 69,
+      "m1_missed": 67,
+      "gate_correct": 78,
+      "gate_wrong": 69,
+      "gate_missed": 66,
+      "rescued": 1,
+      "harmed": 0,
+      "m1_misclassification_rate_among_detected": 0.4726,
+      "m1_miss_rate": 0.31455,
+      "gate_misclassification_rate_among_detected": 0.46939,
+      "gate_miss_rate": 0.30986
+    }
+  },
+  "gate": {
+    "all_GT": {
+      "count": 24712,
+      "mean": 0.9257,
+      "std": 0.0876
+    },
+    "by_cell": {
+      "TC": {
+        "count": 16312,
+        "mean": 0.9146,
+        "std": 0.0935
+      },
+      "BC": {
+        "count": 8400,
+        "mean": 0.9474,
+        "std": 0.07
+      }
+    },
+    "by_tissue_region": {
+      "CA": {
+        "count": 16467,
+        "mean": 0.9147,
+        "std": 0.0934
+      },
+      "BG": {
+        "count": 7523,
+        "mean": 0.9473,
+        "std": 0.0696
+      },
+      "UNK": {
+        "count": 722,
+        "mean": 0.9541,
+        "std": 0.0689
+      }
+    }
+  },
+  "changed_examples": [
+    {
+      "pair_id": "414",
+      "x": 760,
+      "y": 875,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "415",
+      "x": 490,
+      "y": 907,
+      "cell": "BC",
+      "region": "UNK",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "419",
+      "x": 404,
+      "y": 363,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "427",
+      "x": 278,
+      "y": 1011,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "428",
+      "x": 750,
+      "y": 340,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "428",
+      "x": 197,
+      "y": 9,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "429",
+      "x": 786,
+      "y": 376,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "430",
+      "x": 727,
+      "y": 524,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "433",
+      "x": 280,
+      "y": 659,
+      "cell": "BC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "436",
+      "x": 910,
+      "y": 1018,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "437",
+      "x": 937,
+      "y": 187,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "437",
+      "x": 42,
+      "y": 87,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "438",
+      "x": 189,
+      "y": 662,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "438",
+      "x": 51,
+      "y": 163,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "438",
+      "x": 754,
+      "y": 994,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "439",
+      "x": 705,
+      "y": 735,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "439",
+      "x": 550,
+      "y": 211,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "440",
+      "x": 770,
+      "y": 907,
+      "cell": "BC",
+      "region": "BG",
+      "change": "harm"
+    },
+    {
+      "pair_id": "440",
+      "x": 576,
+      "y": 959,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "442",
+      "x": 501,
+      "y": 580,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "443",
+      "x": 963,
+      "y": 229,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "443",
+      "x": 489,
+      "y": 824,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "443",
+      "x": 922,
+      "y": 556,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "443",
+      "x": 603,
+      "y": 236,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "444",
+      "x": 760,
+      "y": 535,
+      "cell": "BC",
+      "region": "BG",
+      "change": "harm"
+    },
+    {
+      "pair_id": "446",
+      "x": 794,
+      "y": 864,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "446",
+      "x": 332,
+      "y": 421,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "446",
+      "x": 432,
+      "y": 747,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "446",
+      "x": 275,
+      "y": 454,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "447",
+      "x": 585,
+      "y": 320,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "447",
+      "x": 473,
+      "y": 975,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "447",
+      "x": 760,
+      "y": 442,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "448",
+      "x": 193,
+      "y": 1012,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "448",
+      "x": 571,
+      "y": 539,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "449",
+      "x": 312,
+      "y": 673,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "449",
+      "x": 108,
+      "y": 844,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "449",
+      "x": 805,
+      "y": 429,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "449",
+      "x": 58,
+      "y": 570,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "449",
+      "x": 101,
+      "y": 303,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "449",
+      "x": 651,
+      "y": 462,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "451",
+      "x": 360,
+      "y": 598,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "451",
+      "x": 825,
+      "y": 451,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "451",
+      "x": 124,
+      "y": 317,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "451",
+      "x": 605,
+      "y": 515,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "451",
+      "x": 976,
+      "y": 439,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "453",
+      "x": 225,
+      "y": 502,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "453",
+      "x": 666,
+      "y": 390,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "453",
+      "x": 1005,
+      "y": 980,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "453",
+      "x": 735,
+      "y": 150,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "453",
+      "x": 539,
+      "y": 342,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "454",
+      "x": 797,
+      "y": 858,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "456",
+      "x": 12,
+      "y": 588,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "456",
+      "x": 569,
+      "y": 593,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "457",
+      "x": 47,
+      "y": 248,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "457",
+      "x": 426,
+      "y": 775,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "458",
+      "x": 794,
+      "y": 576,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "466",
+      "x": 812,
+      "y": 217,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "466",
+      "x": 679,
+      "y": 37,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "466",
+      "x": 832,
+      "y": 246,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "467",
+      "x": 410,
+      "y": 263,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "467",
+      "x": 381,
+      "y": 250,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "468",
+      "x": 733,
+      "y": 462,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "468",
+      "x": 768,
+      "y": 564,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "468",
+      "x": 530,
+      "y": 517,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "468",
+      "x": 43,
+      "y": 711,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "468",
+      "x": 276,
+      "y": 918,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "468",
+      "x": 541,
+      "y": 910,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "468",
+      "x": 784,
+      "y": 770,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "468",
+      "x": 605,
+      "y": 944,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "469",
+      "x": 521,
+      "y": 238,
+      "cell": "BC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "470",
+      "x": 512,
+      "y": 4,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "470",
+      "x": 776,
+      "y": 897,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "470",
+      "x": 208,
+      "y": 636,
+      "cell": "BC",
+      "region": "BG",
+      "change": "harm"
+    },
+    {
+      "pair_id": "470",
+      "x": 277,
+      "y": 569,
+      "cell": "BC",
+      "region": "BG",
+      "change": "harm"
+    },
+    {
+      "pair_id": "470",
+      "x": 955,
+      "y": 55,
+      "cell": "BC",
+      "region": "BG",
+      "change": "harm"
+    },
+    {
+      "pair_id": "470",
+      "x": 965,
+      "y": 158,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "470",
+      "x": 926,
+      "y": 180,
+      "cell": "BC",
+      "region": "BG",
+      "change": "harm"
+    },
+    {
+      "pair_id": "470",
+      "x": 840,
+      "y": 334,
+      "cell": "BC",
+      "region": "BG",
+      "change": "harm"
+    },
+    {
+      "pair_id": "470",
+      "x": 651,
+      "y": 819,
+      "cell": "BC",
+      "region": "BG",
+      "change": "harm"
+    },
+    {
+      "pair_id": "474",
+      "x": 272,
+      "y": 485,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "474",
+      "x": 36,
+      "y": 442,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "474",
+      "x": 553,
+      "y": 1001,
+      "cell": "BC",
+      "region": "BG",
+      "change": "harm"
+    },
+    {
+      "pair_id": "475",
+      "x": 252,
+      "y": 594,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "475",
+      "x": 505,
+      "y": 1017,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "475",
+      "x": 671,
+      "y": 931,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "475",
+      "x": 42,
+      "y": 872,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "475",
+      "x": 8,
+      "y": 157,
+      "cell": "BC",
+      "region": "BG",
+      "change": "harm"
+    },
+    {
+      "pair_id": "475",
+      "x": 395,
+      "y": 807,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "476",
+      "x": 373,
+      "y": 138,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "476",
+      "x": 210,
+      "y": 119,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "478",
+      "x": 911,
+      "y": 690,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "484",
+      "x": 793,
+      "y": 268,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "484",
+      "x": 394,
+      "y": 242,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "484",
+      "x": 745,
+      "y": 493,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "484",
+      "x": 96,
+      "y": 712,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "488",
+      "x": 754,
+      "y": 346,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "491",
+      "x": 862,
+      "y": 11,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "491",
+      "x": 907,
+      "y": 985,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "492",
+      "x": 291,
+      "y": 300,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "492",
+      "x": 126,
+      "y": 375,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "497",
+      "x": 362,
+      "y": 862,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "501",
+      "x": 425,
+      "y": 567,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "504",
+      "x": 1015,
+      "y": 954,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "505",
+      "x": 895,
+      "y": 358,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "505",
+      "x": 383,
+      "y": 523,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "506",
+      "x": 463,
+      "y": 533,
+      "cell": "TC",
+      "region": "UNK",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "508",
+      "x": 597,
+      "y": 125,
+      "cell": "TC",
+      "region": "BG",
+      "change": "harm"
+    },
+    {
+      "pair_id": "509",
+      "x": 56,
+      "y": 340,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "510",
+      "x": 593,
+      "y": 773,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "511",
+      "x": 691,
+      "y": 121,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "514",
+      "x": 413,
+      "y": 288,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    },
+    {
+      "pair_id": "514",
+      "x": 684,
+      "y": 50,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "516",
+      "x": 600,
+      "y": 829,
+      "cell": "TC",
+      "region": "CA",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "523",
+      "x": 861,
+      "y": 231,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "523",
+      "x": 593,
+      "y": 69,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "526",
+      "x": 387,
+      "y": 293,
+      "cell": "BC",
+      "region": "BG",
+      "change": "rescue"
+    },
+    {
+      "pair_id": "533",
+      "x": 328,
+      "y": 931,
+      "cell": "TC",
+      "region": "BG",
+      "change": "harm"
+    },
+    {
+      "pair_id": "534",
+      "x": 577,
+      "y": 516,
+      "cell": "TC",
+      "region": "CA",
+      "change": "harm"
+    }
+  ]
+}
