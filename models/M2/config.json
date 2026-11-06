@@ -1,23 +1,20 @@
 {
   "model": "M2",
-  "status": "not_implemented",
+  "status": "implemented",
+  "description": "M0 구조 그대로, 세포 정답을 원형 지도에서 BC·TC 중심 지도(H_AO)로 바꾼 모델 (보고서 8.4)",
   "common_config": "configs/common.json",
   "tissue_to_cell": {
-    "after_aspp": "global_cross_attention",
+    "after_aspp": "coordinate_crop",
     "after_decoder": "coordinate_crop"
   },
   "cell_to_tissue": {
     "after_encoder": "coordinate_place",
     "coverage_mask": true
   },
-  "attention": {
-    "query": "cell",
-    "key_value": "full_tissue",
-    "token_grid": [
-      16,
-      16
-    ],
-    "use_coordinates": true
-  },
-  "gradient_method": "sum"
+  "attention": null,
+  "gradient_method": "sum",
+  "cell_head": {
+    "outputs": ["BC", "TC"],
+    "activation": "sigmoid"
+  }
 }
