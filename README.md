@@ -251,3 +251,40 @@ python scripts/export_augmented.py --preset default --ids 001 --copies 4
 
 자세한 내용: [두 작성자 어노테이션](docs/annotator_protocol.md), [데이터 증강](docs/augmentation_protocol.md)
 <!-- ANNOTATOR_AUGMENT_END -->
+
+<!-- M2_HEATMAP_START -->
+## M2 세포 중심 정답 지도 — 담당: 신상우
+
+보고서 8.4의 M2다. 가까이 붙은 세포의 누락을 줄이기 위해 **세포 정답 지도만** 바꾼다.
+위 "비교 모델" 표의 M2(예전 계획)와는 다른 모델이며, 표 정리는 담당자와 협의 후 반영한다.
+
+### 변경 내용
+
+- 새 파일만 추가했다. 기존 M0/M1 코드는 수정하지 않았다.
+  - `common/data/center_heatmaps.py`: BC·TC별 G / H_A / H_AO 정답 지도
+  - `common/losses/heatmap_losses.py`: sigmoid 가중 제곱오차
+  - `common/metrics/heatmap_eval.py`: 점수 지도 → 세포 점
+  - `common/training/m2_loop.py`: 로더·검증
+  - `configs/m2_train.json`, `scripts/{train,eval,check}_m2.py`
+- `models/M2/`: 예전 계획의 빈 틀을 보고서 M2로 바꿨다.
+  - 구조: M0와 같고 세포 head만 BC·TC 2채널 sigmoid
+
+### 실행
+
+```
+python scripts/check_m2.py
+python scripts/select_gaussian_params.py --repo . --scope classwise   # σ·λ → configs/m2_train.json
+python scripts/train_m2.py --seed 42
+python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --split val --tune \
+  --compare results/m0_dicefix_seed42/eval_val_per_image.json
+```
+
+필요한 설정: M0와 같은 데이터·SSL 가중치 경로(`OCELOT_DATA_ROOT`, `SSL_WEIGHTS_PATH`, `OUTPUT_ROOT`)
+
+### 확인한 결과와 남은 작업
+
+- 확인한 결과: `check_m2.py` PASS, 가짜 데이터로 학습·평가 전체 동작 확인
+- 남은 작업: σ·λ 확정 → VESSL 1회 학습 → M0와 비교 → 점검 후 방향 결정
+
+자세한 내용: [models/M2/README.md](models/M2/README.md)
+<!-- M2_HEATMAP_END -->
