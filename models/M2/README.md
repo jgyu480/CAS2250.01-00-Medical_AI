@@ -93,6 +93,38 @@ python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --split test   #
 - run 이름 기본값은 `M2_hao_s<σ>_l<λ>_official_seed42`이다.
 - `--target-mode gaussian|ha|hao`로 세 조건을 바꿀 수 있다. 비교할 때는 σ·λ·나머지 설정을 같게 둔다.
 
+## VESSL에서 1회 학습 (σ=6, λ=0.9, seed 42)
+
+```bash
+git clone -b feature/m2-center-heatmap https://github.com/jgyu480/CAS2250.01-00-Medical_AI.git
+cd CAS2250.01-00-Medical_AI
+python -c "import scipy" 2>/dev/null || python -m pip install "scipy<1.16"   # numpy·torch는 건드리지 않는다
+
+# 데이터 (VESSL에 이미 있으면 OCELOT_DATA_ROOT로 지정하고 건너뛴다)
+mkdir -p data/downloads data/raw
+wget -O data/downloads/ocelot2023_v1.0.1.zip "https://zenodo.org/records/8417503/files/ocelot2023_v1.0.1.zip?download=1"
+python -c "import zipfile; zipfile.ZipFile('data/downloads/ocelot2023_v1.0.1.zip').extractall('data/raw')"
+python scripts/check_data.py --zip data/downloads/ocelot2023_v1.0.1.zip   # PASS 확인
+python scripts/check_dataset.py                                            # PASS 확인
+python scripts/check_components.py      # SSL 가중치 다운로드 + SHA256 (SSL_WEIGHTS_PATH가 있으면 그 파일 확인)
+python scripts/check_m2.py --data       # M2 점검
+
+# 학습 (약 2시간 이상). 터미널이 끊겨도 계속 돌도록 nohup
+nohup python scripts/train_m2.py --seed 42 > outputs/train_m2_seed42.log 2>&1 &
+tail -f outputs/train_m2_seed42.log
+# 끊기면: python scripts/train_m2.py --resume outputs/m2/M2_hao_s6_l0.9_official_seed42/last.pt
+
+# 평가 (validation 후처리 선택 + 가까운 세포 진단 + M0 비교)
+python scripts/eval_m2.py --checkpoint outputs/m2/M2_hao_s6_l0.9_official_seed42/best.pt \
+  --split val --tune --compare results/m0_dicefix_seed42/eval_val_per_image.json
+```
+
+- 결과 폴더 `outputs/m2/M2_hao_s6_l0.9_official_seed42/`에서 분석에 쓰는 파일
+  - `config.json`, `history.csv`, `log.txt`
+  - `postprocess.json`, `eval_val.json`, `eval_val_per_image.json`, `close_cells_val.json`
+  - `best.pt`·`last.pt`는 GitHub에 올리지 않는다.
+- test 평가(`--split test`)는 점검 후 설정을 고정하고 한 번만 한다.
+
 ## 평가 항목 (보고서 8.4)
 
 `eval_m2.py`는 M0와 같은 `eval_<split>.json`을 만들고, `close_cells_<split>.json`에 다음을 기록한다.
