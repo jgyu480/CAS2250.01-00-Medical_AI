@@ -57,11 +57,31 @@ python scripts/select_gaussian_params.py --repo . --scope classwise
 비교용 pooled(기본값) 결과도 함께 기록한다.
 고른 값은 `configs/m2_train.json`의 `cell_target.sigma`, `cell_target.lambda`에 적는다.
 
+실행 결과 (train 400쌍, 11/6):
+
+| scope | 기본 기준 (골짜기 0.30) | 골짜기 0.20 | σ=6 Gaussian만으로 기준 통과 비율 |
+|---|---|---|---|
+| classwise | σ=6, **λ=0** | σ=6, λ=0.9 | 94.6% (BC-BC 94.2%, TC-TC 94.8%) |
+| pooled (민규 명령 그대로) | σ=6, **λ=0** | σ=6, λ=0.9 | 94.7% |
+
+- 규칙은 "M0 원 크기에 맞춘 σ, 그다음 가장 작은 λ"다.
+- σ=6이면 14–30px 쌍의 94.6%가 Gaussian만으로 기준(중간점 0.30 이하)을 넘는다. train 14–30px 쌍의 95%가 18px 이상 떨어져 있기 때문이다.
+- 그래서 λ=0이 뽑힌다. λ=0이면 H_AO = G가 되어 A·O가 적용되지 않는다.
+- **1회 실험에 쓸 λ(0 또는 0.9)는 민규 확인 대기 중이다.**
+- 비교 그림: `outputs/gaussian_parameter_audit_classwise/lambda0_vs_0.9.png` (Git 제외, 신상우 맥북)
+
+## 필요한 설정
+
+- **경로:** M0와 같은 데이터·SSL 가중치·결과 경로를 쓴다 (`OCELOT_DATA_ROOT`, `SSL_WEIGHTS_PATH`, `OUTPUT_ROOT`).
+- **사전 검사:** `check_data.py`가 만든 `outputs/audit/manifest.csv`, `report.json`이 있어야 한다.
+- **패키지:** M0 환경에 더해 `scipy`가 필요하다 (정답 지도의 KD-tree). 민규 안내 명령 `python -m pip install numpy scipy matplotlib Pillow`에 들어 있다.
+
 ## 실행
 
 ```bash
-python scripts/check_m2.py                     # 데이터 없이 점검 (CPU 약 15초)
-python scripts/check_m2.py --data              # 실제 데이터로 정답 지도 점검
+python scripts/check_m2.py                     # 데이터 없이 점검 (CPU 약 20초)
+python scripts/check_m2.py --data --sigma 6 --lambda 0.9   # 실제 데이터로 정답 지도 점검
+                                               # (σ·λ를 config에 적은 뒤에는 --data만)
 python scripts/train_m2.py --smoke             # 짧은 동작 확인 (성능 의미 없음)
 python scripts/train_m2.py --seed 42           # 본 학습 (VESSL GPU)
 python scripts/train_m2.py --resume outputs/m2/<run>/last.pt
@@ -88,6 +108,11 @@ python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --split test   #
 
 ## 확인한 결과
 
+- 실제 데이터 (신상우 맥북, 11/6):
+  - `check_data.py`(zip MD5 일치)와 `check_dataset.py` 모두 PASS
+  - `check_m2.py --data --sigma 6 --lambda 0.9` PASS: 증강 뒤 점 위치에서 해당 클래스 지도 값이 1이고, M0 원형 정답과 위치가 일치한다.
+  - 사진 한 장 읽는 시간: M0 Dataset 0.55초, M2 0.68초. 정답 지도 계산이 약 0.1초 더 걸린다.
+- M0 기준선과 같은 환경(Python 3.10, torch 2.3.1)에서 점검·학습·이어서 학습·후처리 선택·test 평가가 동작한다.
 - `check_m2.py` 결과:
   - 정답 지도가 선정 스크립트의 식과 일치하고, 보고서 그림 10 숫자(0.084→0.203, 0.050→0.275)를 재현한다.
   - 뒤집기·회전 뒤 지도가 일치한다.
@@ -104,7 +129,8 @@ python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --split test   #
 
 ## 남은 작업
 
-- [ ] `select_gaussian_params.py --scope classwise` 실행 → σ·λ 확정, `configs/m2_train.json` 기록
+- [x] `select_gaussian_params.py` 실행 (classwise·pooled 모두 σ=6, λ=0)
+- [ ] 1회 실험의 λ 확정 (0 또는 0.9, 민규 확인) → `configs/m2_train.json` 기록
 - [ ] VESSL에서 seed 42 1회 학습 → `eval_m2.py --tune --compare`로 M0와 비교
 - [ ] 민규 점검 후 방향 결정 (계속 / 수정)
 - [ ] M0 확률지도에서 피크 합침과 약한 반응 구분 (보고서 8.4 첫 단계, M0 `best.pt` 필요)
