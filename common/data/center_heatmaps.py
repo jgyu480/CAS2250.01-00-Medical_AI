@@ -65,6 +65,10 @@ def class_heatmap(centers, sigma, lam, mode="hao", size=1024):
     heat = np.zeros((size, size), dtype=np.float32)
     if len(centers) == 0:
         return heat
+    # 같은 좌표가 두 번 있으면 d1 = d2가 되어 그 세포 주변 전체가 억제된다.
+    # Dataset(read_points)도 중복 점을 오류로 처리한다.
+    if len(np.unique(centers, axis=0)) != len(centers):
+        raise ValueError("같은 클래스에 중복된 중심 좌표가 있습니다.")
 
     # 중심에서 cutoff 안의 픽셀만 계산한다 (밖은 G ≈ 0).
     cutoff = CUTOFF_SIGMAS * sigma
