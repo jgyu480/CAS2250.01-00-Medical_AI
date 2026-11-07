@@ -286,11 +286,11 @@ python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --split val --tu
 - 데이터 검사 `check_data.py`·`check_dataset.py` PASS
 - `check_m2.py` PASS (실제 데이터 포함)
 - 가짜 데이터로 학습·평가 전체 동작 확인 (Python 3.10 / torch 2.3.1 포함)
-- `select_gaussian_params.py`: classwise·pooled 모두 σ=6, λ=0. λ=0이면 정답 지도가 Gaussian과 같다 (자세한 내용은 M2 README).
+- `select_gaussian_params.py`: classwise·pooled 모두 σ=6, λ=0. λ=0이면 정답 지도가 Gaussian과 같아서, 1회 실험은 골짜기 0.2 기준 결과인 σ=6, λ=0.9로 정했다 (자세한 내용은 M2 README).
 
 ### 남은 작업
 
-- 1회 실험 λ 확정(민규) → 1회 학습 → M0와 비교 → 점검 후 방향 결정
+- σ=6, λ=0.9로 1회 학습 → M0와 비교(가까운 세포 누락률) → 점검 후 방향 결정
 
 자세한 내용: [models/M2/README.md](models/M2/README.md)
 <!-- M2_HEATMAP_END -->

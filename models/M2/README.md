@@ -67,7 +67,7 @@ python scripts/select_gaussian_params.py --repo . --scope classwise
 - 규칙은 "M0 원 크기에 맞춘 σ, 그다음 가장 작은 λ"다.
 - σ=6이면 14–30px 쌍의 94.6%가 Gaussian만으로 기준(중간점 0.30 이하)을 넘는다. train 14–30px 쌍의 95%가 18px 이상 떨어져 있기 때문이다.
 - 그래서 λ=0이 뽑힌다. λ=0이면 H_AO = G가 되어 A·O가 적용되지 않는다.
-- **1회 실험에 쓸 λ(0 또는 0.9)는 민규 확인 대기 중이다.**
+- **1회 실험은 σ=6, λ=0.9로 정했다 (11/7).** 골짜기 0.2 기준의 결과이며 보고서 그림 10과 같은 λ다. λ=0(Gaussian)은 이후 세 조건 비교에서 따로 돌린다.
 - 비교 그림: `outputs/gaussian_parameter_audit_classwise/lambda0_vs_0.9.png` (Git 제외, 신상우 맥북)
 
 ## 필요한 설정
@@ -80,8 +80,7 @@ python scripts/select_gaussian_params.py --repo . --scope classwise
 
 ```bash
 python scripts/check_m2.py                     # 데이터 없이 점검 (CPU 약 20초)
-python scripts/check_m2.py --data --sigma 6 --lambda 0.9   # 실제 데이터로 정답 지도 점검
-                                               # (σ·λ를 config에 적은 뒤에는 --data만)
+python scripts/check_m2.py --data              # 실제 데이터로 정답 지도 점검 (config의 σ·λ)
 python scripts/train_m2.py --smoke             # 짧은 동작 확인 (성능 의미 없음)
 python scripts/train_m2.py --seed 42           # 본 학습 (VESSL GPU)
 python scripts/train_m2.py --resume outputs/m2/<run>/last.pt
@@ -130,7 +129,7 @@ python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --split test   #
 ## 남은 작업
 
 - [x] `select_gaussian_params.py` 실행 (classwise·pooled 모두 σ=6, λ=0)
-- [ ] 1회 실험의 λ 확정 (0 또는 0.9, 민규 확인) → `configs/m2_train.json` 기록
+- [x] 1회 실험 σ=6, λ=0.9 확정 → `configs/m2_train.json` 기록
 - [ ] VESSL에서 seed 42 1회 학습 → `eval_m2.py --tune --compare`로 M0와 비교
 - [ ] 민규 점검 후 방향 결정 (계속 / 수정)
 - [ ] M0 확률지도에서 피크 합침과 약한 반응 구분 (보고서 8.4 첫 단계, M0 `best.pt` 필요)

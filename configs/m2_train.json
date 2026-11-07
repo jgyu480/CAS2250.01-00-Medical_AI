@@ -7,9 +7,9 @@
     "type": "center_heatmap",
     "mode": "hao",
     "scope": "classwise",
-    "sigma": null,
-    "lambda": null,
-    "selection": "scripts/select_gaussian_params.py --scope classwise 결과로 채운다 (train 데이터만 사용)"
+    "sigma": 6.0,
+    "lambda": 0.9,
+    "selection": "scripts/select_gaussian_params.py --scope classwise (train만 사용). 기본 기준(골짜기 0.3)은 σ=6, λ=0으로 H_AO=G가 되어, A·O 효과를 보기 위해 골짜기 0.2 기준 결과 σ=6, λ=0.9를 1회 실험에 사용 (11/7 결정)"
   },
   "epochs": 50,
   "encoder_freeze_epochs": 3,
