@@ -200,10 +200,14 @@ def main():
     if args.compare:
         m0_records = json.loads(Path(args.compare).read_text(encoding="utf-8"))
         if {r["pair_id"] for r in m0_records} != {r["pair_id"] for r in records}:
-            raise SystemExit("[중단] 비교 파일의 이미지 목록이 다릅니다 (같은 split인지 확인).")
-        diagnosis["compare_file"] = args.compare
-        diagnosis["M0"] = close_cell_table(m0_records)
-        print_table("비교 (M0, 원인 구분 없음)", diagnosis["M0"])
+            # 평가 결과는 그대로 저장하고 비교만 건너뛴다.
+            diagnosis["compare_error"] = f"{args.compare}: 이미지 목록이 다름"
+            print("[경고] 비교 파일의 이미지 목록이 달라 M0 비교를 건너뜁니다 "
+                  "(같은 split인지 확인).")
+        else:
+            diagnosis["compare_file"] = args.compare
+            diagnosis["M0"] = close_cell_table(m0_records)
+            print_table("비교 (M0, 원인 구분 없음)", diagnosis["M0"])
 
     summary = {
         "checkpoint": str(checkpoint), "epoch": state["epoch"] + 1,
