@@ -84,6 +84,7 @@ python scripts/check_m2.py --data              # 실제 데이터로 정답 지�
 python scripts/train_m2.py --smoke             # 짧은 동작 확인 (성능 의미 없음)
 python scripts/train_m2.py --seed 42           # 본 학습 (VESSL GPU)
 python scripts/train_m2.py --resume outputs/m2/<run>/last.pt
+bash scripts/run_m2_conditions.sh             # 세 조건 학습 + 평가 한 번에 (VESSL Run용)
 python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --split val --tune \
   --compare results/m0_dicefix_seed42/eval_val_per_image.json
 python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --split test   # 설정 고정 후 1회
@@ -93,37 +94,34 @@ python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --split test   #
 - run 이름 기본값은 `M2_hao_s<σ>_l<λ>_official_seed42`이다.
 - `--target-mode gaussian|ha|hao`로 세 조건을 바꿀 수 있다. 비교할 때는 σ·λ·나머지 설정을 같게 둔다.
 
-## VESSL에서 1회 학습 (σ=6, λ=0.9, seed 42)
+## VESSL에서 세 조건 학습 (G, H_A, H_AO · σ=6, λ=0.9, seed 42)
+
+`scripts/run_m2_conditions.sh`가 데이터 다운로드·검사 4개 → 조건별 학습 → `eval_m2.py --tune --compare`(M0 비교)를
+순서대로 실행하고, 결과를 `/root/m2_results/<run 이름>/`에 모은다.
+
+1. VESSL(app.vessl.ai, 조직 AI-LEC-03) → **Run → 새 Run 만들기**
+2. 오른쪽 **YAML 에디터**에 `vessl/m2_run.yaml` 내용을 붙여 넣는다.
+   - 클러스터 `yonsei-ai-gpu`, 리소스 `gpu-1`(RTX 3090), 이미지 `torch:2.3.1-cuda12.1-r5`
+   - import: 이 저장소 `feature/m2-center-heatmap` → `/root/repo`
+   - export: `/root/m2_results` → VESSL artifact
+   - 명령: `bash scripts/run_m2_conditions.sh`
+3. **만들기** → Run의 로그 탭에서 진행을 확인한다. 세 조건이면 약 7~8시간이다.
+
+- Workspace(JupyterLab) 대신 Run을 쓰는 이유: Run은 서버에 직접 접속하지 않아 교외 네트워크에서도 실행된다. Workspace는 교외에서 JupyterLab 포트 접속이 막혔다(11/9 확인).
+- YAML 명령에 여러 줄 스크립트를 직접 넣으면 VESSL 실행 파일 안에서 문법 오류가 난다. 그래서 명령은 한 줄로 두고 스크립트는 저장소 파일로 둔다.
+- 조건별 결과 파일
+  - `config.json`, `history.csv`, `log.txt`
+  - `postprocess.json`, `eval_val.json`, `eval_val_per_image.json`, `close_cells_val.json`
+  - `best.pt`
+- test 평가(`--split test`)는 점검 후 설정을 고정하고 한 번만 한다.
+
+직접 터미널에서 돌릴 때 (교내망 Workspace 등):
 
 ```bash
 git clone -b feature/m2-center-heatmap https://github.com/jgyu480/CAS2250.01-00-Medical_AI.git
 cd CAS2250.01-00-Medical_AI
-python -c "import scipy" 2>/dev/null || python -m pip install "scipy<1.16"   # numpy·torch는 건드리지 않는다
-
-# 데이터 (VESSL에 이미 있으면 OCELOT_DATA_ROOT로 지정하고 건너뛴다)
-mkdir -p data/downloads data/raw
-wget -O data/downloads/ocelot2023_v1.0.1.zip "https://zenodo.org/records/8417503/files/ocelot2023_v1.0.1.zip?download=1"
-python -c "import zipfile; zipfile.ZipFile('data/downloads/ocelot2023_v1.0.1.zip').extractall('data/raw')"
-python scripts/check_data.py --zip data/downloads/ocelot2023_v1.0.1.zip   # PASS 확인
-python scripts/check_dataset.py                                            # PASS 확인
-python scripts/check_components.py      # SSL 가중치 다운로드 + SHA256 (SSL_WEIGHTS_PATH가 있으면 그 파일 확인)
-python scripts/check_m2.py --data       # M2 점검
-
-# 학습 (약 2시간 이상). 터미널이 끊겨도 계속 돌도록 nohup
-nohup python scripts/train_m2.py --seed 42 > outputs/train_m2_seed42.log 2>&1 &
-tail -f outputs/train_m2_seed42.log
-# 끊기면: python scripts/train_m2.py --resume outputs/m2/M2_hao_s6_l0.9_official_seed42/last.pt
-
-# 평가 (validation 후처리 선택 + 가까운 세포 진단 + M0 비교)
-python scripts/eval_m2.py --checkpoint outputs/m2/M2_hao_s6_l0.9_official_seed42/best.pt \
-  --split val --tune --compare results/m0_dicefix_seed42/eval_val_per_image.json
+OUT=outputs/m2_results nohup bash scripts/run_m2_conditions.sh > outputs/run_m2.log 2>&1 &
 ```
-
-- 결과 폴더 `outputs/m2/M2_hao_s6_l0.9_official_seed42/`에서 분석에 쓰는 파일
-  - `config.json`, `history.csv`, `log.txt`
-  - `postprocess.json`, `eval_val.json`, `eval_val_per_image.json`, `close_cells_val.json`
-  - `best.pt`·`last.pt`는 GitHub에 올리지 않는다.
-- test 평가(`--split test`)는 점검 후 설정을 고정하고 한 번만 한다.
 
 ## 평가 항목 (보고서 8.4)
 
