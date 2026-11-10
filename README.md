@@ -288,9 +288,26 @@ python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --split val --tu
 - 가짜 데이터로 학습·평가 전체 동작 확인 (Python 3.10 / torch 2.3.1 포함)
 - `select_gaussian_params.py`: classwise·pooled 모두 σ=6, λ=0. λ=0이면 정답 지도가 Gaussian과 같아서, 1회 실험은 골짜기 0.2 기준 결과인 σ=6, λ=0.9로 정했다 (자세한 내용은 M2 README).
 
+### 확인한 결과 (11/10, VESSL 1회 학습, val)
+
+σ=6, λ=0.9, seed 42. 결과 파일 `results/m2_s6_l0.9_seed42/`, 비교 `scripts/compare_m2.py`.
+
+| | M0 | G | H_A | H_AO |
+|---|---|---|---|---|
+| mF1 | 0.7033 | 0.7330 | 0.7342 | 0.7324 |
+| 14–30px 누락률 BC / TC | 36.7% / 32.2% | 26.2% / 25.1% | 17.4% / 20.3% | 25.2% / 22.6% |
+
+- 성능 향상은 대부분 중심 지도(G) 자체에서 왔다 (G − M0 mF1 +0.0296, 환자 단위 95% 구간 +0.0115 ~ +0.0454).
+- A·O 억제(H_AO)는 같은 후처리에서 G와 mF1 차이가 없다. TC 가까운 세포 누락만 조금 줄었다 (−2.5%p).
+- H_A는 후처리 threshold가 0.3으로 달라 누락률을 바로 비교하기 어렵다.
+- 남은 누락은 대부분 피크 합침이 아니라 약한 반응이다.
+- val로 checkpoint·후처리를 골랐고 seed 1개다.
+
 ### 남은 작업
 
-- σ=6, λ=0.9로 1회 학습 → M0와 비교(가까운 세포 누락률) → 점검 후 방향 결정
+- 민규 점검 후 방향 결정
+- 후처리 격자 넓히기, H_A 같은 후처리 재진단, M0 확률지도 원인 구분
+- 방향을 정한 조건만 seed 43·44, 이후 test 1회
 
 자세한 내용: [models/M2/README.md](models/M2/README.md)
 <!-- M2_HEATMAP_END -->
