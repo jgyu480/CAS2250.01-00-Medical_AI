@@ -5,6 +5,17 @@
 조직 사진에서는 픽셀마다 BG/CA/UNK를 구분한다.
 M0~M3로 두 작업 사이의 정보 전달 방식과 gradient 처리 효과를 비교한다.
 
+## 모델과 실험 결과
+
+| 모델 | 코드·실행 안내 | 결과 |
+|---|---|---|
+| M0 | [구현 문서](docs/m0_implementation.md) | [Dice 수정 실험](results/m0_dicefix_seed42/) |
+| M1 | [모델](models/M1/) | [Validation 결과](results/m1_dicefix_seed42/) |
+| M1-1 | [모델](models/M1_1/) · [설치 안내](INSTALL_M1_1.md) | [평가·게이트 분석](results/m1_1/) |
+| M2 | [실행 안내](models/M2/README.md) · [VESSL 설정](vessl/m2_run.yaml) | [세 조건 비교](results/m2_s6_l0.9_seed42/comparison.json) · [전체 결과](results/m2_s6_l0.9_seed42/) |
+
+별도 실험 브랜치 — [M0 Dual Gate](../../tree/experiment/m0-dual-gate) · [M0 PCGrad Gate](../../tree/experiment/m0-pcgrad-gate)
+
 ## 현재 진행 상태
 
 - 1~5단계: 구조, 데이터, 어노테이션, Dataset, SSL 백본·공통 부품 점검 완료.
@@ -12,7 +23,8 @@ M0~M3로 두 작업 사이의 정보 전달 방식과 gradient 처리 효과를 
 - M0 기준선: 공식 라벨, 기본 증강, seed 42로 50 epoch 학습 및 validation/test 평가 완료.
   test 세포 mF1은 0.6893, 조직 mIoU는 0.8672이다.
 - M0 남은 작업: seed 43·44 반복, 라벨 품질·증강 비교, 결과 파일 공유.
-- M1~M3 구현과 비교 실험은 후속 단계에서 진행한다.
+- M1·M1-1 구현과 validation 평가를 완료했다.
+- M2는 G, H_A, H_AO 세 조건을 seed 42로 학습하고 validation에서 비교했다.
 
 M0의 구현 근거, 설정, 학습 경과, 평가 결과와 남은 작업은
 [`docs/m0_implementation.md`](docs/m0_implementation.md)에 기록한다.
@@ -48,7 +60,7 @@ Head는 특징을 클래스별 예측으로 바꾼다.
 Decoder와 head는 직접 구현하며 SSL 사전학습을 처음부터 반복하지 않는다.
 세포 점 정답은 원형 영역으로 바꿔 학습하고, 예측 지도에서 중심점을 찾는다.
 
-## 비교 모델
+## 초기 비교 모델 설계
 
 | 모델 | ASPP 뒤 조직→세포 | Encoder 뒤 세포→조직 | 학습 방식 |
 |---|---|---|---|
@@ -256,7 +268,7 @@ python scripts/export_augmented.py --preset default --ids 001 --copies 4
 ## M2 세포 중심 정답 지도 — 담당: 신상우
 
 보고서 8.4의 M2다. 가까이 붙은 세포의 누락을 줄이기 위해 **세포 정답 지도만** 바꾼다.
-위 "비교 모델" 표의 M2(예전 계획)와는 다른 모델이며, 표 정리는 담당자와 협의 후 반영한다.
+현재 M2는 M0 구조를 바탕으로 BC·TC 세포 중심 히트맵을 학습한다. 위 초기 설계 표에는 당시의 양방향 전달 계획을 남겨 두었다.
 
 ### 변경 내용
 
