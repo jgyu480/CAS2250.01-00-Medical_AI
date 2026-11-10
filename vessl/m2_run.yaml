@@ -1,0 +1,19 @@
+# VESSL Run: M2 세 조건(G, H_A, H_AO) 1회씩 학습 + validation 평가 (σ=6, λ=0.9, seed 42)
+# 새 Run 만들기 → 오른쪽 YAML 에디터에 이 내용을 붙여 넣는다.
+# 결과는 /root/m2_results → VESSL artifact로 저장된다.
+name: m2-g-ga-gao
+description: "M2 G / H_A / H_AO training + val eval (sigma 6, lambda 0.9, seed 42)"
+resources:
+  cluster: yonsei-ai-gpu
+  preset: gpu-1
+image: quay.io/vessl-ai/torch:2.3.1-cuda12.1-r5
+import:
+  /root/repo:
+    git:
+      url: https://github.com/jgyu480/CAS2250.01-00-Medical_AI
+      ref: feature/m2-center-heatmap
+export:
+  /root/m2_results: vessl-artifact://
+run:
+  - workdir: /root/repo
+    command: bash scripts/run_m2_conditions.sh

@@ -5,6 +5,17 @@
 조직 사진에서는 픽셀마다 BG/CA/UNK를 구분한다.
 M0~M3로 두 작업 사이의 정보 전달 방식과 gradient 처리 효과를 비교한다.
 
+## 모델과 실험 결과
+
+| 모델 | 코드·실행 안내 | 결과 |
+|---|---|---|
+| M0 | [구현 문서](docs/m0_implementation.md) | [Dice 수정 실험](results/m0_dicefix_seed42/) |
+| M1 | [모델](models/M1/) | [Validation 결과](results/m1_dicefix_seed42/) |
+| M1-1 | [모델](models/M1_1/) · [설치 안내](INSTALL_M1_1.md) | [평가·게이트 분석](results/m1_1/) |
+| M2 | [실행 안내](models/M2/README.md) · [VESSL 설정](vessl/m2_run.yaml) | [세 조건 비교](results/m2_s6_l0.9_seed42/comparison.json) · [전체 결과](results/m2_s6_l0.9_seed42/) |
+
+별도 실험 브랜치 — [M0 Dual Gate](../../tree/experiment/m0-dual-gate) · [M0 PCGrad Gate](../../tree/experiment/m0-pcgrad-gate)
+
 ## 현재 진행 상태
 
 - 1~5단계: 구조, 데이터, 어노테이션, Dataset, SSL 백본·공통 부품 점검 완료.
@@ -12,7 +23,8 @@ M0~M3로 두 작업 사이의 정보 전달 방식과 gradient 처리 효과를 
 - M0 기준선: 공식 라벨, 기본 증강, seed 42로 50 epoch 학습 및 validation/test 평가 완료.
   test 세포 mF1은 0.6893, 조직 mIoU는 0.8672이다.
 - M0 남은 작업: seed 43·44 반복, 라벨 품질·증강 비교, 결과 파일 공유.
-- M1~M3 구현과 비교 실험은 후속 단계에서 진행한다.
+- M1·M1-1 구현과 validation 평가를 완료했다.
+- M2는 G, H_A, H_AO 세 조건을 seed 42로 학습하고 validation에서 비교했다.
 
 M0의 구현 근거, 설정, 학습 경과, 평가 결과와 남은 작업은
 [`docs/m0_implementation.md`](docs/m0_implementation.md)에 기록한다.
@@ -48,7 +60,7 @@ Head는 특징을 클래스별 예측으로 바꾼다.
 Decoder와 head는 직접 구현하며 SSL 사전학습을 처음부터 반복하지 않는다.
 세포 점 정답은 원형 영역으로 바꿔 학습하고, 예측 지도에서 중심점을 찾는다.
 
-## 비교 모델
+## 초기 비교 모델 설계
 
 | 모델 | ASPP 뒤 조직→세포 | Encoder 뒤 세포→조직 | 학습 방식 |
 |---|---|---|---|
@@ -251,3 +263,63 @@ python scripts/export_augmented.py --preset default --ids 001 --copies 4
 
 자세한 내용: [두 작성자 어노테이션](docs/annotator_protocol.md), [데이터 증강](docs/augmentation_protocol.md)
 <!-- ANNOTATOR_AUGMENT_END -->
+
+<!-- M2_HEATMAP_START -->
+## M2 세포 중심 정답 지도 — 담당: 신상우
+
+보고서 8.4의 M2다. 가까이 붙은 세포의 누락을 줄이기 위해 **세포 정답 지도만** 바꾼다.
+현재 M2는 M0 구조를 바탕으로 BC·TC 세포 중심 히트맵을 학습한다. 위 초기 설계 표에는 당시의 양방향 전달 계획을 남겨 두었다.
+
+### 변경 내용
+
+- 새 파일만 추가했다. 기존 M0/M1 코드는 수정하지 않았다.
+  - `common/data/center_heatmaps.py`: BC·TC별 G / H_A / H_AO 정답 지도
+  - `common/losses/heatmap_losses.py`: sigmoid 가중 제곱오차
+  - `common/metrics/heatmap_eval.py`: 점수 지도 → 세포 점
+  - `common/training/m2_loop.py`: 로더·검증
+  - `configs/m2_train.json`, `scripts/{train,eval,check}_m2.py`
+- `models/M2/`: 예전 계획의 빈 틀을 보고서 M2로 바꿨다.
+  - 구조: M0와 같고 세포 head만 BC·TC 2채널 sigmoid
+
+### 실행
+
+```
+python scripts/check_m2.py
+python scripts/select_gaussian_params.py --repo . --scope classwise   # σ·λ → configs/m2_train.json
+python scripts/train_m2.py --seed 42
+python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --split val --tune \
+  --compare results/m0_dicefix_seed42/eval_val_per_image.json
+```
+
+필요한 설정: M0와 같은 데이터·SSL 가중치 경로(`OCELOT_DATA_ROOT`, `SSL_WEIGHTS_PATH`, `OUTPUT_ROOT`)와 `scipy`
+
+### 확인한 결과 (11/6)
+
+- 데이터 검사 `check_data.py`·`check_dataset.py` PASS
+- `check_m2.py` PASS (실제 데이터 포함)
+- 가짜 데이터로 학습·평가 전체 동작 확인 (Python 3.10 / torch 2.3.1 포함)
+- `select_gaussian_params.py`: classwise·pooled 모두 σ=6, λ=0. λ=0이면 정답 지도가 Gaussian과 같아서, 1회 실험은 골짜기 0.2 기준 결과인 σ=6, λ=0.9로 정했다 (자세한 내용은 M2 README).
+
+### 확인한 결과 (11/10, VESSL 1회 학습, val)
+
+σ=6, λ=0.9, seed 42. 결과 파일 `results/m2_s6_l0.9_seed42/`, 비교 `scripts/compare_m2.py`.
+
+| | M0 | G | H_A | H_AO |
+|---|---|---|---|---|
+| mF1 | 0.7033 | 0.7330 | 0.7342 | 0.7324 |
+| 14–30px 누락률 BC / TC | 36.7% / 32.2% | 26.2% / 25.1% | 17.4% / 20.3% | 25.2% / 22.6% |
+
+- 성능 향상은 대부분 중심 지도(G) 자체에서 왔다 (G − M0 mF1 +0.0296, 환자 단위 95% 구간 +0.0115 ~ +0.0454).
+- A·O 억제(H_AO)는 같은 후처리에서 G와 mF1 차이가 없다. TC 가까운 세포 누락만 조금 줄었다 (−2.5%p).
+- H_A는 후처리 threshold가 0.3으로 달라 누락률을 바로 비교하기 어렵다.
+- 남은 누락은 대부분 피크 합침이 아니라 약한 반응이다.
+- val로 checkpoint·후처리를 골랐고 seed 1개다.
+
+### 남은 작업
+
+- 민규 점검 후 방향 결정
+- 후처리 격자 넓히기, H_A 같은 후처리 재진단, M0 확률지도 원인 구분
+- 방향을 정한 조건만 seed 43·44, 이후 test 1회
+
+자세한 내용: [models/M2/README.md](models/M2/README.md)
+<!-- M2_HEATMAP_END -->
