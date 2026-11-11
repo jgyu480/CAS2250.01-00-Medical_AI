@@ -1,0 +1,85 @@
+{
+  "postprocess": {
+    "sigma": 3.0,
+    "min_distance": 7,
+    "threshold": 0.4
+  },
+  "M2": {
+    "by_class_and_neighbor": [
+      {
+        "class": "BC",
+        "neighbor_bin": "0-14",
+        "cells": 2,
+        "missed": 1,
+        "misclassified": 0,
+        "peak_merged": 0,
+        "weak_response": 1,
+        "miss_rate": 0.5,
+        "misclassified_rate": 0.0
+      },
+      {
+        "class": "BC",
+        "neighbor_bin": "14-30",
+        "cells": 1895,
+        "missed": 369,
+        "misclassified": 287,
+        "peak_merged": 23,
+        "weak_response": 346,
+        "miss_rate": 0.1947,
+        "misclassified_rate": 0.1515
+      },
+      {
+        "class": "BC",
+        "neighbor_bin": "30+",
+        "cells": 6503,
+        "missed": 533,
+        "misclassified": 767,
+        "peak_merged": 13,
+        "weak_response": 520,
+        "miss_rate": 0.082,
+        "misclassified_rate": 0.1179
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "0-14",
+        "cells": 56,
+        "missed": 31,
+        "misclassified": 1,
+        "peak_merged": 9,
+        "weak_response": 22,
+        "miss_rate": 0.5536,
+        "misclassified_rate": 0.0179
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "14-30",
+        "cells": 5563,
+        "missed": 1288,
+        "misclassified": 618,
+        "peak_merged": 59,
+        "weak_response": 1229,
+        "miss_rate": 0.2315,
+        "misclassified_rate": 0.1111
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "30+",
+        "cells": 10693,
+        "missed": 823,
+        "misclassified": 1222,
+        "peak_merged": 18,
+        "weak_response": 805,
+        "miss_rate": 0.077,
+        "misclassified_rate": 0.1143
+      }
+    ],
+    "totals": {
+      "duplicate": 155,
+      "false_positive": 4879,
+      "predictions": 26701,
+      "BC_close_minus_far_miss_rate": 0.1127,
+      "TC_close_minus_far_miss_rate": 0.1545
+    },
+    "cause_split": true
+  }
+}

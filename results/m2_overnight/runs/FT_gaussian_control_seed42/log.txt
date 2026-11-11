@@ -1,0 +1,15 @@
+[파인튜닝 시작 가중치] /root/m2_overnight/outputs/m2/M2_gaussian_s6_l0.9_official_seed42/best.pt
+[시작] FT_gaussian_control_seed42 | device cuda | amp torch.bfloat16 | 정답 gaussian σ=6 λ=0.9 | train 400 / val 137 | batch 2×1 | 10 epoch
+[epoch 1/10] train 0.7717 (cell 0.6416, tissue 0.1300) | val 1.4303 | mF1 0.7342 (BC 0.6683, TC 0.8000) | mIoU 0.8254 | 155.1s
+[저장] best.pt (val mF1 0.7342)
+[epoch 2/10] train 0.7636 (cell 0.6359, tissue 0.1277) | val 1.4423 | mF1 0.7307 (BC 0.6646, TC 0.7967) | mIoU 0.8245 | 157.1s
+[epoch 3/10] train 0.7536 (cell 0.6272, tissue 0.1263) | val 1.4304 | mF1 0.7335 (BC 0.6665, TC 0.8004) | mIoU 0.8287 | 154.5s
+[epoch 4/10] train 0.7485 (cell 0.6254, tissue 0.1232) | val 1.4312 | mF1 0.7351 (BC 0.6695, TC 0.8008) | mIoU 0.8268 | 153.2s
+[저장] best.pt (val mF1 0.7351)
+[epoch 5/10] train 0.7459 (cell 0.6243, tissue 0.1216) | val 1.4644 | mF1 0.7324 (BC 0.6655, TC 0.7993) | mIoU 0.8239 | 154.4s
+[epoch 6/10] train 0.7411 (cell 0.6197, tissue 0.1214) | val 1.4576 | mF1 0.7322 (BC 0.6657, TC 0.7986) | mIoU 0.8231 | 152.8s
+[epoch 7/10] train 0.7410 (cell 0.6207, tissue 0.1203) | val 1.4600 | mF1 0.7320 (BC 0.6643, TC 0.7997) | mIoU 0.8245 | 153.6s
+[epoch 8/10] train 0.7342 (cell 0.6147, tissue 0.1195) | val 1.4653 | mF1 0.7309 (BC 0.6631, TC 0.7986) | mIoU 0.8233 | 154.1s
+[epoch 9/10] train 0.7393 (cell 0.6208, tissue 0.1185) | val 1.4651 | mF1 0.7306 (BC 0.6626, TC 0.7987) | mIoU 0.8231 | 153.3s
+[epoch 10/10] train 0.7362 (cell 0.6177, tissue 0.1185) | val 1.4652 | mF1 0.7302 (BC 0.6620, TC 0.7984) | mIoU 0.8231 | 154.4s
+[완료] best val mF1 0.7351. 결과: /root/m2_overnight/outputs/m2/FT_gaussian_control_seed42

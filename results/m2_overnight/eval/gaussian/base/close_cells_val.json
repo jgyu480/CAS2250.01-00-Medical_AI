@@ -1,0 +1,85 @@
+{
+  "postprocess": {
+    "sigma": 3.0,
+    "min_distance": 7,
+    "threshold": 0.4
+  },
+  "M2": {
+    "by_class_and_neighbor": [
+      {
+        "class": "BC",
+        "neighbor_bin": "0-14",
+        "cells": 2,
+        "missed": 1,
+        "misclassified": 0,
+        "peak_merged": 0,
+        "weak_response": 1,
+        "miss_rate": 0.5,
+        "misclassified_rate": 0.0
+      },
+      {
+        "class": "BC",
+        "neighbor_bin": "14-30",
+        "cells": 1895,
+        "missed": 371,
+        "misclassified": 353,
+        "peak_merged": 23,
+        "weak_response": 348,
+        "miss_rate": 0.1958,
+        "misclassified_rate": 0.1863
+      },
+      {
+        "class": "BC",
+        "neighbor_bin": "30+",
+        "cells": 6503,
+        "missed": 707,
+        "misclassified": 942,
+        "peak_merged": 11,
+        "weak_response": 696,
+        "miss_rate": 0.1087,
+        "misclassified_rate": 0.1449
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "0-14",
+        "cells": 56,
+        "missed": 30,
+        "misclassified": 0,
+        "peak_merged": 9,
+        "weak_response": 21,
+        "miss_rate": 0.5357,
+        "misclassified_rate": 0.0
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "14-30",
+        "cells": 5563,
+        "missed": 1078,
+        "misclassified": 261,
+        "peak_merged": 74,
+        "weak_response": 1004,
+        "miss_rate": 0.1938,
+        "misclassified_rate": 0.0469
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "30+",
+        "cells": 10693,
+        "missed": 743,
+        "misclassified": 765,
+        "peak_merged": 26,
+        "weak_response": 717,
+        "miss_rate": 0.0695,
+        "misclassified_rate": 0.0715
+      }
+    ],
+    "totals": {
+      "duplicate": 156,
+      "false_positive": 4827,
+      "predictions": 26765,
+      "BC_close_minus_far_miss_rate": 0.0871,
+      "TC_close_minus_far_miss_rate": 0.1243
+    },
+    "cause_split": true
+  }
+}

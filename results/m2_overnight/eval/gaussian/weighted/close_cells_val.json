@@ -1,0 +1,85 @@
+{
+  "postprocess": {
+    "sigma": 3.0,
+    "min_distance": 7,
+    "threshold": 0.4
+  },
+  "M2": {
+    "by_class_and_neighbor": [
+      {
+        "class": "BC",
+        "neighbor_bin": "0-14",
+        "cells": 2,
+        "missed": 1,
+        "misclassified": 0,
+        "peak_merged": 0,
+        "weak_response": 1,
+        "miss_rate": 0.5,
+        "misclassified_rate": 0.0
+      },
+      {
+        "class": "BC",
+        "neighbor_bin": "14-30",
+        "cells": 1895,
+        "missed": 369,
+        "misclassified": 334,
+        "peak_merged": 36,
+        "weak_response": 333,
+        "miss_rate": 0.1947,
+        "misclassified_rate": 0.1763
+      },
+      {
+        "class": "BC",
+        "neighbor_bin": "30+",
+        "cells": 6503,
+        "missed": 710,
+        "misclassified": 828,
+        "peak_merged": 17,
+        "weak_response": 693,
+        "miss_rate": 0.1092,
+        "misclassified_rate": 0.1273
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "0-14",
+        "cells": 56,
+        "missed": 29,
+        "misclassified": 0,
+        "peak_merged": 9,
+        "weak_response": 20,
+        "miss_rate": 0.5179,
+        "misclassified_rate": 0.0
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "14-30",
+        "cells": 5563,
+        "missed": 1052,
+        "misclassified": 361,
+        "peak_merged": 92,
+        "weak_response": 960,
+        "miss_rate": 0.1891,
+        "misclassified_rate": 0.0649
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "30+",
+        "cells": 10693,
+        "missed": 727,
+        "misclassified": 1013,
+        "peak_merged": 25,
+        "weak_response": 702,
+        "miss_rate": 0.068,
+        "misclassified_rate": 0.0947
+      }
+    ],
+    "totals": {
+      "duplicate": 180,
+      "false_positive": 4801,
+      "predictions": 26805,
+      "BC_close_minus_far_miss_rate": 0.0855,
+      "TC_close_minus_far_miss_rate": 0.1211
+    },
+    "cause_split": true
+  }
+}

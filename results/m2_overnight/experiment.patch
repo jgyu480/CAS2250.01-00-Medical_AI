@@ -1,0 +1,124 @@
+diff --git a/common/losses/heatmap_losses.py b/common/losses/heatmap_losses.py
+index 6c63d64..6607e68 100644
+--- a/common/losses/heatmap_losses.py
++++ b/common/losses/heatmap_losses.py
+@@ -42,7 +42,7 @@ def foreground_mask(target, threshold=0.2, dilation=3):
+ 
+ 
+ def weighted_mse(logits, target, foreground_weight=10.0, threshold=0.2, dilation=3,
+-                 min_foreground_fraction=0.005):
++                 min_foreground_fraction=0.005, close_tc_pixels=None):
+     """logits, target: (B, 2, H, W). 반환: 스칼라 손실."""
+     if logits.ndim != 4 or logits.shape != target.shape:
+         raise ValueError("logits와 정답 지도의 크기가 다릅니다.")
+@@ -58,7 +58,12 @@ def weighted_mse(logits, target, foreground_weight=10.0, threshold=0.2, dilation
+     prob = torch.sigmoid(logits.float())
+     mask = foreground_mask(target, threshold, dilation)
+     weight = 1.0 + foreground_weight * mask.float()
+-    loss = (weight * (prob - target) ** 2).sum()
++    residual = prob - target
++    loss = (weight * residual ** 2).sum()
++    if close_tc_pixels is not None:
++        batch, y, x = close_tc_pixels
++        underprediction = (-residual[batch, 1, y, x]).clamp_min(0)
++        loss = loss + (weight[batch, 1, y, x] * underprediction.square()).sum()
+ 
+     floor = max(1.0, min_foreground_fraction * target.numel())
+     count = mask.sum().float().clamp_min(floor)
+diff --git a/scripts/eval_m2.py b/scripts/eval_m2.py
+index 275cefa..5301c7d 100644
+--- a/scripts/eval_m2.py
++++ b/scripts/eval_m2.py
+@@ -126,6 +126,7 @@ def main():
+     parser.add_argument("--checkpoint", required=True)
+     parser.add_argument("--split", choices=["val", "test"], required=True)
+     parser.add_argument("--tune", action="store_true")
++    parser.add_argument("--threshold-sweep", action="store_true")
+     parser.add_argument("--compare", help="같은 split의 M0 eval_*_per_image.json")
+     parser.add_argument("--batch-size", type=int, default=2)
+     parser.add_argument("--num-workers", type=int, default=4)
+@@ -197,6 +198,26 @@ def main():
+     diagnosis = {"postprocess": postprocess,
+                  "M2": close_cell_table(records, score_map, postprocess)}
+     print_table("M2", diagnosis["M2"])
++    if args.threshold_sweep:
++        sweep = []
++        for threshold in (0.15, 0.2, 0.25, 0.3, 0.35, 0.375, 0.4,
++                          0.425, 0.45, 0.5, 0.55, 0.6, 0.7, 0.8):
++            if threshold == postprocess["threshold"]:
++                sweep.append({"threshold": threshold, **diagnosis["M2"],
++                              "official": metrics})
++                continue
++            options = {**postprocess, "threshold": threshold}
++            rows = []
++            metric = CellF1()
++            for pair_id, logits, truths in cached:
++                preds = to_full_size(
++                    detect_cells_heatmap(logits[None].float(), **options)[0], s["size"])
++                rows.append({"pair_id": pair_id, "predictions": preds, "truths": truths})
++                metric.update(preds, truths)
++            sweep.append({"threshold": threshold, **close_cell_table(rows),
++                          "official": metric.compute()})
++        (folder / "threshold_sweep_val.json").write_text(
++            json.dumps(sweep, ensure_ascii=False, indent=2) + chr(10))
+     if args.compare:
+         m0_records = json.loads(Path(args.compare).read_text(encoding="utf-8"))
+         if {r["pair_id"] for r in m0_records} != {r["pair_id"] for r in records}:
+diff --git a/scripts/train_m2.py b/scripts/train_m2.py
+index 74cfaef..90ac6be 100644
+--- a/scripts/train_m2.py
++++ b/scripts/train_m2.py
+@@ -129,6 +129,27 @@ def run_name(args, s):
+             + ("_smoke" if args.smoke else ""))
+ 
+ 
++def close_tc_pixels(points_by_image, size, device):
++    import numpy as np
++    from scipy.spatial import cKDTree
++
++    pixels = set()
++    for b, points in enumerate(points_by_image):
++        points = points.numpy()
++        if len(points) < 2:
++            continue
++        xy = points[:, :2]
++        nearest = cKDTree(xy).query(xy, k=2)[0][:, 1]
++        selected = (points[:, 2] == 2) & (nearest >= 14) & (nearest < 30)
++        for x, y in np.rint(xy[selected]).astype(int):
++            for row in range(max(0, y - 1), min(size, y + 2)):
++                for col in range(max(0, x - 1), min(size, x + 2)):
++                    pixels.add((b, row, col))
++    if pixels:
++        return torch.as_tensor(sorted(pixels), device=device, dtype=torch.long).T
++    return None
++
++
+ def main():
+     args = parse_args()
+     s = build_settings(args)
+@@ -161,6 +182,11 @@ def main():
+ 
+     model_config = json.loads((ROOT / s["model_config"]).read_text(encoding="utf-8"))
+     model = build_model(model_config).to(device)
++    if not args.resume and s.get("finetune_checkpoint"):
++        checkpoint = torch.load(s["finetune_checkpoint"], map_location="cpu", weights_only=False)
++        model.load_state_dict(checkpoint["model"], strict=True)
++        log(f"[파인튜닝 시작 가중치] {s['finetune_checkpoint']}")
++        del checkpoint
+     optimizer = torch.optim.AdamW([
+         {"params": model.encoder_parameters(), "lr": s["encoder_lr"]},
+         {"params": model.new_module_parameters(), "lr": s["new_modules_lr"]}
+@@ -215,8 +241,12 @@ def main():
+             images, targets, boxes = prepare(batch, device, s["size"])
+             with cast:
+                 out = model(*images, boxes)
++            train_loss_kwargs = loss_kwargs
++            if s.get("close_tc_underprediction"):
++                train_loss_kwargs = {**loss_kwargs, "close_tc_pixels": close_tc_pixels(
++                    batch["cell_points"], s["size"], device)}
+             losses = task_losses(out["cell_logits"], out["tissue_logits"],
+-                                 *targets, **loss_kwargs)
++                                 *targets, **train_loss_kwargs)
+             total = losses["cell"] + s["tissue_loss_weight"] * losses["tissue"]
+             if not torch.isfinite(total):
+                 raise SystemExit(f"[중단] epoch {epoch + 1} batch {index}: 손실 NaN/Inf")

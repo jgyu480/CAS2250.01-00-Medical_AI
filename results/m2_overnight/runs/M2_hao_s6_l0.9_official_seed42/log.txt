@@ -1,0 +1,61 @@
+[시작] M2_hao_s6_l0.9_official_seed42 | device cuda | amp torch.bfloat16 | 정답 hao σ=6 λ=0.9 | train 400 / val 137 | batch 2×1 | 50 epoch
+[epoch 1/50] (백본 고정) train 2.1500 (cell 1.4628, tissue 0.6873) | val 1.5516 | mF1 0.5356 (BC 0.4991, TC 0.5721) | mIoU 0.7721 | 154.5s
+[저장] best.pt (val mF1 0.5356)
+[epoch 2/50] (백본 고정) train 1.5019 (cell 1.0656, tissue 0.4364) | val 1.4640 | mF1 0.5414 (BC 0.5013, TC 0.5816) | mIoU 0.8073 | 154.3s
+[저장] best.pt (val mF1 0.5414)
+[epoch 3/50] (백본 고정) train 1.3979 (cell 1.0027, tissue 0.3952) | val 1.4551 | mF1 0.5784 (BC 0.5415, TC 0.6153) | mIoU 0.8092 | 156.2s
+[저장] best.pt (val mF1 0.5784)
+[epoch 4/50] train 1.3405 (cell 0.9512, tissue 0.3892) | val 1.3947 | mF1 0.5810 (BC 0.5319, TC 0.6300) | mIoU 0.8067 | 157.1s
+[저장] best.pt (val mF1 0.5810)
+[epoch 5/50] train 1.2859 (cell 0.9261, tissue 0.3598) | val 1.3410 | mF1 0.6517 (BC 0.5894, TC 0.7141) | mIoU 0.8214 | 153.6s
+[저장] best.pt (val mF1 0.6517)
+[epoch 6/50] train 1.2156 (cell 0.8947, tissue 0.3209) | val 1.4136 | mF1 0.6323 (BC 0.5737, TC 0.6909) | mIoU 0.7961 | 153.7s
+[epoch 7/50] train 1.1991 (cell 0.8894, tissue 0.3096) | val 1.4971 | mF1 0.6355 (BC 0.5738, TC 0.6973) | mIoU 0.7697 | 153.9s
+[epoch 8/50] train 1.1572 (cell 0.8661, tissue 0.2912) | val 1.4243 | mF1 0.6847 (BC 0.6279, TC 0.7415) | mIoU 0.7995 | 153.8s
+[저장] best.pt (val mF1 0.6847)
+[epoch 9/50] train 1.1543 (cell 0.8520, tissue 0.3022) | val 1.2907 | mF1 0.6629 (BC 0.5931, TC 0.7328) | mIoU 0.8311 | 154.9s
+[epoch 10/50] train 1.1044 (cell 0.8371, tissue 0.2672) | val 1.3749 | mF1 0.6749 (BC 0.6222, TC 0.7275) | mIoU 0.7987 | 154.5s
+[epoch 11/50] train 1.0880 (cell 0.8253, tissue 0.2626) | val 1.2837 | mF1 0.6990 (BC 0.6440, TC 0.7540) | mIoU 0.8280 | 154.2s
+[저장] best.pt (val mF1 0.6990)
+[epoch 12/50] train 1.0644 (cell 0.8165, tissue 0.2479) | val 1.4675 | mF1 0.6743 (BC 0.6121, TC 0.7365) | mIoU 0.7955 | 155.3s
+[epoch 13/50] train 1.0523 (cell 0.8060, tissue 0.2462) | val 1.4136 | mF1 0.6919 (BC 0.6199, TC 0.7638) | mIoU 0.8163 | 156.2s
+[epoch 14/50] train 1.0301 (cell 0.7954, tissue 0.2347) | val 1.3609 | mF1 0.6758 (BC 0.6316, TC 0.7201) | mIoU 0.8098 | 154.5s
+[epoch 15/50] train 1.0142 (cell 0.7890, tissue 0.2251) | val 1.3623 | mF1 0.6620 (BC 0.5922, TC 0.7318) | mIoU 0.8217 | 155.9s
+[epoch 16/50] train 0.9849 (cell 0.7765, tissue 0.2084) | val 1.5186 | mF1 0.6958 (BC 0.6395, TC 0.7520) | mIoU 0.7862 | 157.1s
+[epoch 17/50] train 0.9756 (cell 0.7710, tissue 0.2047) | val 1.5454 | mF1 0.6889 (BC 0.6228, TC 0.7549) | mIoU 0.7946 | 155.9s
+[epoch 18/50] train 0.9546 (cell 0.7534, tissue 0.2012) | val 1.3525 | mF1 0.6866 (BC 0.6159, TC 0.7572) | mIoU 0.8188 | 154.5s
+[epoch 19/50] train 0.9488 (cell 0.7478, tissue 0.2010) | val 1.3711 | mF1 0.7028 (BC 0.6353, TC 0.7702) | mIoU 0.8142 | 155.1s
+[저장] best.pt (val mF1 0.7028)
+[epoch 20/50] train 0.9423 (cell 0.7454, tissue 0.1969) | val 1.4315 | mF1 0.6804 (BC 0.6098, TC 0.7510) | mIoU 0.8164 | 154.9s
+[epoch 21/50] train 0.9168 (cell 0.7302, tissue 0.1866) | val 1.5349 | mF1 0.6505 (BC 0.5875, TC 0.7136) | mIoU 0.7873 | 154.3s
+[epoch 22/50] train 0.9144 (cell 0.7310, tissue 0.1834) | val 1.4929 | mF1 0.6640 (BC 0.5780, TC 0.7499) | mIoU 0.8086 | 154.6s
+[epoch 23/50] train 0.8821 (cell 0.7115, tissue 0.1706) | val 1.3812 | mF1 0.6696 (BC 0.6045, TC 0.7347) | mIoU 0.8201 | 153.2s
+[epoch 24/50] train 0.8738 (cell 0.7063, tissue 0.1675) | val 1.5600 | mF1 0.6157 (BC 0.5454, TC 0.6860) | mIoU 0.7830 | 153.8s
+[epoch 25/50] train 0.8669 (cell 0.6996, tissue 0.1673) | val 1.4451 | mF1 0.6707 (BC 0.6116, TC 0.7298) | mIoU 0.8052 | 153.9s
+[epoch 26/50] train 0.8476 (cell 0.6896, tissue 0.1580) | val 1.4043 | mF1 0.6967 (BC 0.6320, TC 0.7614) | mIoU 0.8144 | 154.2s
+[epoch 27/50] train 0.8324 (cell 0.6837, tissue 0.1487) | val 1.4194 | mF1 0.6968 (BC 0.6326, TC 0.7610) | mIoU 0.8280 | 154.2s
+[epoch 28/50] train 0.8279 (cell 0.6748, tissue 0.1531) | val 1.3926 | mF1 0.6913 (BC 0.6249, TC 0.7578) | mIoU 0.8304 | 153.8s
+[epoch 29/50] train 0.8169 (cell 0.6716, tissue 0.1452) | val 1.4869 | mF1 0.6997 (BC 0.6465, TC 0.7529) | mIoU 0.8066 | 155.1s
+[epoch 30/50] train 0.8068 (cell 0.6656, tissue 0.1413) | val 1.4314 | mF1 0.6913 (BC 0.6301, TC 0.7524) | mIoU 0.8211 | 154.2s
+[epoch 31/50] train 0.7911 (cell 0.6511, tissue 0.1400) | val 1.4481 | mF1 0.7005 (BC 0.6398, TC 0.7613) | mIoU 0.8215 | 154.1s
+[epoch 32/50] train 0.7855 (cell 0.6495, tissue 0.1361) | val 1.4584 | mF1 0.6997 (BC 0.6391, TC 0.7603) | mIoU 0.8139 | 153.4s
+[epoch 33/50] train 0.7724 (cell 0.6426, tissue 0.1299) | val 1.4231 | mF1 0.7008 (BC 0.6407, TC 0.7609) | mIoU 0.8290 | 154.2s
+[epoch 34/50] train 0.7639 (cell 0.6362, tissue 0.1277) | val 1.4906 | mF1 0.6920 (BC 0.6252, TC 0.7588) | mIoU 0.8107 | 153.1s
+[epoch 35/50] train 0.7570 (cell 0.6319, tissue 0.1251) | val 1.5280 | mF1 0.7041 (BC 0.6453, TC 0.7629) | mIoU 0.8099 | 156.6s
+[저장] best.pt (val mF1 0.7041)
+[epoch 36/50] train 0.7574 (cell 0.6323, tissue 0.1250) | val 1.5136 | mF1 0.6940 (BC 0.6337, TC 0.7543) | mIoU 0.8139 | 155.7s
+[epoch 37/50] train 0.7501 (cell 0.6298, tissue 0.1203) | val 1.4663 | mF1 0.6980 (BC 0.6369, TC 0.7590) | mIoU 0.8252 | 157.6s
+[epoch 38/50] train 0.7337 (cell 0.6158, tissue 0.1179) | val 1.5013 | mF1 0.6979 (BC 0.6346, TC 0.7612) | mIoU 0.8163 | 154.3s
+[epoch 39/50] train 0.7303 (cell 0.6141, tissue 0.1163) | val 1.5450 | mF1 0.6943 (BC 0.6323, TC 0.7564) | mIoU 0.8106 | 153.9s
+[epoch 40/50] train 0.7204 (cell 0.6059, tissue 0.1146) | val 1.5099 | mF1 0.6949 (BC 0.6309, TC 0.7589) | mIoU 0.8189 | 153.7s
+[epoch 41/50] train 0.7236 (cell 0.6114, tissue 0.1122) | val 1.5252 | mF1 0.6971 (BC 0.6342, TC 0.7599) | mIoU 0.8155 | 154.4s
+[epoch 42/50] train 0.7182 (cell 0.6060, tissue 0.1123) | val 1.5040 | mF1 0.6986 (BC 0.6345, TC 0.7627) | mIoU 0.8211 | 155.9s
+[epoch 43/50] train 0.7143 (cell 0.6042, tissue 0.1101) | val 1.5246 | mF1 0.7008 (BC 0.6391, TC 0.7625) | mIoU 0.8170 | 154.5s
+[epoch 44/50] train 0.7133 (cell 0.6036, tissue 0.1096) | val 1.5261 | mF1 0.6994 (BC 0.6368, TC 0.7620) | mIoU 0.8167 | 154.3s
+[epoch 45/50] train 0.7099 (cell 0.5993, tissue 0.1105) | val 1.5202 | mF1 0.7007 (BC 0.6373, TC 0.7641) | mIoU 0.8191 | 154.9s
+[epoch 46/50] train 0.7134 (cell 0.6030, tissue 0.1104) | val 1.5231 | mF1 0.6987 (BC 0.6354, TC 0.7620) | mIoU 0.8185 | 155.3s
+[epoch 47/50] train 0.7087 (cell 0.5983, tissue 0.1104) | val 1.5239 | mF1 0.6973 (BC 0.6335, TC 0.7611) | mIoU 0.8186 | 152.4s
+[epoch 48/50] train 0.7052 (cell 0.5956, tissue 0.1095) | val 1.5223 | mF1 0.6989 (BC 0.6358, TC 0.7619) | mIoU 0.8192 | 153.8s
+[epoch 49/50] train 0.7153 (cell 0.6065, tissue 0.1088) | val 1.5215 | mF1 0.6996 (BC 0.6365, TC 0.7627) | mIoU 0.8196 | 155.0s
+[epoch 50/50] train 0.7114 (cell 0.6022, tissue 0.1092) | val 1.5217 | mF1 0.6994 (BC 0.6362, TC 0.7627) | mIoU 0.8195 | 155.4s
+[완료] best val mF1 0.7041. 결과: /root/m2_overnight/outputs/m2/M2_hao_s6_l0.9_official_seed42

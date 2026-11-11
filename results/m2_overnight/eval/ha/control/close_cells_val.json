@@ -1,0 +1,85 @@
+{
+  "postprocess": {
+    "sigma": 3.0,
+    "min_distance": 7,
+    "threshold": 0.4
+  },
+  "M2": {
+    "by_class_and_neighbor": [
+      {
+        "class": "BC",
+        "neighbor_bin": "0-14",
+        "cells": 2,
+        "missed": 1,
+        "misclassified": 0,
+        "peak_merged": 0,
+        "weak_response": 1,
+        "miss_rate": 0.5,
+        "misclassified_rate": 0.0
+      },
+      {
+        "class": "BC",
+        "neighbor_bin": "14-30",
+        "cells": 1895,
+        "missed": 370,
+        "misclassified": 288,
+        "peak_merged": 24,
+        "weak_response": 346,
+        "miss_rate": 0.1953,
+        "misclassified_rate": 0.152
+      },
+      {
+        "class": "BC",
+        "neighbor_bin": "30+",
+        "cells": 6503,
+        "missed": 536,
+        "misclassified": 758,
+        "peak_merged": 10,
+        "weak_response": 526,
+        "miss_rate": 0.0824,
+        "misclassified_rate": 0.1166
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "0-14",
+        "cells": 56,
+        "missed": 31,
+        "misclassified": 1,
+        "peak_merged": 9,
+        "weak_response": 22,
+        "miss_rate": 0.5536,
+        "misclassified_rate": 0.0179
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "14-30",
+        "cells": 5563,
+        "missed": 1317,
+        "misclassified": 630,
+        "peak_merged": 53,
+        "weak_response": 1264,
+        "miss_rate": 0.2367,
+        "misclassified_rate": 0.1132
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "30+",
+        "cells": 10693,
+        "missed": 830,
+        "misclassified": 1234,
+        "peak_merged": 17,
+        "weak_response": 813,
+        "miss_rate": 0.0776,
+        "misclassified_rate": 0.1154
+      }
+    ],
+    "totals": {
+      "duplicate": 152,
+      "false_positive": 4857,
+      "predictions": 26636,
+      "BC_close_minus_far_miss_rate": 0.1129,
+      "TC_close_minus_far_miss_rate": 0.1591
+    },
+    "cause_split": true
+  }
+}

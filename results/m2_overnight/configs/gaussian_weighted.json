@@ -1,0 +1,91 @@
+{
+  "description": "M2 학습 설정. 세포 정답과 세포 손실만 M0(configs/m0_train.json)와 다르고 나머지는 같다. 보고서 8.4.",
+  "model_config": "models/M2/config.json",
+  "label_source": "official",
+  "augmentation": "default",
+  "cell_target": {
+    "type": "center_heatmap",
+    "mode": "gaussian",
+    "scope": "classwise",
+    "sigma": 6.0,
+    "lambda": 0.9,
+    "selection": "scripts/select_gaussian_params.py --scope classwise (train만 사용). 기본 기준(골짜기 0.3)은 σ=6, λ=0으로 H_AO=G가 되어, A·O 효과를 보기 위해 골짜기 0.2 기준 결과 σ=6, λ=0.9를 1회 실험에 사용 (11/7 결정)"
+  },
+  "epochs": 10,
+  "encoder_freeze_epochs": 0,
+  "optimizer": "AdamW",
+  "encoder_lr": 1e-06,
+  "new_modules_lr": 1e-05,
+  "weight_decay": 0.01,
+  "scheduler": "cosine",
+  "tissue_loss_weight": 1.0,
+  "cell_loss": {
+    "type": "weighted_mse_sigmoid",
+    "foreground_weight": 10.0,
+    "foreground_threshold": 0.2,
+    "dilation": 3,
+    "min_foreground_fraction": 0.005
+  },
+  "grad_clip_norm": 10.0,
+  "tissue_loss": {
+    "type": "cross_entropy+dice",
+    "ignore": "UNK"
+  },
+  "batch_size": 2,
+  "grad_accum_steps": 1,
+  "num_workers": 4,
+  "amp": true,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "checkpoint_selection": "val_cell_mF1",
+  "postprocess_during_training": {
+    "sigma": 3.0,
+    "min_distance": 7,
+    "threshold": 0.4
+  },
+  "postprocess_search": {
+    "sigma": [
+      0.0,
+      1.0,
+      2.0,
+      3.0
+    ],
+    "min_distance": [
+      3,
+      5,
+      7
+    ],
+    "threshold": [
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5
+    ]
+  },
+  "notes": [
+    "mode: gaussian(G) / ha(H_A) / hao(H_AO). 1회 실험은 hao. 세 조건 비교 시 sigma·lambda·나머지 설정은 같게 둔다.",
+    "cell_loss: 독립 sigmoid + 제곱오차(보고서 8.4). 가중치는 Adaptive Wing Loss의 Weighted Loss Map(W=10, 3x3 팽창, 0.2), 정규화는 M0 Focal과 같은 전경 픽셀 수·최소 0.5% 규칙.",
+    "postprocess: 배경 채널이 없어 threshold는 0보다 커야 한다. 학습 중 threshold 0.3은 select_gaussian_params.py의 골짜기 기준(중간점 점수 0.30 이하)과 맞춘 값이다.",
+    "postprocess_search: M0 격자에 σ=0,1을 더했다. 중심 지도가 이미 부드럽고, 큰 smoothing은 H_AO가 만든 골짜기를 다시 메울 수 있어서다. 최종 값은 validation에서 고른다 (scripts/eval_m2.py --tune).",
+    "M0와 같은 값: epoch, 고정 epoch, optimizer, 학습률, weight decay, cosine, 조직 손실과 가중치, grad clip, batch, 증강, seed, checkpoint 선택 기준."
+  ],
+  "seed": 42,
+  "size": 1024,
+  "limit_train": null,
+  "limit_val": null,
+  "run_name": "M2_gaussian_s6_l0.9_official_seed42",
+  "device": "cuda",
+  "amp_dtype": "torch.bfloat16",
+  "git_commit": "ea70ffc",
+  "torch": "2.3.1+cu121",
+  "python": "3.10.12",
+  "train_pairs": 400,
+  "val_pairs": 137,
+  "steps_per_epoch": 200,
+  "finetune_checkpoint": "/root/m2_overnight/outputs/m2/M2_gaussian_s6_l0.9_official_seed42/best.pt",
+  "close_tc_underprediction": true
+}

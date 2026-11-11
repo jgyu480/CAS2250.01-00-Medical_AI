@@ -1,0 +1,96 @@
+{
+  "checkpoint": "/root/m2_overnight/eval/ha/weighted/checkpoint.pt",
+  "epoch": 10,
+  "split": "val",
+  "pairs": 137,
+  "cell_target": {
+    "type": "center_heatmap",
+    "mode": "ha",
+    "scope": "classwise",
+    "sigma": 6.0,
+    "lambda": 0.9,
+    "selection": "scripts/select_gaussian_params.py --scope classwise (train만 사용). 기본 기준(골짜기 0.3)은 σ=6, λ=0으로 H_AO=G가 되어, A·O 효과를 보기 위해 골짜기 0.2 기준 결과 σ=6, λ=0.9를 1회 실험에 사용 (11/7 결정)"
+  },
+  "postprocess": {
+    "sigma": 3.0,
+    "min_distance": 7,
+    "threshold": 0.4
+  },
+  "overall": {
+    "loss_cell": 0.857,
+    "loss_tissue": 0.6222,
+    "loss_total": 1.4793,
+    "precision_BC": 0.5718,
+    "recall_BC": 0.7671,
+    "f1_BC": 0.6552,
+    "precision_TC": 0.7991,
+    "recall_TC": 0.756,
+    "f1_TC": 0.777,
+    "mF1": 0.7161,
+    "iou_BG": 0.8336,
+    "iou_CA": 0.7585,
+    "mIoU": 0.796
+  },
+  "by_organ": {
+    "bladder": {
+      "pairs": 29,
+      "precision_BC": 0.5504,
+      "recall_BC": 0.7169,
+      "f1_BC": 0.6227,
+      "precision_TC": 0.6667,
+      "recall_TC": 0.7269,
+      "f1_TC": 0.6955,
+      "mF1": 0.6591
+    },
+    "endometrium": {
+      "pairs": 29,
+      "precision_BC": 0.6357,
+      "recall_BC": 0.8588,
+      "f1_BC": 0.7306,
+      "precision_TC": 0.8399,
+      "recall_TC": 0.7954,
+      "f1_TC": 0.8171,
+      "mF1": 0.7739
+    },
+    "head-and-neck": {
+      "pairs": 9,
+      "precision_BC": 0.6867,
+      "recall_BC": 0.5502,
+      "f1_BC": 0.6109,
+      "precision_TC": 0.7333,
+      "recall_TC": 0.7746,
+      "f1_TC": 0.7534,
+      "mF1": 0.6821
+    },
+    "kidney": {
+      "pairs": 41,
+      "precision_BC": 0.3957,
+      "recall_BC": 0.7383,
+      "f1_BC": 0.5152,
+      "precision_TC": 0.8673,
+      "recall_TC": 0.7243,
+      "f1_TC": 0.7894,
+      "mF1": 0.6523
+    },
+    "prostate": {
+      "pairs": 17,
+      "precision_BC": 0.56,
+      "recall_BC": 0.6521,
+      "f1_BC": 0.6026,
+      "precision_TC": 0.7374,
+      "recall_TC": 0.7839,
+      "f1_TC": 0.76,
+      "mF1": 0.6813
+    },
+    "stomach": {
+      "pairs": 12,
+      "precision_BC": 0.714,
+      "recall_BC": 0.8887,
+      "f1_BC": 0.7918,
+      "precision_TC": 0.6795,
+      "recall_TC": 0.6795,
+      "f1_TC": 0.6795,
+      "mF1": 0.7357
+    }
+  }
+}
