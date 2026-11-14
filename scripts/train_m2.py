@@ -11,6 +11,12 @@ configs/m2_train.json의 cell_target에 적거나 --sigma/--lambda로 준다.
     python scripts/train_m2.py --smoke
 이어서 학습:
     python scripts/train_m2.py --resume outputs/m2/<run>/last.pt
+공식 train 안의 분할로 학습 (계수 선택용, 공식 val·test는 쓰지 않는다):
+    python scripts/train_m2.py --split-file configs/train_split_seed42.json \
+        --train-part fit --val-part select --sigma 4 --target-mode gaussian
+저장된 가중치에서 시작 (파인튜닝, optimizer는 새로 만든다):
+    python scripts/train_m2.py --init-from outputs/m2/<run>/best.pt --epochs 10 \
+        --freeze-epochs 0 --lr-scale 0.1 --sigma 5 ...
 
 결과 폴더: outputs/m2/<run 이름>/  (OUTPUT_ROOT를 따른다)
 - config.json   실제 사용한 설정 (재현용)
@@ -39,7 +45,7 @@ from common.data.center_heatmaps import check_parameters
 from common.paths import resolve_paths
 from common.training.m0_loop import seed_everything, pick_device, autocast
 from common.training.m2_loop import (
-    make_loader, prepare, evaluate, task_losses, cell_loss_kwargs
+    make_loader, prepare, evaluate, task_losses, cell_loss_kwargs, load_split
 )
 from models.M2.model import build_model
 from scripts.train_m0 import git_commit, set_encoder_trainable, cosine_factor
@@ -68,6 +74,15 @@ def parse_args():
     parser.add_argument("--device", default="auto")
     parser.add_argument("--run-name")
     parser.add_argument("--resume", help="last.pt 경로 (저장된 설정을 그대로 사용)")
+    # 공식 train 안의 분할 (scripts/make_train_split.py)
+    parser.add_argument("--split-file", help="분할 파일. 주면 학습·검증 모두 이 파일의 부분을 쓴다")
+    parser.add_argument("--train-part", default="fit", help="학습에 쓸 부분 이름")
+    parser.add_argument("--val-part", default="select", help="checkpoint 선택에 쓸 부분 이름")
+    # 파인튜닝 (scripts/train_m0.py와 같은 옵션)
+    parser.add_argument("--init-from", help="이 checkpoint의 모델 가중치로 시작 (optimizer는 새로)")
+    parser.add_argument("--lr-scale", type=float, default=1.0,
+                        help="encoder·새 부품 학습률에 곱할 값 (파인튜닝은 0.1)")
+    parser.add_argument("--freeze-epochs", type=int, help="처음 몇 epoch 백본을 고정할지")
     parser.add_argument("--no-amp", action="store_true")
     # 점검용
     parser.add_argument("--size", type=int, default=1024, choices=[128, 256, 512, 1024])
@@ -110,6 +125,21 @@ def build_settings(args):
         "grad_accum_steps": args.grad_accum, "num_workers": args.num_workers
     }
     s.update({k: v for k, v in overrides.items() if v is not None})
+    if args.freeze_epochs is not None:
+        s["encoder_freeze_epochs"] = args.freeze_epochs
+    if args.lr_scale != 1.0:
+        s["encoder_lr"] *= args.lr_scale
+        s["new_modules_lr"] *= args.lr_scale
+    s.update(init_from=args.init_from, lr_scale=args.lr_scale)
+    s["data_split"] = None
+    if args.split_file:
+        if args.train_part == args.val_part:
+            raise SystemExit("[중단] 학습 부분과 checkpoint 선택 부분이 같습니다.")
+        train_part = load_split(args.split_file, args.train_part)
+        val_part = load_split(args.split_file, args.val_part)
+        s["data_split"] = {"file": train_part["file"], "sha256": train_part["sha256"],
+                           "source_split": train_part["source_split"],
+                           "train_part": args.train_part, "val_part": args.val_part}
     s.update(seed=args.seed, size=args.size,
              limit_train=args.limit_train, limit_val=args.limit_val,
              amp=s["amp"] and not args.no_amp)
@@ -124,8 +154,11 @@ def run_name(args, s):
     if args.run_name:
         return args.run_name
     t = s["cell_target"]
+    split = s.get("data_split")
     return (f"M2_{t['mode']}_s{t['sigma']:g}_l{t['lambda']:g}"
             f"_{s['label_source'].replace(':', '-')}_seed{s['seed']}"
+            + (f"_{Path(split['file']).stem}-{split['train_part']}" if split else "")
+            + ("_ft" if s.get("init_from") else "")
             + ("_smoke" if args.smoke else ""))
 
 
@@ -149,18 +182,36 @@ def main():
         log_file.flush()
 
     target = s["cell_target"]
+    split = s.get("data_split")
+    train_ids = val_ids = None
+    if split:
+        train_part = load_split(split["file"], split["train_part"])
+        val_part = load_split(split["file"], split["val_part"])
+        if train_part["sha256"] != split["sha256"]:
+            raise SystemExit(f"[중단] 분할 파일이 바뀌었습니다: {split['file']}")
+        train_ids, val_ids = train_part["pair_ids"], val_part["pair_ids"]
+        if set(train_ids) & set(val_ids):
+            raise SystemExit("[중단] 학습 부분과 선택 부분이 겹칩니다.")
     train_loader, train_set = make_loader(
-        "train", s["seed"], s["batch_size"], s["num_workers"], target,
-        label_source=s["label_source"], augment=True,
-        augmentation=s["augmentation"], limit=s["limit_train"], shuffle=True
+        split["source_split"] if split else "train", s["seed"], s["batch_size"],
+        s["num_workers"], target, label_source=s["label_source"], augment=True,
+        augmentation=s["augmentation"], limit=s["limit_train"], shuffle=True,
+        pair_ids=train_ids
     )
     val_loader, val_set = make_loader(
-        "val", s["seed"], s["batch_size"], s["num_workers"], target,
-        limit=s["limit_val"]
+        split["source_split"] if split else "val", s["seed"], s["batch_size"],
+        s["num_workers"], target, limit=s["limit_val"], pair_ids=val_ids
     )
 
     model_config = json.loads((ROOT / s["model_config"]).read_text(encoding="utf-8"))
     model = build_model(model_config).to(device)
+    if s.get("init_from") and not args.resume:
+        source = torch.load(s["init_from"], map_location="cpu", weights_only=False)
+        model.load_state_dict(source["model"])
+        log(f"[시작 가중치] {s['init_from']} (epoch {source['epoch'] + 1}, "
+            f"정답 {source['settings']['cell_target']['mode']} "
+            f"σ={source['settings']['cell_target']['sigma']:g})")
+        del source
     optimizer = torch.optim.AdamW([
         {"params": model.encoder_parameters(), "lr": s["encoder_lr"]},
         {"params": model.new_module_parameters(), "lr": s["new_modules_lr"]}
@@ -193,6 +244,7 @@ def main():
         json.dumps(s, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     log(f"[시작] {name} | device {device} | amp {amp_dtype} | "
         f"정답 {target['mode']} σ={target['sigma']:g} λ={target['lambda']:g} | "
+        f"{'분할 ' + split['file'] + ' ' + split['train_part'] + '/' + split['val_part'] + ' | ' if split else ''}"
         f"train {s['train_pairs']} / val {s['val_pairs']} | "
         f"batch {s['batch_size']}×{s['grad_accum_steps']} | {s['epochs']} epoch")
 

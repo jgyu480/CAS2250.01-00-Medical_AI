@@ -7,7 +7,10 @@ M0 공통 loop(common/training/m0_loop.py)를 고치지 않고, 다른 부분만
 - 후처리: common/metrics/heatmap_eval.py, 공식 F1은 m0_eval.CellF1 그대로.
 """
 
+import hashlib
+import json
 from functools import partial
+from pathlib import Path
 
 import torch
 from torch.nn import functional as F
@@ -19,6 +22,7 @@ from common.losses.heatmap_losses import weighted_mse
 from common.losses.m0_losses import cross_entropy_dice
 from common.metrics.heatmap_eval import detect_cells_heatmap
 from common.metrics.m0_eval import CellF1, TissueIoU
+from common.paths import PROJECT_ROOT
 from common.training.m0_loop import (
     FULL_SIZE, _init_worker, autocast, truth_points, to_full_size
 )
@@ -57,14 +61,42 @@ def collate_heatmaps(samples):
     return batch
 
 
+def load_split(path, part):
+    """scripts/make_train_split.py가 만든 분할 파일에서 한 부분의 정보를 읽는다."""
+    path = Path(path)
+    if not path.is_absolute():
+        path = PROJECT_ROOT / path
+    raw = path.read_bytes()
+    payload = json.loads(raw.decode("utf-8"))
+    if part not in payload["parts"]:
+        raise ValueError(f"{path}: '{part}' 부분이 없습니다 ({', '.join(payload['parts'])}).")
+    return {"file": str(path.relative_to(PROJECT_ROOT)) if path.is_relative_to(PROJECT_ROOT)
+            else str(path),
+            "sha256": hashlib.sha256(raw).hexdigest(),
+            "source_split": payload["source_split"], "part": part,
+            "pair_ids": payload["parts"][part]}
+
+
 def make_loader(split, seed, batch_size, num_workers, target,
                 label_source="official", augment=False,
-                augmentation="default", limit=None, shuffle=False):
+                augmentation="default", limit=None, shuffle=False, pair_ids=None):
+    """pair_ids를 주면 split 안에서 그 사진만 쓴다 (분할 파일의 한 부분).
+    증강 난수는 원래 index로 정해지므로 일부만 써도 같은 사진은 같은 증강을 받는다."""
     dataset = HeatmapDataset(
         target, split=split, label_source=label_source, augment=augment,
         seed=seed, augmentation=augmentation
     )
-    data = Subset(dataset, range(min(limit, len(dataset)))) if limit else dataset
+    data = dataset
+    if pair_ids is not None:
+        wanted = set(pair_ids)
+        index = [i for i, row in enumerate(dataset.source.rows) if row["pair_id"] in wanted]
+        found = {dataset.source.rows[i]["pair_id"] for i in index}
+        if found != wanted or len(index) != len(wanted):
+            missing = sorted(wanted - found)[:5]
+            raise ValueError(f"{split}에 없는 pair_id가 있습니다: {missing}")
+        data = Subset(dataset, index)
+    if limit:
+        data = Subset(data, range(min(limit, len(data))))
     generator = torch.Generator().manual_seed(seed)
     loader = DataLoader(
         data, batch_size=batch_size, shuffle=shuffle,

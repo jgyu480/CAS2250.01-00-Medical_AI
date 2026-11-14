@@ -7,6 +7,10 @@
     python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --split test
 3) M0와 같은 기준으로 비교 (M0 결과 파일은 저장소에 있다):
     --compare results/m0_dicefix_seed42/eval_val_per_image.json
+4) 분할 파일로 학습한 모델 (train_m2.py --split-file): 공식 split 대신 부분 이름으로 평가한다.
+    --part select --tune   checkpoint를 고른 부분에서 후처리 고르기 → postprocess.json
+    --part holdout         고른 후처리로 다른 부분 평가 (계수 비교용)
+   이런 모델은 공식 val에서 후처리를 고르지 않는다 (--split val은 고른 값으로 평가만).
 
 결과
 - eval_<split>.json, eval_<split>_per_image.json: M0와 같은 형식 (공식 F1·mIoU·장기별).
@@ -36,7 +40,7 @@ sys.path.insert(0, str(ROOT))
 from common.metrics.heatmap_eval import detect_cells_heatmap, heatmap_scores
 from common.metrics.m0_eval import CellF1, gaussian_blur
 from common.training.m0_loop import pick_device, to_full_size
-from common.training.m2_loop import make_loader, evaluate, cell_loss_kwargs
+from common.training.m2_loop import make_loader, evaluate, cell_loss_kwargs, load_split
 from models.M2.model import build_model
 from scripts.diagnose_m0 import localization_labels, nearest_distances
 from scripts.eval_m0 import organ_scores
@@ -124,7 +128,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--checkpoint", required=True)
-    parser.add_argument("--split", choices=["val", "test"], required=True)
+    parser.add_argument("--split", choices=["val", "test"], help="공식 split")
+    parser.add_argument("--part", help="분할 파일의 부분 이름 (--split 대신)")
+    parser.add_argument("--split-file", help="분할 파일 (기본: checkpoint 설정에 적힌 파일)")
     parser.add_argument("--tune", action="store_true")
     parser.add_argument("--compare", help="같은 split의 M0 eval_*_per_image.json")
     parser.add_argument("--batch-size", type=int, default=2)
@@ -133,33 +139,56 @@ def main():
     parser.add_argument("--limit", type=int, help="점검용 일부만 평가")
     args = parser.parse_args()
 
+    if bool(args.split) == bool(args.part):
+        raise SystemExit("[중단] --split 또는 --part 중 하나만 주세요.")
     checkpoint = Path(args.checkpoint)
     folder = checkpoint.parent
     postprocess_path = folder / "postprocess.json"
-    if args.split == "test" and args.tune:
-        raise SystemExit("[중단] test로 후처리를 고르지 않습니다. val에서 --tune.")
-    if args.split == "test" and not postprocess_path.exists():
-        raise SystemExit("[중단] postprocess.json이 없습니다. 먼저 --split val --tune을 실행하세요.")
-
     state = torch.load(checkpoint, map_location="cpu", weights_only=False)
     s = state["settings"]
+    split_info = s.get("data_split")
+    # 후처리를 고를 수 있는 곳: 공식 학습 모델은 공식 val, 분할 학습 모델은 checkpoint를 고른 부분.
+    tune_on = split_info["val_part"] if split_info else "val"
+    label = args.part or args.split
+    if args.tune and label != tune_on:
+        raise SystemExit(f"[중단] 이 모델의 후처리는 '{tune_on}'에서만 고릅니다 "
+                         f"({'--part ' + tune_on if split_info else '--split val'} --tune).")
+    if not args.tune and label != tune_on and not postprocess_path.exists():
+        raise SystemExit(f"[중단] postprocess.json이 없습니다. 먼저 '{tune_on}'에서 --tune을 실행하세요.")
+    if postprocess_path.exists() and not args.tune:
+        chosen_on = json.loads(postprocess_path.read_text())["selected_on"]
+        if chosen_on != tune_on:
+            raise SystemExit(f"[중단] postprocess.json이 '{chosen_on}'에서 골라졌습니다 (기대: {tune_on}).")
+
+    pair_ids, source_split = None, args.split
+    if args.part:
+        split_file = args.split_file or (split_info or {}).get("file")
+        if not split_file:
+            raise SystemExit("[중단] --part에는 분할 파일이 필요합니다 (--split-file).")
+        part = load_split(split_file, args.part)
+        if split_info and part["sha256"] != split_info["sha256"]:
+            raise SystemExit(f"[중단] 학습 때와 다른 분할 파일입니다: {split_file}")
+        if split_info and args.part == split_info["train_part"]:
+            raise SystemExit("[중단] 학습에 쓴 부분으로는 평가하지 않습니다.")
+        pair_ids, source_split = part["pair_ids"], part["source_split"]
     device = pick_device(args.device)
     model_config = json.loads((ROOT / s["model_config"]).read_text(encoding="utf-8"))
     model = build_model(model_config)
     model.load_state_dict(state["model"])
     model.to(device)
 
-    loader, dataset = make_loader(args.split, s["seed"], args.batch_size,
-                                  args.num_workers, s["cell_target"], limit=args.limit)
+    loader, dataset = make_loader(source_split, s["seed"], args.batch_size,
+                                  args.num_workers, s["cell_target"], limit=args.limit,
+                                  pair_ids=pair_ids)
     organs = {k: v["organ"] for k, v in dataset.source.metadata.items()}
-    if args.split == "test" or not args.tune:
+    if not args.tune:
         chosen = (json.loads(postprocess_path.read_text())["chosen"]
                   if postprocess_path.exists() else s["postprocess_during_training"])
         postprocess = {k: chosen[k] for k in KEYS}
     else:
         postprocess = s["postprocess_during_training"]
 
-    print(f"[평가] {checkpoint} (epoch {state['epoch'] + 1}) | {args.split} "
+    print(f"[평가] {checkpoint} (epoch {state['epoch'] + 1}) | {label} "
           f"{len(loader.dataset)}쌍 | 정답 {s['cell_target']} | 후처리 {postprocess}")
     metrics, records, cached = evaluate(
         model, loader, device, postprocess, size=s["size"], amp=s["amp"],
@@ -168,10 +197,10 @@ def main():
     )
 
     if args.tune:
-        print("[탐색] 후처리 격자 (validation 세포 mF1 기준)")
+        print(f"[탐색] 후처리 격자 ({label} 세포 mF1 기준)")
         best, table = tune(cached, s["postprocess_search"], s["size"])
         postprocess_path.write_text(json.dumps({
-            "chosen": best, "selected_on": "val", "checkpoint": str(checkpoint),
+            "chosen": best, "selected_on": label, "checkpoint": str(checkpoint),
             "search": table}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print(f"[선택] {best} → {postprocess_path}")
         postprocess = {k: best[k] for k in KEYS}
@@ -211,20 +240,21 @@ def main():
 
     summary = {
         "checkpoint": str(checkpoint), "epoch": state["epoch"] + 1,
-        "split": args.split, "pairs": len(records),
+        "split": label, "pairs": len(records),
+        "data_split": ({"file": split_info["file"], "part": args.part} if args.part else None),
         "cell_target": s["cell_target"], "postprocess": postprocess,
         "overall": {k: round(v, 4) for k, v in metrics.items()},
         "by_organ": organ_scores(records)
     }
-    (folder / f"eval_{args.split}.json").write_text(
+    (folder / f"eval_{label}.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    (folder / f"eval_{args.split}_per_image.json").write_text(
+    (folder / f"eval_{label}_per_image.json").write_text(
         json.dumps(records, ensure_ascii=False) + "\n", encoding="utf-8")
-    (folder / f"close_cells_{args.split}.json").write_text(
+    (folder / f"close_cells_{label}.json").write_text(
         json.dumps(diagnosis, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     o = summary["overall"]
-    print(f"[결과] {args.split}: 세포 mF1 {o['mF1']:.4f} (BC {o['f1_BC']:.4f}, "
+    print(f"[결과] {label}: 세포 mF1 {o['mF1']:.4f} (BC {o['f1_BC']:.4f}, "
           f"TC {o['f1_TC']:.4f}) | 조직 mIoU {o['mIoU']:.4f} "
           f"(BG {o['iou_BG']:.4f}, CA {o['iou_CA']:.4f})")
     for organ, v in summary["by_organ"].items():
