@@ -1,0 +1,48 @@
+{
+  "description": "M2 계수 탐색(G·GA) 설정. 학습 설정은 configs/m2_train.json과 같고, 학습 중 후처리와 후처리 격자만 1회 실험 결과에 맞춰 옮겼다.",
+  "model_config": "models/M2/config.json",
+  "label_source": "official",
+  "augmentation": "default",
+  "cell_target": {
+    "type": "center_heatmap",
+    "mode": "gaussian",
+    "scope": "classwise",
+    "sigma": 6.0,
+    "lambda": 0.9,
+    "selection": "σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값."
+  },
+  "epochs": 50,
+  "encoder_freeze_epochs": 3,
+  "optimizer": "AdamW",
+  "encoder_lr": 1e-05,
+  "new_modules_lr": 0.0001,
+  "weight_decay": 0.01,
+  "scheduler": "cosine",
+  "tissue_loss_weight": 1.0,
+  "cell_loss": {
+    "type": "weighted_mse_sigmoid",
+    "foreground_weight": 10.0,
+    "foreground_threshold": 0.2,
+    "dilation": 3,
+    "min_foreground_fraction": 0.005
+  },
+  "grad_clip_norm": 10.0,
+  "tissue_loss": {"type": "cross_entropy+dice", "ignore": "UNK"},
+  "batch_size": 2,
+  "grad_accum_steps": 1,
+  "num_workers": 4,
+  "amp": true,
+  "seeds": [42],
+  "checkpoint_selection": "val_cell_mF1",
+  "postprocess_during_training": {"sigma": 3.0, "min_distance": 7, "threshold": 0.4},
+  "postprocess_search": {
+    "sigma": [2.0, 3.0, 4.0, 5.0],
+    "min_distance": [3, 5, 7, 9],
+    "threshold": [0.2, 0.3, 0.4, 0.5]
+  },
+  "notes": [
+    "configs/m2_train.json과 같은 값: 모델, 정답 종류, 손실, epoch, 고정 epoch, optimizer, 학습률, weight decay, cosine, 조직 손실, grad clip, batch, 증강, seed, checkpoint 선택 기준.",
+    "postprocess_during_training: 1회 실험(σ=6)에서 세 조건이 고른 값(σ=3, d=7, thr 0.3–0.4)에 맞췄다. checkpoint 선택이 실제 평가 조건에 가깝도록 하기 위해서다.",
+    "postprocess_search: 1회 실험에서 σ=3, d=7이 격자 끝 값이었고 thr 0.1은 한 번도 골라지지 않아 범위를 옮겼다 (64개, 이전 60개). 모든 후보에 같은 격자를 쓴다."
+  ]
+}

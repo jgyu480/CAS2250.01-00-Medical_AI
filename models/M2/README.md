@@ -123,6 +123,71 @@ cd CAS2250.01-00-Medical_AI
 OUT=outputs/m2_results nohup bash scripts/run_m2_conditions.sh > outputs/run_m2.log 2>&1 &
 ```
 
+## 2차: G·GA 계수 탐색 (11/14~, 담당 신상우)
+
+민규 지시(11/14): G와 GA를 앙상블에 쓰므로 둘 다 성능을 올린다. 계수는 **각 모델 단독 성능이 가장 높은 값**으로 고르고,
+고를 때 **test 지표를 쓰지 않는다**. σ는 간격을 두고 처음부터 학습한 뒤, 가장 좋은 값 주변은 파인튜닝으로 본다.
+Run 하나는 최대 24시간이고 동시에 여러 개 돌릴 수 있다.
+
+### 데이터 분할 (`configs/train_split_seed42.json`)
+
+공식 val은 최종 비교(앙상블 평가 포함), 공식 test는 마지막 1회에 남겨 두고, **공식 train 400장 안에서만** 나눈다.
+처음 계획(train+val 537장을 다시 나눔)은 val 정답이 계수 선택에 쓰여, val로 하는 M2 결과와 앙상블 평가가 함께 낙관적으로 나올 수 있어 바꿨다.
+
+| 부분 | 장수 | 환자 | 용도 |
+|---|---|---|---|
+| fit | 233 | 63 | 후보 학습 |
+| select | 40 | 22 | checkpoint·후처리 선택 |
+| holdout | 127 | 47 | 계수 비교 (가장 높은 holdout mF1을 고른다) |
+
+- 같은 환자의 사진은 한 부분에만 넣었다 (train은 환자 132명, 한 환자에서 최대 18장).
+- 장기 비율은 공식 train과 같게 맞췄다 (`scripts/make_train_split.py`, seed 42, 다시 실행하면 같은 파일).
+- 앙상블을 273/127로 나눈다면 fit+select = 273, holdout = 127과 같은 구성이다 (팀 확인 필요).
+
+### 탐색 단계 (`scripts/run_m2_search.py`)
+
+1. **처음부터 학습:** σ = 4, 6, 8 (GA는 λ = 0.9). fit 학습 → select에서 checkpoint·후처리 → holdout 평가.
+2. **파인튜닝:** holdout mF1이 가장 높은 σ*의 best.pt에서 10 epoch (학습률 ×0.1, 백본 고정 없음).
+   - 대조군: σ* 그대로 10 epoch 더. overnight 실험(11/10)에서 σ를 바꾸지 않고 더 학습만 해도 mF1이 떨어졌기 때문에, 파인튜닝 후보는 대조군과 비교한다.
+   - σ*−1, σ*+1, GA는 σ*에서 λ = 0.5도 본다.
+3. **선택:** 모든 후보 중 holdout mF1이 가장 높은 것. 이 checkpoint(fit으로 학습)를 앙상블용으로 내보낸다.
+4. **공식 확인:** 고른 방법 그대로 공식 train 400장으로 학습 → 공식 val에서 후처리 고르기·평가 (M0와 비교).
+   파인튜닝 후보를 골랐으면 σ*로 50 epoch 학습한 뒤 같은 파인튜닝을 반복한다.
+
+- 다음 후보가 끝나는 예상 시각이 22시간(공식 확인 시간을 남기고)을 넘으면 건너뛴다. Run이 24시간에 강제 종료되면 결과를 내보내지 못할 수 있어서다.
+- 설정 `configs/m2_search_train.json`: 학습 설정은 `m2_train.json`과 같고, 학습 중 후처리(3/7/0.4)와 후처리 격자(σ 2–5, d 3–9, thr 0.2–0.5, 64개)만 1회 실험에서 고른 값이 격자 끝이던 것에 맞춰 옮겼다.
+
+### 후보를 고른 이유
+
+- **σ=6:** `select_gaussian_params.py`에서 반높이 반지름 약 7px 기준으로 나온 값이고 1회 실험 값이다.
+- **σ=4:** 더 날카롭다. 14px 떨어진 같은 클래스 두 세포 사이 점수가 0.22(σ=6은 0.51)로 낮아 가까운 세포 분리에 유리하다.
+- **σ=8:** 더 넓다 (같은 위치 0.68). 중심이 조금 어긋나도 너그럽고, 반응이 약한 세포를 살릴 수 있다.
+- **λ:** 0.9(1회 실험, 보고서 그림 10)와 0.5(약한 억제). λ=0이면 GA는 G와 같다.
+
+### 실행
+
+VESSL에서 Run 두 개를 동시에 만든다 (YAML 에디터에 붙여 넣기).
+
+- `vessl/m2_search_g.yaml` → `MODE=gaussian bash scripts/run_m2_search.sh` (약 10시간)
+- `vessl/m2_search_ga.yaml` → `MODE=ha bash scripts/run_m2_search.sh` (약 10–11시간)
+- 결과: `/root/m2_search_<mode>/summary.json`, `summary.csv`, `candidates/<후보>/`, `final/<run>/`
+  - `best.pt`는 고른 후보(앙상블용)와 공식 확인 모델만 내보낸다.
+
+직접 돌릴 때와 점검:
+
+```bash
+python scripts/make_train_split.py --parts fit=233 select=40 holdout=127 --seed 42 --out configs/train_split_seed42.json
+python scripts/train_m2.py --config configs/m2_search_train.json --split-file configs/train_split_seed42.json \
+  --train-part fit --val-part select --target-mode gaussian --sigma 4 --lambda 0.9
+python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --part select --tune
+python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --part holdout
+python scripts/train_m2.py ... --init-from outputs/m2/<run>/best.pt --epochs 10 --freeze-epochs 0 --lr-scale 0.1
+SKIP_PREP=1 SEARCH_EXTRA="--train-extra=--smoke" MODE=gaussian bash scripts/run_m2_search.sh   # 짧은 점검
+```
+
+- 분할로 학습한 모델은 공식 val에서 후처리를 고르지 않는다. `eval_m2.py`가 막는다 (`--split val`은 select에서 고른 값으로 평가만).
+- 파인튜닝 옵션(`--init-from`, `--lr-scale`, `--freeze-epochs`)은 `train_m0.py`와 같은 이름이다. overnight 실험 코드(`results/m2-overnight-20261110-121336`)의 파인튜닝 방식(10 epoch, 학습률 ×0.1, 고정 없음)을 따랐다.
+
 ## 평가 항목 (보고서 8.4)
 
 `eval_m2.py`는 M0와 같은 `eval_<split>.json`을 만들고, `close_cells_<split>.json`에 다음을 기록한다.

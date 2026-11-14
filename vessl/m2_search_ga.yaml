@@ -1,0 +1,19 @@
+# VESSL Run: M2 계수 탐색 GA (coarse σ 4·6·8, λ 0.9 → 파인튜닝 σ±1, λ 0.5 → 공식 train 재학습 → 공식 val)
+# G(vessl/m2_search_g.yaml)와 동시에 따로 돌린다. 예상 약 10–11시간 (Run 제한 24시간).
+# 결과는 /root/m2_search_ha → VESSL artifact로 저장된다.
+name: m2-search-ga
+description: "M2 GA sigma/lambda search on train-only split (fit/select/holdout), then official train -> val"
+resources:
+  cluster: yonsei-ai-gpu
+  preset: gpu-1
+image: quay.io/vessl-ai/torch:2.3.1-cuda12.1-r5
+import:
+  /root/repo:
+    git:
+      url: https://github.com/jgyu480/CAS2250.01-00-Medical_AI
+      ref: feature/m2-sigma-search
+export:
+  /root/m2_search_ha: vessl-artifact://
+run:
+  - workdir: /root/repo
+    command: MODE=ha bash scripts/run_m2_search.sh
