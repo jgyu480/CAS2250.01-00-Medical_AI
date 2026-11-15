@@ -11,6 +11,11 @@
     --part select --tune   checkpoint를 고른 부분에서 후처리 고르기 → postprocess.json
     --part holdout         고른 후처리로 다른 부분 평가 (계수 비교용)
    이런 모델은 공식 val에서 후처리를 고르지 않는다 (--split val은 고른 값으로 평가만).
+5) 후처리 격자가 좁았는지 확인 (고른 값이 격자 끝일 때):
+    --part select --tune --extend-grid sigma=1 min_distance=11 threshold=0.6,0.7
+   설정의 격자에서 고른 값(chosen, 다른 후보와 같은 조건)과 넓힌 격자에서 고른 값(chosen_extended)을
+   postprocess.json에 함께 적는다. 평가는 chosen으로 하고, --use-extended를 주면 chosen_extended로
+   평가해 eval_<split>_ext.json 등에 따로 저장한다.
 
 결과
 - eval_<split>.json, eval_<split>_per_image.json: M0와 같은 형식 (공식 F1·mIoU·장기별).
@@ -69,6 +74,18 @@ def tune(cached, grid, size):
                         **{k: round(v, 4) for k, v in score.items()}})
         print(f"  σ={sigma} d={distance} thr={threshold}: mF1 {score['mF1']:.4f}", flush=True)
     return max(results, key=lambda r: r["mF1"]), results
+
+
+def parse_extend(items):
+    """["sigma=1", "threshold=0.6,0.7"] → {"sigma": [1.0], "threshold": [0.6, 0.7]}"""
+    extra = {}
+    for item in items or []:
+        key, _, values = item.partition("=")
+        if key not in KEYS or not values:
+            raise SystemExit(f"[중단] --extend-grid 형식: {'|'.join(KEYS)}=값[,값] (받은 값: {item})")
+        cast = int if key == "min_distance" else float
+        extra[key] = [cast(v) for v in values.split(",")]
+    return extra
 
 
 def close_cell_table(records, score_map=None, postprocess=None):
@@ -132,6 +149,10 @@ def main():
     parser.add_argument("--part", help="분할 파일의 부분 이름 (--split 대신)")
     parser.add_argument("--split-file", help="분할 파일 (기본: checkpoint 설정에 적힌 파일)")
     parser.add_argument("--tune", action="store_true")
+    parser.add_argument("--extend-grid", nargs="+", metavar="KEY=V[,V]",
+                        help="--tune에서 설정의 격자에 더해 볼 값 (예: threshold=0.6,0.7)")
+    parser.add_argument("--use-extended", action="store_true",
+                        help="넓힌 격자에서 고른 값(chosen_extended)으로 평가하고 _ext 파일에 저장")
     parser.add_argument("--compare", help="같은 split의 M0 eval_*_per_image.json")
     parser.add_argument("--batch-size", type=int, default=2)
     parser.add_argument("--num-workers", type=int, default=4)
@@ -141,6 +162,11 @@ def main():
 
     if bool(args.split) == bool(args.part):
         raise SystemExit("[중단] --split 또는 --part 중 하나만 주세요.")
+    if args.extend_grid and not args.tune:
+        raise SystemExit("[중단] --extend-grid는 --tune과 함께 씁니다.")
+    if args.use_extended and args.tune:
+        raise SystemExit("[중단] --use-extended는 --tune 뒤에 따로 실행합니다.")
+    extra_grid = parse_extend(args.extend_grid)
     checkpoint = Path(args.checkpoint)
     folder = checkpoint.parent
     postprocess_path = folder / "postprocess.json"
@@ -150,6 +176,7 @@ def main():
     # 후처리를 고를 수 있는 곳: 공식 학습 모델은 공식 val, 분할 학습 모델은 checkpoint를 고른 부분.
     tune_on = split_info["val_part"] if split_info else "val"
     label = args.part or args.split
+    out_label = label + ("_ext" if args.use_extended else "")
     if args.tune and label != tune_on:
         raise SystemExit(f"[중단] 이 모델의 후처리는 '{tune_on}'에서만 고릅니다 "
                          f"({'--part ' + tune_on if split_info else '--split val'} --tune).")
@@ -181,7 +208,12 @@ def main():
                                   args.num_workers, s["cell_target"], limit=args.limit,
                                   pair_ids=pair_ids)
     organs = {k: v["organ"] for k, v in dataset.source.metadata.items()}
-    if not args.tune:
+    if args.use_extended:
+        saved = json.loads(postprocess_path.read_text()) if postprocess_path.exists() else {}
+        if "chosen_extended" not in saved:
+            raise SystemExit("[중단] chosen_extended가 없습니다. 먼저 --tune --extend-grid를 실행하세요.")
+        postprocess = {k: saved["chosen_extended"][k] for k in KEYS}
+    elif not args.tune:
         chosen = (json.loads(postprocess_path.read_text())["chosen"]
                   if postprocess_path.exists() else s["postprocess_during_training"])
         postprocess = {k: chosen[k] for k in KEYS}
@@ -198,10 +230,19 @@ def main():
 
     if args.tune:
         print(f"[탐색] 후처리 격자 ({label} 세포 mF1 기준)")
-        best, table = tune(cached, s["postprocess_search"], s["size"])
-        postprocess_path.write_text(json.dumps({
-            "chosen": best, "selected_on": label, "checkpoint": str(checkpoint),
-            "search": table}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        base_grid = s["postprocess_search"]
+        grid = {k: list(base_grid[k]) + [v for v in extra_grid.get(k, []) if v not in base_grid[k]]
+                for k in KEYS}
+        best_any, table = tune(cached, grid, s["size"])
+        # chosen은 항상 설정의 격자 안에서 고른다 (--extend-grid가 없을 때와 같은 값).
+        best = max((r for r in table if all(r[k] in base_grid[k] for k in KEYS)),
+                   key=lambda r: r["mF1"])
+        saved = {"chosen": best, "selected_on": label, "checkpoint": str(checkpoint)}
+        if extra_grid:
+            saved.update(chosen_extended=best_any, extended_grid=grid)
+            print(f"[넓힌 격자] {best_any}")
+        postprocess_path.write_text(json.dumps({**saved, "search": table},
+                                               ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print(f"[선택] {best} → {postprocess_path}")
         postprocess = {k: best[k] for k in KEYS}
         by_id = {pid: logits for pid, logits, _ in cached}
@@ -241,20 +282,21 @@ def main():
     summary = {
         "checkpoint": str(checkpoint), "epoch": state["epoch"] + 1,
         "split": label, "pairs": len(records),
+        "postprocess_from": "chosen_extended" if args.use_extended else "chosen",
         "data_split": ({"file": split_info["file"], "part": args.part} if args.part else None),
         "cell_target": s["cell_target"], "postprocess": postprocess,
         "overall": {k: round(v, 4) for k, v in metrics.items()},
         "by_organ": organ_scores(records)
     }
-    (folder / f"eval_{label}.json").write_text(
+    (folder / f"eval_{out_label}.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    (folder / f"eval_{label}_per_image.json").write_text(
+    (folder / f"eval_{out_label}_per_image.json").write_text(
         json.dumps(records, ensure_ascii=False) + "\n", encoding="utf-8")
-    (folder / f"close_cells_{label}.json").write_text(
+    (folder / f"close_cells_{out_label}.json").write_text(
         json.dumps(diagnosis, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     o = summary["overall"]
-    print(f"[결과] {label}: 세포 mF1 {o['mF1']:.4f} (BC {o['f1_BC']:.4f}, "
+    print(f"[결과] {out_label}: 세포 mF1 {o['mF1']:.4f} (BC {o['f1_BC']:.4f}, "
           f"TC {o['f1_TC']:.4f}) | 조직 mIoU {o['mIoU']:.4f} "
           f"(BG {o['iou_BG']:.4f}, CA {o['iou_CA']:.4f})")
     for organ, v in summary["by_organ"].items():

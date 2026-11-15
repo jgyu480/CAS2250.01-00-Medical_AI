@@ -1,0 +1,16 @@
+name: m2-confirm
+description: "M2 confirmation: seed 43 repeats and extended postprocess grid on the train-only split (no official val/test)"
+resources:
+  cluster: yonsei-ai-gpu
+  preset: gpu-1
+image: quay.io/vessl-ai/torch:2.3.1-cuda12.1-r5
+import:
+  /root/repo:
+    git:
+      url: https://github.com/jgyu480/CAS2250.01-00-Medical_AI
+      ref: feature/m2-sigma-search
+export:
+  /root/m2_confirm: vessl-artifact://
+run:
+  - workdir: /root/repo
+    command: RUNS="gaussian:6:0.9:43 gaussian:8:0.9:43 ha:8:0.9:43 ha:10:0.9:42" bash scripts/run_m2_search.sh

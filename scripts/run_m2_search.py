@@ -18,6 +18,16 @@
 4) 공식 확인 (--no-final로 끔): 고른 방법 그대로 공식 train으로 학습 → 공식 val에서 후처리 고르기와 평가.
    파인튜닝 후보를 골랐으면 σ*로 50 epoch 학습한 뒤 같은 파인튜닝을 반복한다.
 
+확인 단계 (--confirm, 위 1~4를 하지 않는다)
+    python scripts/run_m2_search.py --out /root/m2_confirm \
+        --confirm gaussian:6:0.9:43 gaussian:8:0.9:43 ha:10:0.9:42 \
+        --extend-grid sigma=1 min_distance=11 threshold=0.6,0.7
+- 적어 준 후보(모델:σ:λ:seed)만 fit으로 처음부터 학습 → select에서 후처리 → holdout 평가.
+  seed만 바꾼 후보는 같은 설정의 seed 42 후보와 비교해 학습을 다시 했을 때의 흔들림을 본다.
+- --extend-grid: 후처리 격자를 넓혀서도 고른다. 설정의 격자에서 고른 값(다른 후보와 같은 조건)과
+  넓힌 격자에서 고른 값이 다르면 holdout을 한 번 더 평가한다 (ext_ 열, *_ext.json).
+- 후보마다 best.pt도 내보낸다 (G 탐색의 σ=8은 가중치를 남기지 않아 다시 평가할 수 없었다).
+
 시간 제한: 다음 후보가 끝나는 예상 시각이 --budget-hours를 넘으면 (공식 확인 시간을 남기고) 건너뛴다.
 결과: --out/summary.json, summary.csv, candidates/<후보>/ (설정·기록·평가),
       고른 후보의 best.pt (앙상블용, fit으로 학습), final/<run>/ (공식 확인, best.pt 포함).
@@ -39,12 +49,17 @@ from common.paths import resolve_paths
 
 KEEP = ("config.json", "history.csv", "log.txt", "postprocess.json")
 M0_VAL = "results/m0_dicefix_seed42/eval_val_per_image.json"
+MODES = ["gaussian", "ha", "hao"]
 
 
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--mode", choices=["gaussian", "ha", "hao"], required=True)
+    p.add_argument("--mode", choices=MODES, help="탐색할 모델 (--confirm이 없을 때 필수)")
+    p.add_argument("--confirm", nargs="+", metavar="MODE:SIGMA:LAMBDA:SEED",
+                   help="이 후보들만 처음부터 학습·평가한다 (파인튜닝·선택·공식 확인 없음)")
+    p.add_argument("--extend-grid", nargs="+", metavar="KEY=V[,V]",
+                   help="후처리 격자에 더해 볼 값 (eval_m2.py --extend-grid로 전달)")
     p.add_argument("--sigmas", type=float, nargs="+", default=[4.0, 6.0, 8.0])
     p.add_argument("--lambdas", type=float, nargs="+", default=[0.9],
                    help="coarse λ (G는 지도에 영향 없음, 이름에만 쓰인다)")
@@ -64,7 +79,17 @@ def parse_args():
     p.add_argument("--out", required=True)
     p.add_argument("--train-extra", default="", help="train_m2.py에 더할 인자 (점검: --train-extra=--smoke)")
     p.add_argument("--eval-extra", default="", help="eval_m2.py에 더할 인자 (점검: '--eval-extra=--limit 2')")
-    return p.parse_args()
+    args = p.parse_args()
+    if bool(args.mode) == bool(args.confirm):
+        p.error("--mode 또는 --confirm 중 하나를 주세요.")
+    specs = []
+    for item in args.confirm or []:
+        parts = item.split(":")
+        if len(parts) != 4 or parts[0] not in MODES:
+            p.error(f"--confirm 형식: 모델:σ:λ:seed (예: gaussian:6:0.9:43). 받은 값: {item}")
+        specs.append((parts[0], float(parts[1]), float(parts[2]), int(parts[3])))
+    args.confirm = specs
+    return args
 
 
 class Search:
@@ -103,20 +128,25 @@ class Search:
         return bool(best and best["init_from"])
 
     def fits(self, stage):
-        reserve = 0 if self.args.no_final else self.estimate("final")
+        reserve = 0 if self.args.no_final or self.args.confirm else self.estimate("final")
         need = self.hours() + self.estimate(stage) + (reserve if stage != "final" else 0)
         if need > self.args.budget_hours:
             print(f"[시간] {stage} 건너뜀: 예상 {need:.1f}h > 제한 {self.args.budget_hours}h", flush=True)
             return False
         return True
 
-    def name(self, sigma, lam, suffix=""):
-        return f"search_{self.args.mode}_s{sigma:g}_l{lam:g}{suffix}"
+    def name(self, sigma, lam, suffix="", mode=None, seed=None):
+        # 이름에 seed를 적는 것은 기본 seed와 다를 때뿐이다 (1·2단계 후보 이름을 그대로 두기 위해).
+        mode, seed = mode or self.args.mode, self.args.seed if seed is None else seed
+        tail = "" if seed == 42 else f"_seed{seed}"
+        return f"search_{mode}_s{sigma:g}_l{lam:g}{suffix}{tail}"
 
-    def train_cmd(self, run_name, sigma, lam, init_from=None, split=True):
+    def train_cmd(self, run_name, sigma, lam, init_from=None, split=True, mode=None, seed=None):
         a = self.args
-        cmd = [sys.executable, "scripts/train_m2.py", "--config", a.config, "--seed", a.seed,
-               "--target-mode", a.mode, "--sigma", sigma, "--lambda", lam, "--run-name", run_name]
+        cmd = [sys.executable, "scripts/train_m2.py", "--config", a.config,
+               "--seed", a.seed if seed is None else seed,
+               "--target-mode", mode or a.mode, "--sigma", sigma, "--lambda", lam,
+               "--run-name", run_name]
         if split:
             cmd += ["--split-file", a.split_file, "--train-part", a.train_part,
                     "--val-part", a.val_part]
@@ -147,43 +177,53 @@ class Search:
 
     def write_summary(self, chosen=None, final=None):
         a = self.args
-        payload = {"mode": a.mode, "split_file": a.split_file,
+        rule = ("선택 없음: 적어 준 후보만 학습·평가 (seed 차이, 넓힌 후처리 격자 확인)" if a.confirm
+                else f"{a.test_part} 세포 mF1이 가장 높은 후보 (공식 val·test 미사용)")
+        payload = {"mode": a.mode or "confirm", "split_file": a.split_file,
                    "parts": {"train": a.train_part, "select": a.val_part, "compare": a.test_part},
-                   "rule": f"{a.test_part} 세포 mF1이 가장 높은 후보 (공식 val·test 미사용)",
+                   "rule": rule, "extend_grid": a.extend_grid,
                    "hours": round(self.hours(), 2), "candidates": self.rows,
                    "chosen": chosen, "final": final}
         (self.out / "summary.json").write_text(
             json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        fields = ["name", "stage", "sigma", "lambda", "init_from_name", "status",
+        fields = ["name", "stage", "mode", "sigma", "lambda", "seed", "init_from_name", "status",
                   "select_mF1", "mF1", "f1_BC", "f1_TC", "BC_miss_14_30", "TC_miss_14_30",
                   "BC_miss_30", "TC_miss_30", "false_positive", "postprocess", "hours"]
+        if a.extend_grid:
+            fields += ["ext_select_mF1", "ext_mF1", "ext_false_positive", "ext_postprocess"]
         with (self.out / "summary.csv").open("w", newline="", encoding="utf-8") as f:
             w = csv.DictWriter(f, fields, extrasaction="ignore")
             w.writeheader()
             for r in self.rows:
-                w.writerow({**r, "postprocess": json.dumps(r.get("postprocess"))})
+                w.writerow({**r, "postprocess": json.dumps(r.get("postprocess")),
+                            "ext_postprocess": json.dumps(r.get("ext_postprocess"))})
 
     # ---------- 후보 하나 ----------
-    def candidate(self, stage, sigma, lam, init_from=None, from_name=None, suffix=""):
+    def candidate(self, stage, sigma, lam, init_from=None, from_name=None, suffix="",
+                  mode=None, seed=None):
         a = self.args
-        run_name = self.name(sigma, lam, suffix)
-        row = {"name": run_name, "stage": stage, "sigma": sigma, "lambda": lam,
-               "init_from": str(init_from) if init_from else None,
+        mode, seed = mode or a.mode, a.seed if seed is None else seed
+        run_name = self.name(sigma, lam, suffix, mode, seed)
+        row = {"name": run_name, "stage": stage, "mode": mode, "sigma": sigma, "lambda": lam,
+               "seed": seed, "init_from": str(init_from) if init_from else None,
                "init_from_name": from_name, "status": "skipped"}
-        kind = "coarse" if stage == "coarse" else "ft"
+        kind = "ft" if init_from else "coarse"   # 처음부터 학습(coarse·confirm) / 파인튜닝
         if not self.fits(kind):
             self.rows.append(row)
             self.write_summary()
             return row
         began = time.time()
-        ok = (self.call(self.train_cmd(run_name, sigma, lam, init_from))
-              and self.call(self.eval_cmd(run_name, "--part", a.val_part, "--tune"))
+        extend = ["--extend-grid", *a.extend_grid] if a.extend_grid else []
+        folder = self.runs / run_name
+        ok = (self.call(self.train_cmd(run_name, sigma, lam, init_from, mode=mode, seed=seed))
+              and self.call(self.eval_cmd(run_name, "--part", a.val_part, "--tune", *extend))
               and self.call(self.eval_cmd(run_name, "--part", a.test_part)))
+        if ok and extend:
+            ok = self.extended(run_name, row)
         hours = (time.time() - began) / 3600
         row["hours"] = round(hours, 2)
         if ok:
             self.durations[kind].append(hours)
-            folder = self.runs / run_name
             sel = self.read(folder / f"eval_{a.val_part}.json")
             test = self.read(folder / f"eval_{a.test_part}.json")
             cells = self.read(folder / f"close_cells_{a.test_part}.json")["M2"]
@@ -196,15 +236,38 @@ class Search:
                        BC_miss_30=rate[("BC", "30+")], TC_miss_30=rate[("TC", "30+")],
                        false_positive=cells["totals"]["false_positive"],
                        postprocess=test["postprocess"])
+            if extend:   # 넓힌 격자가 같은 값을 골랐으면 평가 결과도 같다
+                row.setdefault("ext_mF1", row["mF1"])
+                row.setdefault("ext_false_positive", row["false_positive"])
             print(f"[후보] {run_name}: {a.test_part} mF1 {row['mF1']:.4f} "
-                  f"(select {row['select_mF1']:.4f}) | {hours:.2f}h", flush=True)
+                  f"(select {row['select_mF1']:.4f})"
+                  + (f" | 넓힌 격자 {row['ext_mF1']:.4f} {row['ext_postprocess']}" if extend else "")
+                  + f" | {hours:.2f}h", flush=True)
         else:
             row["status"] = "failed"
             print(f"[실패] {run_name}", flush=True)
-        self.keep(run_name, f"candidates/{run_name}", [a.val_part, a.test_part])
+        self.keep(run_name, f"candidates/{run_name}",
+                  [a.val_part, a.test_part, f"{a.test_part}_ext"])
         self.rows.append(row)
         self.write_summary()
         return row
+
+    def extended(self, run_name, row):
+        """넓힌 격자에서 고른 후처리가 설정 격자에서 고른 것과 다르면 그 값으로 한 번 더 평가한다."""
+        a = self.args
+        folder = self.runs / run_name
+        saved = self.read(folder / "postprocess.json")
+        wide = saved["chosen_extended"]
+        keys = ("sigma", "min_distance", "threshold")
+        row.update(ext_select_mF1=wide["mF1"], ext_postprocess={k: wide[k] for k in keys})
+        if all(wide[k] == saved["chosen"][k] for k in keys):
+            return True   # 같은 값 → 평가 결과도 같다 (ext_mF1은 mF1과 같게 적는다)
+        if not self.call(self.eval_cmd(run_name, "--part", a.test_part, "--use-extended")):
+            return False
+        cells = self.read(folder / f"close_cells_{a.test_part}_ext.json")["M2"]
+        row.update(ext_mF1=self.read(folder / f"eval_{a.test_part}_ext.json")["overall"]["mF1"],
+                   ext_false_positive=cells["totals"]["false_positive"])
+        return True
 
     def best(self, stage=None):
         done = [r for r in self.rows if r["status"] == "done"
@@ -214,6 +277,16 @@ class Search:
     # ---------- 전체 ----------
     def run(self):
         a = self.args
+        if a.confirm:
+            print(f"[확인] 후보 {len(a.confirm)}개 (모델:σ:λ:seed) {a.confirm} | 넓힌 격자 {a.extend_grid} "
+                  f"| 분할 {a.split_file} ({a.train_part}/{a.val_part}/{a.test_part}) "
+                  f"| 제한 {a.budget_hours}h", flush=True)
+            for mode, sigma, lam, seed in a.confirm:
+                row = self.candidate("confirm", sigma, lam, mode=mode, seed=seed)
+                if row["status"] == "done":   # 나중에 다시 평가하거나 채택할 수 있게 가중치도 내보낸다
+                    self.keep(row["name"], f"candidates/{row['name']}", [], checkpoint=True)
+            print(f"[완료] {self.hours():.2f}h. 결과: {self.out}", flush=True)
+            return
         print(f"[탐색] {a.mode} | coarse σ {a.sigmas} λ {a.lambdas} | 파인튜닝 ±{a.ft_step:g}"
               f"{' λ ' + str(a.ft_lambdas) if a.ft_lambdas else ''} | 분할 {a.split_file} "
               f"({a.train_part}/{a.val_part}/{a.test_part}) | 제한 {a.budget_hours}h", flush=True)

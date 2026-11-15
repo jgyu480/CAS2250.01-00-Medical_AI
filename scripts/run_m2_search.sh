@@ -5,11 +5,20 @@
 #
 # VESSL Run:  MODE=gaussian bash scripts/run_m2_search.sh      (vessl/m2_search_g.yaml)
 #             MODE=ha bash scripts/run_m2_search.sh            (vessl/m2_search_ga.yaml)
+# 확인 단계:  RUNS="gaussian:6:0.9:43 gaussian:8:0.9:43" bash scripts/run_m2_search.sh   (vessl/m2_confirm.yaml)
+#             적어 준 후보(모델:σ:λ:seed)만 학습·평가한다. 후처리 격자는 GRID만큼 넓혀서도 본다.
 # 점검용:     SKIP_PREP=1 SEARCH_EXTRA="--train-extra=--smoke" MODE=gaussian bash scripts/run_m2_search.sh
 set -uo pipefail
 REPO=${REPO:-$(cd "$(dirname "$0")/.." && pwd)}
-MODE=${MODE:?MODE=gaussian 또는 MODE=ha}
-OUT=${OUT:-/root/m2_search_${MODE}}
+RUNS=${RUNS:-}
+if [ -n "$RUNS" ]; then
+  MODE=confirm
+  OUT=${OUT:-/root/m2_confirm}
+  GRID=${GRID-sigma=1 min_distance=11 threshold=0.6,0.7}
+else
+  MODE=${MODE:?MODE=gaussian 또는 MODE=ha (확인 단계는 RUNS=...)}
+  OUT=${OUT:-/root/m2_search_${MODE}}
+fi
 SPLIT=${SPLIT:-configs/train_split_seed42.json}
 SEARCH_EXTRA=${SEARCH_EXTRA:-}
 SKIP_PREP=${SKIP_PREP:-0}
@@ -83,8 +92,20 @@ if hashlib.sha256(meta.read_bytes()).hexdigest() != split["metadata_sha256"]:
 print("[분할]", sys.argv[1], {k: v["pairs"] for k, v in split["summary"].items()})
 PY
 
-EXTRA=""
-[ "$MODE" = "ha" ] && EXTRA="--ft-lambdas 0.5"
-python scripts/run_m2_search.py --mode "$MODE" --split-file "$SPLIT" --out "$OUT" $EXTRA $SEARCH_EXTRA
-echo "[종료] $(date '+%F %T')"
+if [ -n "$RUNS" ]; then
+  python scripts/run_m2_search.py --confirm $RUNS ${GRID:+--extend-grid $GRID} \
+    --split-file "$SPLIT" --out "$OUT" $SEARCH_EXTRA
+  STATUS=$?
+else
+  EXTRA=""
+  [ "$MODE" = "ha" ] && EXTRA="--ft-lambdas 0.5"
+  python scripts/run_m2_search.py --mode "$MODE" --split-file "$SPLIT" --out "$OUT" $EXTRA $SEARCH_EXTRA
+  STATUS=$?
+fi
+echo "[종료] $(date '+%F %T') (탐색 종료 코드 $STATUS)"
+# 내려받기 쉽게 작은 결과 파일(가중치 제외)을 하나로 묶는다. 묶는 동안 폴더가 바뀌지 않게 밖에서 만든 뒤 옮긴다.
+sleep 1
+tar -czf "$OUT.small.tar.gz" -C "$OUT" --exclude='*.pt' --exclude='*.tar.gz' . 2>/dev/null
+[ -s "$OUT.small.tar.gz" ] && mv "$OUT.small.tar.gz" "$OUT/results_small.tar.gz" && echo "[묶음] $OUT/results_small.tar.gz"
 ls -la "$OUT" "$OUT"/candidates/* "$OUT"/final/* 2>/dev/null
+exit $STATUS

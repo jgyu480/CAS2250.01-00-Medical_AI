@@ -170,7 +170,7 @@ VESSL에서 Run을 하나씩 만든다 (YAML 에디터에 붙여 넣기. 하나�
 
 - `vessl/m2_search_g.yaml` → `MODE=gaussian bash scripts/run_m2_search.sh` (약 10시간)
 - `vessl/m2_search_ga.yaml` → `MODE=ha bash scripts/run_m2_search.sh` (약 10–11시간)
-- 결과: `/root/m2_search_<mode>/summary.json`, `summary.csv`, `candidates/<후보>/`, `final/<run>/`
+- 결과: `/root/m2_search_<mode>/summary.json`, `summary.csv`, `candidates/<후보>/`, `final/<run>/`, `results_small.tar.gz`(가중치를 뺀 파일 묶음)
   - `best.pt`는 고른 후보(앙상블용)와 공식 확인 모델만 내보낸다.
 - 데이터 ZIP은 연결이 끊기거나 2분 넘게 멈추면 받은 곳부터 이어 받는다 (최대 30회). 받은 파일은 `check_data.py`가 MD5로 확인한다.
   - 11/15 GA Run 첫 시도가 Zenodo 다운로드 도중(303MB 중 234MB) 끊겨 학습 전에 실패해서 넣었다. 학습 코드는 바뀌지 않았다.
@@ -189,6 +189,35 @@ SKIP_PREP=1 SEARCH_EXTRA="--train-extra=--smoke" MODE=gaussian bash scripts/run_
 
 - 분할로 학습한 모델은 공식 val에서 후처리를 고르지 않는다. `eval_m2.py`가 막는다 (`--split val`은 select에서 고른 값으로 평가만).
 - 파인튜닝 옵션(`--init-from`, `--lr-scale`, `--freeze-epochs`)은 `train_m0.py`와 같은 이름이다. overnight 실험 코드(`results/m2-overnight-20261110-121336`)의 파인튜닝 방식(10 epoch, 학습률 ×0.1, 고정 없음)을 따랐다.
+
+### 확인 단계 (11/16, `run_m2_search.py --confirm`)
+
+G 탐색(11/14~15) 결과를 보고 추가했다. 후보 간 holdout mF1 차이가 작았고(σ 5·6·7이 0.003 안), 아래 세 가지를 확인하지 않고는 그 차이를 해석할 수 없어서다.
+
+| 확인할 것 | 이유 | 방법 |
+|---|---|---|
+| 학습을 다시 했을 때의 흔들림 | 한 번 학습한 결과끼리의 작은 차이는 seed만 바꿔도 뒤집힐 수 있다 (Bouthillier 2021) | 같은 설정을 seed 43으로 다시 학습해 seed 42 후보와 비교 (데이터 분할은 그대로) |
+| 넓은 σ의 후처리 격자 | G σ=8이 고른 후처리(σ 2, d 9, thr 0.5)가 세 값 모두 격자 끝이었다. 후처리 영향이 크다 (Höfener 2018) | 격자에 σ 1, d 11, thr 0.6·0.7을 더해 select에서 다시 고름 (`eval_m2.py --extend-grid`) |
+| 범위 밖 σ | 가장 좋은 값이 범위 끝이면 그 너머를 본다 (Bengio 2012). GA는 A가 골짜기를 깎아 넓은 σ가 가능하다 | GA 탐색에서 최고가 σ=8이면 σ=10 추가 |
+
+- 후보는 `모델:σ:λ:seed`로 적는다. fit으로 처음부터 학습 → select에서 후처리 → holdout 평가. 파인튜닝·선택·공식 확인은 하지 않는다 (공식 val·test 미사용).
+- 후처리는 두 가지로 고른다. `chosen`은 설정의 격자(1·2단계 후보와 같은 조건)에서, `chosen_extended`는 넓힌 격자에서 고른 값이다.
+  seed 비교에는 `chosen` 결과(`mF1`)를 쓰고, 격자 영향은 `ext_mF1`과의 차이로 본다. 두 값이 다를 때만 holdout을 한 번 더 평가한다 (`*_ext.json`).
+- **판정 규칙 (돌리기 전에 정함):** 2단계에서 고른 계수를 유지한다. 새 후보의 holdout mF1이 같은 설정 seed 42·43의 차이보다 크게 앞설 때만 바꾸고, 그때는 4단계(공식 확인)를 그 후보로 다시 한다.
+  σ 후보들의 차이가 seed 차이 안이면 "이 구간에서는 성능이 평탄하다"로 적는다.
+- 한계: seed 2개로는 흔들림의 크기를 대략만 알 수 있다.
+- 실행: `vessl/m2_confirm.yaml` → `RUNS="gaussian:6:0.9:43 gaussian:8:0.9:43 ha:8:0.9:43 ha:10:0.9:42" bash scripts/run_m2_search.sh` (후보 하나에 약 2시간).
+  GA 후보(`ha:...`)는 GA 탐색 결과를 보고 확정한다. 결과는 `/root/m2_confirm/`에 모이고(후보마다 `best.pt` 포함), 가중치를 뺀 파일은 `results_small.tar.gz` 하나로도 묶인다.
+
+### 참고한 선행 연구
+
+후보의 이유(위 "후보를 고른 이유")는 실험 전에 적었고, 아래 연구는 그 뒤(11/15)에 대조했다. 값을 가져온 것은 OCELOT 기준 모델의 반지름뿐이다.
+
+- 기준점: OCELOT 기준 모델은 세포를 반지름 1.4μm(7px) 원으로 표시한다. σ=6의 반높이 반지름(7.1px)과 같다. [Ryu et al., CVPR 2023 보충 자료](https://openaccess.thecvf.com/content/CVPR2023/supplemental/Ryu_OCELOT_Overlapped_Cell_CVPR_2023_supplemental.pdf)
+- 같은 데이터의 σ 비교: OCELOT 2023 3위(SoftCTM)는 σ 1–4μm(5–20px)를 비교했고 차이가 작았다. 이 팀의 Gaussian은 핵 영역 안으로 잘려 있어 넓은 σ에서도 이웃과 겹치지 않는다는 점이 우리와 다르다. [SoftCTM](https://arxiv.org/abs/2312.12151)
+- 이웃 억제: repel coding. 식의 계수 값은 논문에 없어 λ는 우리 스크리닝 값을 썼다. [Liang et al., 2019](https://arxiv.org/abs/1904.08864)
+- 넣지 않은 방법: 크기 적응형 σ([CenterNet](https://arxiv.org/abs/1904.07850))는 크기 라벨이 없어서, 밀도 적응형 σ([MCNN](https://openaccess.thecvf.com/content_cvpr_2016/html/Zhang_Single-Image_Crowd_Counting_CVPR_2016_paper.html), σ=0.3×이웃 평균 거리)는 fit 233장에 넣으면 중앙값이 15px로 범위를 크게 벗어나서 넣지 않았다.
+- 탐색 방법: 범위 끝 점검 [Bengio 2012](https://arxiv.org/abs/1206.5533), 좋은 모델에서 이어 학습하며 주변 탐색 [PBT](https://arxiv.org/abs/1711.09846), 후처리의 영향 [Höfener et al. 2018](https://doi.org/10.1016/j.compmedimag.2018.08.010), 선택용 데이터 분리 [Cawley & Talbot 2010](https://www.jmlr.org/papers/v11/cawley10a.html), seed에 따른 분산 [Bouthillier et al. 2021](https://arxiv.org/abs/2103.03098)
 
 ## 평가 항목 (보고서 8.4)
 
