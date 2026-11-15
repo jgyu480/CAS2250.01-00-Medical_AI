@@ -1,5 +1,5 @@
 #!/bin/bash
-# M2 계수 탐색 한 모델 (VESSL Run 하나). G와 GA를 각각 다른 Run으로 동시에 돌린다.
+# M2 계수 탐색 한 모델 (VESSL Run 하나). G와 GA를 각각 다른 Run으로 돌린다 (한 번에 하나).
 # 데이터 다운로드·검사 → scripts/run_m2_search.py (coarse σ → 파인튜닝 → 공식 train 재학습 → 공식 val)
 # 결과는 OUT(기본 /root/m2_search_<MODE>)에 모인다 (VESSL artifact로 내보냄).
 #
@@ -15,6 +15,43 @@ SEARCH_EXTRA=${SEARCH_EXTRA:-}
 SKIP_PREP=${SKIP_PREP:-0}
 ZIP_URL="https://zenodo.org/records/8417503/files/ocelot2023_v1.0.1.zip?download=1"
 
+# 파일 하나를 받는다. 연결이 끊기거나 2분 넘게 멈추면 받은 곳부터 이어 받는다 (최대 30회).
+# 받은 ZIP이 공식 파일과 같은지는 뒤의 check_data.py가 MD5로 확인한다.
+fetch() {
+  python - "$1" "$2" <<'PY'
+import os, sys, time, urllib.error, urllib.request
+url, dest = sys.argv[1], sys.argv[2]
+for attempt in range(1, 31):
+    have = os.path.getsize(dest) if os.path.exists(dest) else 0
+    request = urllib.request.Request(url, headers={"Range": f"bytes={have}-"} if have else {})
+    try:
+        with urllib.request.urlopen(request, timeout=120) as response:
+            resumed = bool(have) and response.status == 206   # 200이면 서버가 이어받기를 무시한 것 → 처음부터
+            length = response.headers.get("Content-Length")
+            expected = (have if resumed else 0) + int(length) if length else None
+            with open(dest, "ab" if resumed else "wb") as handle:
+                while True:
+                    chunk = response.read(1 << 20)
+                    if not chunk:
+                        break
+                    handle.write(chunk)
+        size = os.path.getsize(dest)
+        if expected is None or size >= expected:
+            print(f"[다운로드] 완료 {size:,} bytes (시도 {attempt}회)", flush=True)
+            sys.exit(0)
+        print(f"[다운로드] 시도 {attempt}: {size:,} / {expected:,} bytes에서 끊김 → 이어 받기", flush=True)
+    except urllib.error.HTTPError as exc:
+        if exc.code == 416 and have:   # 요청한 위치가 파일 끝 = 이미 다 받음
+            print(f"[다운로드] 이미 받은 파일 {have:,} bytes", flush=True)
+            sys.exit(0)
+        print(f"[다운로드] 시도 {attempt}: HTTP {exc.code} → 다시 시도", flush=True)
+    except Exception as exc:
+        print(f"[다운로드] 시도 {attempt}: {type(exc).__name__}: {exc} → 다시 시도", flush=True)
+    time.sleep(min(60, 5 * attempt))
+sys.exit("[중단] 다운로드 실패 (30회 시도)")
+PY
+}
+
 mkdir -p "$OUT"
 exec > >(tee -a "$OUT/run_all.log") 2>&1
 cd "$REPO" || exit 1
@@ -27,7 +64,7 @@ python -c "import scipy" 2>/dev/null || python -m pip install -q "scipy<1.16" ||
 if [ "$SKIP_PREP" != "1" ]; then
   mkdir -p data/downloads data/raw
   echo "[데이터] OCELOT 다운로드"
-  python -c "import urllib.request as u; u.urlretrieve('$ZIP_URL', 'data/downloads/ocelot2023_v1.0.1.zip')" || exit 1
+  fetch "$ZIP_URL" data/downloads/ocelot2023_v1.0.1.zip || exit 1
   python -c "import zipfile; zipfile.ZipFile('data/downloads/ocelot2023_v1.0.1.zip').extractall('data/raw')" || exit 1
   python scripts/check_data.py --zip data/downloads/ocelot2023_v1.0.1.zip || { echo "[중단] check_data 실패"; exit 1; }
   python scripts/check_dataset.py || { echo "[중단] check_dataset 실패"; exit 1; }

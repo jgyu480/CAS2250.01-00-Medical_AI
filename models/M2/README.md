@@ -127,7 +127,7 @@ OUT=outputs/m2_results nohup bash scripts/run_m2_conditions.sh > outputs/run_m2.
 
 민규 지시(11/14): G와 GA를 앙상블에 쓰므로 둘 다 성능을 올린다. 계수는 **각 모델 단독 성능이 가장 높은 값**으로 고르고,
 고를 때 **test 지표를 쓰지 않는다**. σ는 간격을 두고 처음부터 학습한 뒤, 가장 좋은 값 주변은 파인튜닝으로 본다.
-Run 하나는 최대 24시간이고 동시에 여러 개 돌릴 수 있다.
+Run 하나는 최대 24시간이다. 이 계정은 GPU Run을 한 번에 하나만 돌릴 수 있어(resource quota) G → GA 순서로 돌린다.
 
 ### 데이터 분할 (`configs/train_split_seed42.json`)
 
@@ -166,12 +166,14 @@ Run 하나는 최대 24시간이고 동시에 여러 개 돌릴 수 있다.
 
 ### 실행
 
-VESSL에서 Run 두 개를 동시에 만든다 (YAML 에디터에 붙여 넣기).
+VESSL에서 Run을 하나씩 만든다 (YAML 에디터에 붙여 넣기. 하나가 끝난 뒤 다음 것을 만든다).
 
 - `vessl/m2_search_g.yaml` → `MODE=gaussian bash scripts/run_m2_search.sh` (약 10시간)
 - `vessl/m2_search_ga.yaml` → `MODE=ha bash scripts/run_m2_search.sh` (약 10–11시간)
 - 결과: `/root/m2_search_<mode>/summary.json`, `summary.csv`, `candidates/<후보>/`, `final/<run>/`
   - `best.pt`는 고른 후보(앙상블용)와 공식 확인 모델만 내보낸다.
+- 데이터 ZIP은 연결이 끊기거나 2분 넘게 멈추면 받은 곳부터 이어 받는다 (최대 30회). 받은 파일은 `check_data.py`가 MD5로 확인한다.
+  - 11/15 GA Run 첫 시도가 Zenodo 다운로드 도중(303MB 중 234MB) 끊겨 학습 전에 실패해서 넣었다. 학습 코드는 바뀌지 않았다.
 
 직접 돌릴 때와 점검:
 
