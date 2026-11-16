@@ -1,0 +1,243 @@
+{
+  "mode": "ha",
+  "split_file": "configs/train_split_seed42.json",
+  "parts": {
+    "train": "fit",
+    "select": "select",
+    "compare": "holdout"
+  },
+  "rule": "holdout 세포 mF1이 가장 높은 후보 (공식 val·test 미사용)",
+  "hours": 10.13,
+  "candidates": [
+    {
+      "name": "search_ha_s4_l0.9",
+      "stage": "coarse",
+      "sigma": 4.0,
+      "lambda": 0.9,
+      "init_from": null,
+      "init_from_name": null,
+      "status": "done",
+      "hours": 1.44,
+      "select_mF1": 0.7607,
+      "mF1": 0.7144,
+      "f1_BC": 0.665,
+      "f1_TC": 0.7639,
+      "epoch": 22,
+      "BC_miss_14_30": 0.2085,
+      "TC_miss_14_30": 0.2752,
+      "BC_miss_30": 0.0818,
+      "TC_miss_30": 0.0956,
+      "false_positive": 4694,
+      "postprocess": {
+        "sigma": 3.0,
+        "min_distance": 9,
+        "threshold": 0.3
+      }
+    },
+    {
+      "name": "search_ha_s6_l0.9",
+      "stage": "coarse",
+      "sigma": 6.0,
+      "lambda": 0.9,
+      "init_from": null,
+      "init_from_name": null,
+      "status": "done",
+      "hours": 1.51,
+      "select_mF1": 0.7829,
+      "mF1": 0.7215,
+      "f1_BC": 0.6758,
+      "f1_TC": 0.7672,
+      "epoch": 16,
+      "BC_miss_14_30": 0.245,
+      "TC_miss_14_30": 0.2885,
+      "BC_miss_30": 0.1127,
+      "TC_miss_30": 0.1118,
+      "false_positive": 4027,
+      "postprocess": {
+        "sigma": 4.0,
+        "min_distance": 3,
+        "threshold": 0.3
+      }
+    },
+    {
+      "name": "search_ha_s8_l0.9",
+      "stage": "coarse",
+      "sigma": 8.0,
+      "lambda": 0.9,
+      "init_from": null,
+      "init_from_name": null,
+      "status": "done",
+      "hours": 1.57,
+      "select_mF1": 0.7857,
+      "mF1": 0.7194,
+      "f1_BC": 0.6742,
+      "f1_TC": 0.7646,
+      "epoch": 18,
+      "BC_miss_14_30": 0.2033,
+      "TC_miss_14_30": 0.2906,
+      "BC_miss_30": 0.0741,
+      "TC_miss_30": 0.1016,
+      "false_positive": 4804,
+      "postprocess": {
+        "sigma": 4.0,
+        "min_distance": 3,
+        "threshold": 0.4
+      }
+    },
+    {
+      "name": "search_ha_s6_l0.9_ft-control",
+      "stage": "ft-control",
+      "sigma": 6.0,
+      "lambda": 0.9,
+      "init_from": "/mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt",
+      "init_from_name": "search_ha_s6_l0.9",
+      "status": "done",
+      "hours": 0.52,
+      "select_mF1": 0.7773,
+      "mF1": 0.7237,
+      "f1_BC": 0.6759,
+      "f1_TC": 0.7715,
+      "epoch": 3,
+      "BC_miss_14_30": 0.2632,
+      "TC_miss_14_30": 0.2989,
+      "BC_miss_30": 0.1279,
+      "TC_miss_30": 0.11,
+      "false_positive": 3822,
+      "postprocess": {
+        "sigma": 5.0,
+        "min_distance": 3,
+        "threshold": 0.3
+      }
+    },
+    {
+      "name": "search_ha_s5_l0.9_ft-from-s6",
+      "stage": "ft",
+      "sigma": 5.0,
+      "lambda": 0.9,
+      "init_from": "/mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt",
+      "init_from_name": "search_ha_s6_l0.9",
+      "status": "done",
+      "hours": 0.51,
+      "select_mF1": 0.7759,
+      "mF1": 0.7232,
+      "f1_BC": 0.6751,
+      "f1_TC": 0.7714,
+      "epoch": 7,
+      "BC_miss_14_30": 0.2339,
+      "TC_miss_14_30": 0.2869,
+      "BC_miss_30": 0.1107,
+      "TC_miss_30": 0.1088,
+      "false_positive": 4169,
+      "postprocess": {
+        "sigma": 4.0,
+        "min_distance": 5,
+        "threshold": 0.3
+      }
+    },
+    {
+      "name": "search_ha_s7_l0.9_ft-from-s6",
+      "stage": "ft",
+      "sigma": 7.0,
+      "lambda": 0.9,
+      "init_from": "/mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt",
+      "init_from_name": "search_ha_s6_l0.9",
+      "status": "done",
+      "hours": 0.53,
+      "select_mF1": 0.7759,
+      "mF1": 0.7222,
+      "f1_BC": 0.6749,
+      "f1_TC": 0.7695,
+      "epoch": 3,
+      "BC_miss_14_30": 0.2391,
+      "TC_miss_14_30": 0.2829,
+      "BC_miss_30": 0.1195,
+      "TC_miss_30": 0.1079,
+      "false_positive": 4100,
+      "postprocess": {
+        "sigma": 3.0,
+        "min_distance": 7,
+        "threshold": 0.4
+      }
+    },
+    {
+      "name": "search_ha_s6_l0.5_ft-from-l0.9",
+      "stage": "ft",
+      "sigma": 6.0,
+      "lambda": 0.5,
+      "init_from": "/mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt",
+      "init_from_name": "search_ha_s6_l0.9",
+      "status": "done",
+      "hours": 0.52,
+      "select_mF1": 0.7771,
+      "mF1": 0.7241,
+      "f1_BC": 0.6768,
+      "f1_TC": 0.7715,
+      "epoch": 3,
+      "BC_miss_14_30": 0.2567,
+      "TC_miss_14_30": 0.2965,
+      "BC_miss_30": 0.1238,
+      "TC_miss_30": 0.1083,
+      "false_positive": 3900,
+      "postprocess": {
+        "sigma": 5.0,
+        "min_distance": 3,
+        "threshold": 0.3
+      }
+    }
+  ],
+  "chosen": {
+    "name": "search_ha_s6_l0.5_ft-from-l0.9",
+    "stage": "ft",
+    "sigma": 6.0,
+    "lambda": 0.5,
+    "init_from": "/mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt",
+    "init_from_name": "search_ha_s6_l0.9",
+    "status": "done",
+    "hours": 0.52,
+    "select_mF1": 0.7771,
+    "mF1": 0.7241,
+    "f1_BC": 0.6768,
+    "f1_TC": 0.7715,
+    "epoch": 3,
+    "BC_miss_14_30": 0.2567,
+    "TC_miss_14_30": 0.2965,
+    "BC_miss_30": 0.1238,
+    "TC_miss_30": 0.1083,
+    "false_positive": 3900,
+    "postprocess": {
+      "sigma": 5.0,
+      "min_distance": 3,
+      "threshold": 0.3
+    }
+  },
+  "final": {
+    "name": "final_ha_s6_l0.5_ft-from-s6-l0.9",
+    "recipe": [
+      "final_ha_s6_l0.9_base",
+      "final_ha_s6_l0.5_ft-from-s6-l0.9"
+    ],
+    "status": "done",
+    "hours": 3.51,
+    "val": {
+      "loss_cell": 0.8659,
+      "loss_tissue": 0.5438,
+      "loss_total": 1.4097,
+      "precision_BC": 0.6213,
+      "recall_BC": 0.7202,
+      "f1_BC": 0.6671,
+      "precision_TC": 0.8095,
+      "recall_TC": 0.7911,
+      "f1_TC": 0.8002,
+      "mF1": 0.7337,
+      "iou_BG": 0.8559,
+      "iou_CA": 0.8001,
+      "mIoU": 0.828
+    },
+    "postprocess": {
+      "sigma": 4.0,
+      "min_distance": 9,
+      "threshold": 0.4
+    },
+    "epoch": 3
+  }
+}

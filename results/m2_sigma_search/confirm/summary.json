@@ -1,0 +1,160 @@
+{
+  "mode": "confirm",
+  "split_file": "configs/train_split_seed42.json",
+  "parts": {
+    "train": "fit",
+    "select": "select",
+    "compare": "holdout"
+  },
+  "rule": "선택 없음: 적어 준 후보만 학습·평가 (seed 차이, 넓힌 후처리 격자 확인)",
+  "extend_grid": [
+    "sigma=1",
+    "min_distance=11",
+    "threshold=0.6,0.7"
+  ],
+  "hours": 8.38,
+  "candidates": [
+    {
+      "name": "search_gaussian_s6_l0.9_seed43",
+      "stage": "confirm",
+      "mode": "gaussian",
+      "sigma": 6.0,
+      "lambda": 0.9,
+      "seed": 43,
+      "init_from": null,
+      "init_from_name": null,
+      "status": "done",
+      "ext_select_mF1": 0.7812,
+      "ext_postprocess": {
+        "sigma": 2.0,
+        "min_distance": 9,
+        "threshold": 0.4
+      },
+      "hours": 2.06,
+      "select_mF1": 0.7812,
+      "mF1": 0.7074,
+      "f1_BC": 0.659,
+      "f1_TC": 0.7557,
+      "epoch": 22,
+      "BC_miss_14_30": 0.2397,
+      "TC_miss_14_30": 0.2898,
+      "BC_miss_30": 0.1386,
+      "TC_miss_30": 0.119,
+      "false_positive": 4062,
+      "postprocess": {
+        "sigma": 2.0,
+        "min_distance": 9,
+        "threshold": 0.4
+      },
+      "ext_mF1": 0.7074,
+      "ext_false_positive": 4062
+    },
+    {
+      "name": "search_gaussian_s8_l0.9_seed43",
+      "stage": "confirm",
+      "mode": "gaussian",
+      "sigma": 8.0,
+      "lambda": 0.9,
+      "seed": 43,
+      "init_from": null,
+      "init_from_name": null,
+      "status": "done",
+      "ext_select_mF1": 0.7819,
+      "ext_postprocess": {
+        "sigma": 4.0,
+        "min_distance": 5,
+        "threshold": 0.4
+      },
+      "hours": 2.1,
+      "select_mF1": 0.7819,
+      "mF1": 0.7116,
+      "f1_BC": 0.6656,
+      "f1_TC": 0.7576,
+      "epoch": 29,
+      "BC_miss_14_30": 0.2515,
+      "TC_miss_14_30": 0.2922,
+      "BC_miss_30": 0.1484,
+      "TC_miss_30": 0.1143,
+      "false_positive": 3800,
+      "postprocess": {
+        "sigma": 4.0,
+        "min_distance": 5,
+        "threshold": 0.4
+      },
+      "ext_mF1": 0.7116,
+      "ext_false_positive": 3800
+    },
+    {
+      "name": "search_ha_s6_l0.9_seed43",
+      "stage": "confirm",
+      "mode": "ha",
+      "sigma": 6.0,
+      "lambda": 0.9,
+      "seed": 43,
+      "init_from": null,
+      "init_from_name": null,
+      "status": "done",
+      "ext_select_mF1": 0.7835,
+      "ext_postprocess": {
+        "sigma": 4.0,
+        "min_distance": 3,
+        "threshold": 0.3
+      },
+      "hours": 2.08,
+      "select_mF1": 0.7835,
+      "mF1": 0.721,
+      "f1_BC": 0.6849,
+      "f1_TC": 0.7572,
+      "epoch": 13,
+      "BC_miss_14_30": 0.2039,
+      "TC_miss_14_30": 0.2975,
+      "BC_miss_30": 0.0843,
+      "TC_miss_30": 0.1113,
+      "false_positive": 4530,
+      "postprocess": {
+        "sigma": 4.0,
+        "min_distance": 3,
+        "threshold": 0.3
+      },
+      "ext_mF1": 0.721,
+      "ext_false_positive": 4530
+    },
+    {
+      "name": "search_ha_s8_l0.9_seed43",
+      "stage": "confirm",
+      "mode": "ha",
+      "sigma": 8.0,
+      "lambda": 0.9,
+      "seed": 43,
+      "init_from": null,
+      "init_from_name": null,
+      "status": "done",
+      "ext_select_mF1": 0.7806,
+      "ext_postprocess": {
+        "sigma": 3.0,
+        "min_distance": 9,
+        "threshold": 0.4
+      },
+      "hours": 2.14,
+      "select_mF1": 0.7806,
+      "mF1": 0.7106,
+      "f1_BC": 0.664,
+      "f1_TC": 0.7572,
+      "epoch": 22,
+      "BC_miss_14_30": 0.2371,
+      "TC_miss_14_30": 0.301,
+      "BC_miss_30": 0.1218,
+      "TC_miss_30": 0.1151,
+      "false_positive": 4195,
+      "postprocess": {
+        "sigma": 3.0,
+        "min_distance": 9,
+        "threshold": 0.4
+      },
+      "ext_mF1": 0.7106,
+      "ext_false_positive": 4195
+    }
+  ],
+  "chosen": null,
+  "final": null
+}

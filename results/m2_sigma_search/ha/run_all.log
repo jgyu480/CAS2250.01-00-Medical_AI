@@ -1,0 +1,1403 @@
+[시작] 2026-11-15 07:50:40 MODE=ha
+Sun Nov 15 07:50:40 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.107.02             Driver Version: 550.107.02     CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 3090        Off |   00000000:01:00.0 Off |                  N/A |
+| 32%   29C    P8             20W /  350W |       1MiB /  24576MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+3.10.12 2.3.1+cu121 cuda True
+4ca6433 Resume interrupted dataset download in M2 search runner
+[데이터] OCELOT 다운로드
+[다운로드] 완료 303,248,865 bytes (시도 1회)
+[SCAN] train: 100/400
+[SCAN] train: 200/400
+[SCAN] train: 300/400
+[SCAN] train: 400/400
+[SCAN] train: 400/400 file pairs validated
+[SCAN] val: 100/137
+[SCAN] val: 137/137 file pairs validated
+[SCAN] test: 100/126
+[SCAN] test: 126/126 file pairs validated
+[train] pairs=400, valid=400, cells={'BC': 23332, 'TC': 42505}
+  mask pixel counts: {1: 235409146, 2: 166661770, 255: 17359484}
+  organs: {'bladder': 82, 'endometrium': 86, 'head-and-neck': 27, 'kidney': 122, 'prostate': 47, 'stomach': 36}
+[val] pairs=137, valid=137, cells={'BC': 8400, 'TC': 16312}
+  mask pixel counts: {1: 79082000, 2: 57805340, 255: 6767572}
+  organs: {'bladder': 29, 'endometrium': 29, 'head-and-neck': 9, 'kidney': 41, 'prostate': 17, 'stomach': 12}
+[test] pairs=126, valid=126, cells={'BC': 9603, 'TC': 12874}
+  mask pixel counts: {1: 67427541, 2: 58590757, 255: 6102278}
+  organs: {'bladder': 24, 'endometrium': 23, 'head-and-neck': 10, 'kidney': 41, 'prostate': 16, 'stomach': 12}
+Metadata example: {
+  "pair_id": "001",
+  "record": {
+    "slide_name": "TCGA-4A-A93X-01Z-00-DX2.45011BF1-FED8-4D22-B5E1-C63DC384FD2A",
+    "cell": {
+      "x_start": 67768,
+      "y_start": 29944,
+      "x_end": 68556,
+      "y_end": 30732,
+      "resized_mpp_x": 0.1944605476455763,
+      "resized_mpp_y": 0.1944605476455763
+    },
+    "tissue": {
+      "x_start": 66192,
+      "y_start": 28368,
+      "x_end": 69344,
+      "y_end": 31520,
+      "resized_mpp_x": 0.7778421905823052,
+      "resized_mpp_y": 0.7778421905823052
+    },
+    "patch_x_offset": 0.625,
+    "patch_y_offset": 0.625,
+    "mpp_x": 0.25270000100135803,
+    "mpp_y": 0.25270000100135803,
+    "organ": "kidney",
+    "subset": "train"
+  }
+}
+[WARN] train/val: overlapping TCGA case IDs ['TCGA-G2-A2EO', 'TCGA-Y6-A9XI']
+[WARN] train/test: overlapping TCGA case IDs ['TCGA-AX-A06D', 'TCGA-FJ-A3Z7', 'TCGA-FJ-A871', 'TCGA-G2-A2EF', 'TCGA-KV-A6GD', 'TCGA-QK-A64Z', 'TCGA-T3-A92M', 'TCGA-X4-A8KQ', 'TCGA-Y6-A8TL', 'TCGA-Y6-A9XI']
+[WARN] val/test: overlapping TCGA case IDs ['TCGA-G2-A2ES', 'TCGA-G2-A3IB', 'TCGA-G2-AA3B', 'TCGA-G2-AA3F', 'TCGA-PG-A5BC', 'TCGA-PG-A916', 'TCGA-UW-A7GY', 'TCGA-Y6-A9XI', 'TCGA-YL-A8SJ', 'TCGA-YL-A8SK', 'TCGA-YL-A9WI']
+Saved: /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/audit/report.json
+Saved: /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/audit/manifest.csv
+[PASS] 파일 검사 통과. 조직 클래스 확인 완료. 좌표 검사는 별도 단계입니다.
+[완료] 클래스·빈 점 목록·원 겹침·8가지 위치 변환 검사
+[점검] train: 100/400
+[점검] train: 200/400
+[점검] train: 300/400
+[점검] train: 400/400
+[점검] val: 100/137
+[점검] val: 137/137
+[점검] test: 100/126
+[점검] test: 126/126
+[PASS] 전체 Dataset 검사 완료. 4/10단계, 구현 진행률 40%.
+[안내] 학습 실행 없음. 어노테이션 정확성은 별도 검토합니다.
+[환경] 3.10.12 2.3.1+cu121 0.18.1+cu121
+[다운로드] Lunit 공식 BT 가중치
+[완료] 공식 BT 파일 SHA256 대조
+[완료] 두 SSL 백본 strict 로딩
+[완료] 같은 백본 초기값 / 독립 파라미터
+[출력] cell: {'low': [1, 256, 32, 32], 'high': [1, 2048, 8, 8], 'context': [1, 256, 8, 8], 'decoded': [1, 256, 32, 32], 'logits': [1, 3, 128, 128]}
+[출력] tissue: {'low': [1, 256, 32, 32], 'high': [1, 2048, 8, 8], 'context': [1, 256, 8, 8], 'decoded': [1, 256, 32, 32], 'logits': [1, 3, 128, 128]}
+[완료] 손실 방향·UNK 제외·전체 UNK 처리
+[완료] 파라미터·BN 통계 변경 없음
+[안내] backward·optimizer 실행 없음
+[PASS] 5/10단계 완료. 실제 어노테이션 수는 그대로 유지.
+[안내] 학습·성능 평가 미시작.
+PASS 정답 지도: 선정 스크립트 식과 최대 차이 3.0e-08, 중심 1, 클래스별, 중심 1·0개, λ 범위, H_AO≥H_A, 그림 10 숫자, 뒤집기·회전
+PASS 손실: 골짜기 포함 가중치, 정규화, 기울기, 세포 없는 사진
+PASS 후처리: 세 정답 지도 모두 가까운 쌍(12~14px)까지 모든 중심을 찾음
+PASS 모델: M0와 같은 가중치 이름, 세포 head만 2채널, 출력 크기, 8 step 손실 20.115→2.366
+  train 001: 세포 128개, 지도 최대 1.000, 전경 픽셀 2.18%
+  train 201: 세포 68개, 지도 최대 1.000, 전경 픽셀 1.14%
+  val 401: 세포 89개, 지도 최대 1.000, 전경 픽셀 1.50%
+  val 469: 세포 192개, 지도 최대 1.000, 전경 픽셀 3.23%
+PASS 실제 데이터: 증강 뒤 점 위치에서 해당 클래스 지도 값 1, M0 원형 정답과 같은 위치
+M2 점검 완료
+[분할] configs/train_split_seed42.json {'fit': 233, 'select': 40, 'holdout': 127}
+[탐색] ha | coarse σ [4.0, 6.0, 8.0] λ [0.9] | 파인튜닝 ±1 λ [0.5] | 분할 configs/train_split_seed42.json (fit/select/holdout) | 제한 22.0h
+
+[실행 0.00h] /usr/bin/python scripts/train_m2.py --config configs/m2_search_train.json --seed 42 --target-mode ha --sigma 4.0 --lambda 0.9 --run-name search_ha_s4_l0.9 --split-file configs/train_split_seed42.json --train-part fit --val-part select
+[시작] search_ha_s4_l0.9 | device cuda | amp torch.bfloat16 | 정답 ha σ=4 λ=0.9 | 분할 configs/train_split_seed42.json fit/select | train 233 / val 40 | batch 2×1 | 50 epoch
+[epoch 1/50] (백본 고정) train 2.6440 (cell 1.7872, tissue 0.8568) | val 1.7417 | mF1 0.1829 (BC 0.2134, TC 0.1524) | mIoU 0.8224 | 84.6s
+[저장] best.pt (val mF1 0.1829)
+[epoch 2/50] (백본 고정) train 1.7725 (cell 1.2896, tissue 0.4829) | val 1.6424 | mF1 0.2007 (BC 0.2348, TC 0.1666) | mIoU 0.8199 | 82.8s
+[저장] best.pt (val mF1 0.2007)
+[epoch 3/50] (백본 고정) train 1.6442 (cell 1.2058, tissue 0.4385) | val 1.5993 | mF1 0.2582 (BC 0.1147, TC 0.4016) | mIoU 0.8466 | 83.0s
+[저장] best.pt (val mF1 0.2582)
+[epoch 4/50] train 1.5665 (cell 1.1605, tissue 0.4060) | val 1.6569 | mF1 0.3491 (BC 0.2444, TC 0.4537) | mIoU 0.7976 | 82.4s
+[저장] best.pt (val mF1 0.3491)
+[epoch 5/50] train 1.4603 (cell 1.1061, tissue 0.3541) | val 1.5146 | mF1 0.5795 (BC 0.5141, TC 0.6450) | mIoU 0.8305 | 81.9s
+[저장] best.pt (val mF1 0.5795)
+[epoch 6/50] train 1.4129 (cell 1.0919, tissue 0.3209) | val 1.4227 | mF1 0.5753 (BC 0.6548, TC 0.4959) | mIoU 0.8607 | 81.9s
+[epoch 7/50] train 1.4022 (cell 1.0909, tissue 0.3112) | val 1.4769 | mF1 0.6301 (BC 0.5588, TC 0.7013) | mIoU 0.8448 | 81.1s
+[저장] best.pt (val mF1 0.6301)
+[epoch 8/50] train 1.3292 (cell 1.0313, tissue 0.2979) | val 1.4133 | mF1 0.6313 (BC 0.6310, TC 0.6316) | mIoU 0.8642 | 82.8s
+[저장] best.pt (val mF1 0.6313)
+[epoch 9/50] train 1.3209 (cell 1.0400, tissue 0.2809) | val 1.4497 | mF1 0.6914 (BC 0.6983, TC 0.6846) | mIoU 0.8559 | 81.7s
+[저장] best.pt (val mF1 0.6914)
+[epoch 10/50] train 1.2760 (cell 1.0168, tissue 0.2592) | val 1.5497 | mF1 0.5929 (BC 0.5815, TC 0.6043) | mIoU 0.8121 | 81.5s
+[epoch 11/50] train 1.2670 (cell 1.0175, tissue 0.2496) | val 1.3793 | mF1 0.5510 (BC 0.4544, TC 0.6475) | mIoU 0.8794 | 82.0s
+[epoch 12/50] train 1.2493 (cell 0.9854, tissue 0.2638) | val 1.4365 | mF1 0.6004 (BC 0.5374, TC 0.6634) | mIoU 0.8599 | 81.3s
+[epoch 13/50] train 1.2305 (cell 1.0056, tissue 0.2250) | val 1.3544 | mF1 0.5857 (BC 0.6056, TC 0.5659) | mIoU 0.8851 | 81.7s
+[epoch 14/50] train 1.2162 (cell 0.9908, tissue 0.2254) | val 1.3313 | mF1 0.7200 (BC 0.7004, TC 0.7395) | mIoU 0.8766 | 82.3s
+[저장] best.pt (val mF1 0.7200)
+[epoch 15/50] train 1.2001 (cell 0.9730, tissue 0.2270) | val 1.3216 | mF1 0.6916 (BC 0.7238, TC 0.6594) | mIoU 0.8801 | 81.8s
+[epoch 16/50] train 1.1778 (cell 0.9639, tissue 0.2139) | val 1.4030 | mF1 0.5857 (BC 0.6317, TC 0.5397) | mIoU 0.8640 | 82.0s
+[epoch 17/50] train 1.1413 (cell 0.9363, tissue 0.2049) | val 1.3953 | mF1 0.6961 (BC 0.6442, TC 0.7480) | mIoU 0.8793 | 82.5s
+[epoch 18/50] train 1.1497 (cell 0.9490, tissue 0.2007) | val 1.3918 | mF1 0.7143 (BC 0.6807, TC 0.7480) | mIoU 0.8658 | 82.5s
+[epoch 19/50] train 1.1384 (cell 0.9360, tissue 0.2023) | val 1.3270 | mF1 0.7232 (BC 0.7336, TC 0.7129) | mIoU 0.8867 | 82.0s
+[저장] best.pt (val mF1 0.7232)
+[epoch 20/50] train 1.1304 (cell 0.9398, tissue 0.1905) | val 1.3429 | mF1 0.7210 (BC 0.6918, TC 0.7503) | mIoU 0.8848 | 82.1s
+[epoch 21/50] train 1.1138 (cell 0.9262, tissue 0.1876) | val 1.3421 | mF1 0.6874 (BC 0.6165, TC 0.7582) | mIoU 0.8871 | 81.6s
+[epoch 22/50] train 1.0748 (cell 0.9011, tissue 0.1737) | val 1.3387 | mF1 0.7346 (BC 0.7182, TC 0.7510) | mIoU 0.8844 | 84.4s
+[저장] best.pt (val mF1 0.7346)
+[epoch 23/50] train 1.0585 (cell 0.8879, tissue 0.1706) | val 1.3578 | mF1 0.6423 (BC 0.5949, TC 0.6897) | mIoU 0.8901 | 81.5s
+[epoch 24/50] train 1.0769 (cell 0.8981, tissue 0.1788) | val 1.3808 | mF1 0.7014 (BC 0.6560, TC 0.7468) | mIoU 0.8744 | 82.1s
+[epoch 25/50] train 1.0417 (cell 0.8741, tissue 0.1676) | val 1.4214 | mF1 0.7042 (BC 0.7206, TC 0.6879) | mIoU 0.8602 | 83.5s
+[epoch 26/50] train 1.0522 (cell 0.8809, tissue 0.1713) | val 1.4897 | mF1 0.7075 (BC 0.6734, TC 0.7415) | mIoU 0.8577 | 82.0s
+[epoch 27/50] train 1.0306 (cell 0.8731, tissue 0.1574) | val 1.4858 | mF1 0.6888 (BC 0.6669, TC 0.7106) | mIoU 0.8626 | 82.2s
+[epoch 28/50] train 1.0154 (cell 0.8591, tissue 0.1563) | val 1.3899 | mF1 0.7035 (BC 0.6628, TC 0.7441) | mIoU 0.8792 | 82.0s
+[epoch 29/50] train 1.0070 (cell 0.8555, tissue 0.1515) | val 1.4223 | mF1 0.7021 (BC 0.6645, TC 0.7398) | mIoU 0.8793 | 81.7s
+[epoch 30/50] train 0.9889 (cell 0.8467, tissue 0.1423) | val 1.4299 | mF1 0.6632 (BC 0.6953, TC 0.6311) | mIoU 0.8676 | 81.5s
+[epoch 31/50] train 0.9926 (cell 0.8551, tissue 0.1374) | val 1.4223 | mF1 0.6987 (BC 0.6899, TC 0.7075) | mIoU 0.8745 | 83.4s
+[epoch 32/50] train 0.9589 (cell 0.8264, tissue 0.1326) | val 1.4181 | mF1 0.6956 (BC 0.6637, TC 0.7275) | mIoU 0.8807 | 82.7s
+[epoch 33/50] train 0.9717 (cell 0.8362, tissue 0.1355) | val 1.4411 | mF1 0.7246 (BC 0.6940, TC 0.7552) | mIoU 0.8763 | 82.1s
+[epoch 34/50] train 0.9540 (cell 0.8234, tissue 0.1306) | val 1.4545 | mF1 0.7055 (BC 0.6712, TC 0.7398) | mIoU 0.8722 | 82.7s
+[epoch 35/50] train 0.9556 (cell 0.8273, tissue 0.1283) | val 1.4349 | mF1 0.7091 (BC 0.6851, TC 0.7331) | mIoU 0.8782 | 83.0s
+[epoch 36/50] train 0.9433 (cell 0.8177, tissue 0.1256) | val 1.4417 | mF1 0.7125 (BC 0.6744, TC 0.7505) | mIoU 0.8808 | 82.5s
+[epoch 37/50] train 0.9399 (cell 0.8151, tissue 0.1248) | val 1.4657 | mF1 0.7072 (BC 0.6848, TC 0.7296) | mIoU 0.8752 | 83.0s
+[epoch 38/50] train 0.9173 (cell 0.7958, tissue 0.1215) | val 1.4608 | mF1 0.7137 (BC 0.6900, TC 0.7373) | mIoU 0.8778 | 82.1s
+[epoch 39/50] train 0.9064 (cell 0.7875, tissue 0.1189) | val 1.4486 | mF1 0.7051 (BC 0.6927, TC 0.7174) | mIoU 0.8785 | 81.7s
+[epoch 40/50] train 0.9135 (cell 0.7954, tissue 0.1181) | val 1.4747 | mF1 0.7195 (BC 0.7000, TC 0.7391) | mIoU 0.8747 | 82.1s
+[epoch 41/50] train 0.8955 (cell 0.7790, tissue 0.1166) | val 1.4773 | mF1 0.7057 (BC 0.6777, TC 0.7337) | mIoU 0.8749 | 82.6s
+[epoch 42/50] train 0.9060 (cell 0.7890, tissue 0.1169) | val 1.4577 | mF1 0.7072 (BC 0.6792, TC 0.7353) | mIoU 0.8784 | 85.3s
+[epoch 43/50] train 0.9169 (cell 0.8027, tissue 0.1142) | val 1.4613 | mF1 0.6992 (BC 0.6741, TC 0.7243) | mIoU 0.8782 | 82.2s
+[epoch 44/50] train 0.8935 (cell 0.7803, tissue 0.1132) | val 1.4694 | mF1 0.7052 (BC 0.6711, TC 0.7392) | mIoU 0.8778 | 84.0s
+[epoch 45/50] train 0.8908 (cell 0.7783, tissue 0.1124) | val 1.4602 | mF1 0.7086 (BC 0.6837, TC 0.7335) | mIoU 0.8787 | 81.6s
+[epoch 46/50] train 0.8997 (cell 0.7856, tissue 0.1141) | val 1.4611 | mF1 0.7043 (BC 0.6797, TC 0.7288) | mIoU 0.8785 | 82.2s
+[epoch 47/50] train 0.8847 (cell 0.7704, tissue 0.1143) | val 1.4619 | mF1 0.7050 (BC 0.6779, TC 0.7321) | mIoU 0.8792 | 82.2s
+[epoch 48/50] train 0.9053 (cell 0.7921, tissue 0.1132) | val 1.4654 | mF1 0.7043 (BC 0.6795, TC 0.7291) | mIoU 0.8782 | 82.2s
+[epoch 49/50] train 0.9050 (cell 0.7921, tissue 0.1129) | val 1.4626 | mF1 0.7046 (BC 0.6790, TC 0.7302) | mIoU 0.8790 | 82.8s
+[epoch 50/50] train 0.9031 (cell 0.7897, tissue 0.1134) | val 1.4630 | mF1 0.7051 (BC 0.6798, TC 0.7305) | mIoU 0.8789 | 82.3s
+[완료] best val mF1 0.7346. 결과: /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s4_l0.9
+
+[실행 1.17h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s4_l0.9/best.pt --part select --tune
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s4_l0.9/best.pt (epoch 22) | select 40쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 4.0, 'lambda': 0.9, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 3.0, 'min_distance': 7, 'threshold': 0.4}
+[탐색] 후처리 격자 (select 세포 mF1 기준)
+  σ=2.0 d=3 thr=0.2: mF1 0.7345
+  σ=2.0 d=3 thr=0.3: mF1 0.7518
+  σ=2.0 d=3 thr=0.4: mF1 0.7459
+  σ=2.0 d=3 thr=0.5: mF1 0.5946
+  σ=2.0 d=5 thr=0.2: mF1 0.7388
+  σ=2.0 d=5 thr=0.3: mF1 0.7537
+  σ=2.0 d=5 thr=0.4: mF1 0.7466
+  σ=2.0 d=5 thr=0.5: mF1 0.5947
+  σ=2.0 d=7 thr=0.2: mF1 0.7420
+  σ=2.0 d=7 thr=0.3: mF1 0.7556
+  σ=2.0 d=7 thr=0.4: mF1 0.7479
+  σ=2.0 d=7 thr=0.5: mF1 0.5947
+  σ=2.0 d=9 thr=0.2: mF1 0.7429
+  σ=2.0 d=9 thr=0.3: mF1 0.7555
+  σ=2.0 d=9 thr=0.4: mF1 0.7480
+  σ=2.0 d=9 thr=0.5: mF1 0.5948
+  σ=3.0 d=3 thr=0.2: mF1 0.7478
+  σ=3.0 d=3 thr=0.3: mF1 0.7603
+  σ=3.0 d=3 thr=0.4: mF1 0.7341
+  σ=3.0 d=3 thr=0.5: mF1 0.3881
+  σ=3.0 d=5 thr=0.2: mF1 0.7484
+  σ=3.0 d=5 thr=0.3: mF1 0.7599
+  σ=3.0 d=5 thr=0.4: mF1 0.7341
+  σ=3.0 d=5 thr=0.5: mF1 0.3881
+  σ=3.0 d=7 thr=0.2: mF1 0.7492
+  σ=3.0 d=7 thr=0.3: mF1 0.7600
+  σ=3.0 d=7 thr=0.4: mF1 0.7346
+  σ=3.0 d=7 thr=0.5: mF1 0.3881
+  σ=3.0 d=9 thr=0.2: mF1 0.7505
+  σ=3.0 d=9 thr=0.3: mF1 0.7607
+  σ=3.0 d=9 thr=0.4: mF1 0.7348
+  σ=3.0 d=9 thr=0.5: mF1 0.3881
+  σ=4.0 d=3 thr=0.2: mF1 0.7543
+  σ=4.0 d=3 thr=0.3: mF1 0.7595
+  σ=4.0 d=3 thr=0.4: mF1 0.6725
+  σ=4.0 d=3 thr=0.5: mF1 0.0922
+  σ=4.0 d=5 thr=0.2: mF1 0.7547
+  σ=4.0 d=5 thr=0.3: mF1 0.7597
+  σ=4.0 d=5 thr=0.4: mF1 0.6727
+  σ=4.0 d=5 thr=0.5: mF1 0.0922
+  σ=4.0 d=7 thr=0.2: mF1 0.7551
+  σ=4.0 d=7 thr=0.3: mF1 0.7601
+  σ=4.0 d=7 thr=0.4: mF1 0.6727
+  σ=4.0 d=7 thr=0.5: mF1 0.0922
+  σ=4.0 d=9 thr=0.2: mF1 0.7566
+  σ=4.0 d=9 thr=0.3: mF1 0.7601
+  σ=4.0 d=9 thr=0.4: mF1 0.6726
+  σ=4.0 d=9 thr=0.5: mF1 0.0922
+  σ=5.0 d=3 thr=0.2: mF1 0.7588
+  σ=5.0 d=3 thr=0.3: mF1 0.7495
+  σ=5.0 d=3 thr=0.4: mF1 0.4234
+  σ=5.0 d=3 thr=0.5: mF1 0.0005
+  σ=5.0 d=5 thr=0.2: mF1 0.7590
+  σ=5.0 d=5 thr=0.3: mF1 0.7498
+  σ=5.0 d=5 thr=0.4: mF1 0.4234
+  σ=5.0 d=5 thr=0.5: mF1 0.0005
+  σ=5.0 d=7 thr=0.2: mF1 0.7592
+  σ=5.0 d=7 thr=0.3: mF1 0.7500
+  σ=5.0 d=7 thr=0.4: mF1 0.4234
+  σ=5.0 d=7 thr=0.5: mF1 0.0005
+  σ=5.0 d=9 thr=0.2: mF1 0.7590
+  σ=5.0 d=9 thr=0.3: mF1 0.7495
+  σ=5.0 d=9 thr=0.4: mF1 0.4234
+  σ=5.0 d=9 thr=0.5: mF1 0.0005
+[선택] {'sigma': 3.0, 'min_distance': 9, 'threshold': 0.3, 'precision_BC': 0.7056, 'recall_BC': 0.7973, 'f1_BC': 0.7486, 'precision_TC': 0.7542, 'recall_TC': 0.7924, 'f1_TC': 0.7728, 'mF1': 0.7607} → /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s4_l0.9/postprocess.json
+[진단] M2
+  BC  0-14:      2개, 누락 50.0%, 오분류 0.0% | 합침 0 / 약함 1
+  BC 14-30:   1160개, 누락 18.1%, 오분류 5.3% | 합침 30 / 약함 180
+  BC   30+:   2000개, 누락 5.9%, 오분류 12.4% | 합침 6 / 약함 113
+  TC  0-14:      8개, 누락 50.0%, 오분류 0.0% | 합침 3 / 약함 1
+  TC 14-30:   1459개, 누락 26.4%, 오분류 2.6% | 합침 38 / 약함 347
+  TC   30+:   2517개, 누락 9.0%, 오분류 7.0% | 합침 21 / 약함 206
+  중복 42 / 오검출 1517 / 예측 7759 | 가까움-멂 누락률 차이 BC +12.2%, TC +17.4%
+[결과] select: 세포 mF1 0.7607 (BC 0.7486, TC 0.7728) | 조직 mIoU 0.8844 (BG 0.9050, CA 0.8638)
+  bladder           8쌍  mF1 0.8214
+  endometrium       8쌍  mF1 0.8048
+  head-and-neck     3쌍  mF1 0.6328
+  kidney           12쌍  mF1 0.6682
+  prostate          4쌍  mF1 0.2784
+  stomach           5쌍  mF1 0.8233
+
+[실행 1.44h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s4_l0.9/best.pt --part holdout
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s4_l0.9/best.pt (epoch 22) | holdout 127쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 4.0, 'lambda': 0.9, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 3.0, 'min_distance': 9, 'threshold': 0.3}
+[진단] M2
+  BC  0-14:     14개, 누락 42.9%, 오분류 0.0% | 합침 1 / 약함 5
+  BC 14-30:   1535개, 누락 20.8%, 오분류 13.0% | 합침 41 / 약함 279
+  BC   30+:   6098개, 누락 8.2%, 오분류 16.1% | 합침 35 / 약함 464
+  TC  0-14:     58개, 누락 50.0%, 오분류 0.0% | 합침 8 / 약함 21
+  TC 14-30:   3761개, 누락 27.5%, 오분류 4.4% | 합침 80 / 약함 955
+  TC   30+:   9010개, 누락 9.6%, 오분류 8.7% | 합침 36 / 약함 825
+  중복 139 / 오검출 4694 / 예측 22559 | 가까움-멂 누락률 차이 BC +12.7%, TC +18.0%
+[결과] holdout: 세포 mF1 0.7144 (BC 0.6650, TC 0.7639) | 조직 mIoU 0.8509 (BG 0.8800, CA 0.8218)
+  bladder          26쌍  mF1 0.7306
+  endometrium      28쌍  mF1 0.6998
+  head-and-neck     8쌍  mF1 0.6463
+  kidney           39쌍  mF1 0.7163
+  prostate         16쌍  mF1 0.6386
+  stomach          10쌍  mF1 0.7365
+[후보] search_ha_s4_l0.9: holdout mF1 0.7144 (select 0.7607) | 1.44h
+
+[실행 1.44h] /usr/bin/python scripts/train_m2.py --config configs/m2_search_train.json --seed 42 --target-mode ha --sigma 6.0 --lambda 0.9 --run-name search_ha_s6_l0.9 --split-file configs/train_split_seed42.json --train-part fit --val-part select
+[시작] search_ha_s6_l0.9 | device cuda | amp torch.bfloat16 | 정답 ha σ=6 λ=0.9 | 분할 configs/train_split_seed42.json fit/select | train 233 / val 40 | batch 2×1 | 50 epoch
+[epoch 1/50] (백본 고정) train 2.4591 (cell 1.5830, tissue 0.8761) | val 1.7339 | mF1 0.4775 (BC 0.3450, TC 0.6100) | mIoU 0.8001 | 88.3s
+[저장] best.pt (val mF1 0.4775)
+[epoch 2/50] (백본 고정) train 1.6168 (cell 1.1166, tissue 0.5002) | val 1.4846 | mF1 0.5121 (BC 0.5697, TC 0.4545) | mIoU 0.8323 | 87.6s
+[저장] best.pt (val mF1 0.5121)
+[epoch 3/50] (백본 고정) train 1.4688 (cell 1.0360, tissue 0.4328) | val 1.4746 | mF1 0.5711 (BC 0.4443, TC 0.6979) | mIoU 0.8434 | 89.1s
+[저장] best.pt (val mF1 0.5711)
+[epoch 4/50] train 1.3991 (cell 1.0023, tissue 0.3968) | val 1.5254 | mF1 0.5721 (BC 0.5053, TC 0.6389) | mIoU 0.7971 | 88.2s
+[저장] best.pt (val mF1 0.5721)
+[epoch 5/50] train 1.3155 (cell 0.9608, tissue 0.3547) | val 1.3859 | mF1 0.6954 (BC 0.6927, TC 0.6982) | mIoU 0.8325 | 88.3s
+[저장] best.pt (val mF1 0.6954)
+[epoch 6/50] train 1.2706 (cell 0.9431, tissue 0.3275) | val 1.2998 | mF1 0.7108 (BC 0.6887, TC 0.7329) | mIoU 0.8631 | 87.7s
+[저장] best.pt (val mF1 0.7108)
+[epoch 7/50] train 1.2457 (cell 0.9339, tissue 0.3119) | val 1.3562 | mF1 0.6872 (BC 0.6521, TC 0.7223) | mIoU 0.8426 | 88.9s
+[epoch 8/50] train 1.1769 (cell 0.8726, tissue 0.3043) | val 1.3135 | mF1 0.7425 (BC 0.7323, TC 0.7527) | mIoU 0.8613 | 89.9s
+[저장] best.pt (val mF1 0.7425)
+[epoch 9/50] train 1.1547 (cell 0.8656, tissue 0.2892) | val 1.3787 | mF1 0.7655 (BC 0.7502, TC 0.7809) | mIoU 0.8462 | 87.3s
+[저장] best.pt (val mF1 0.7655)
+[epoch 10/50] train 1.1298 (cell 0.8666, tissue 0.2631) | val 1.3839 | mF1 0.7307 (BC 0.7063, TC 0.7551) | mIoU 0.8378 | 87.6s
+[epoch 11/50] train 1.0986 (cell 0.8480, tissue 0.2507) | val 1.3162 | mF1 0.6277 (BC 0.5646, TC 0.6909) | mIoU 0.8672 | 87.4s
+[epoch 12/50] train 1.1202 (cell 0.8548, tissue 0.2654) | val 1.3158 | mF1 0.7256 (BC 0.7014, TC 0.7498) | mIoU 0.8623 | 89.6s
+[epoch 13/50] train 1.0695 (cell 0.8456, tissue 0.2240) | val 1.2839 | mF1 0.7299 (BC 0.7086, TC 0.7512) | mIoU 0.8674 | 91.7s
+[epoch 14/50] train 1.0534 (cell 0.8249, tissue 0.2285) | val 1.2090 | mF1 0.7622 (BC 0.7478, TC 0.7767) | mIoU 0.8751 | 89.2s
+[epoch 15/50] train 1.0433 (cell 0.8049, tissue 0.2383) | val 1.2493 | mF1 0.7605 (BC 0.7500, TC 0.7710) | mIoU 0.8801 | 87.9s
+[epoch 16/50] train 1.0099 (cell 0.8001, tissue 0.2098) | val 1.2952 | mF1 0.7747 (BC 0.7678, TC 0.7815) | mIoU 0.8683 | 87.7s
+[저장] best.pt (val mF1 0.7747)
+[epoch 17/50] train 0.9962 (cell 0.7863, tissue 0.2099) | val 1.3255 | mF1 0.7139 (BC 0.6738, TC 0.7541) | mIoU 0.8776 | 88.1s
+[epoch 18/50] train 0.9873 (cell 0.7855, tissue 0.2018) | val 1.2497 | mF1 0.7744 (BC 0.7624, TC 0.7865) | mIoU 0.8701 | 88.9s
+[epoch 19/50] train 0.9746 (cell 0.7793, tissue 0.1953) | val 1.2935 | mF1 0.7734 (BC 0.7578, TC 0.7890) | mIoU 0.8687 | 88.3s
+[epoch 20/50] train 0.9693 (cell 0.7773, tissue 0.1919) | val 1.2422 | mF1 0.7569 (BC 0.7408, TC 0.7731) | mIoU 0.8855 | 87.0s
+[epoch 21/50] train 0.9613 (cell 0.7599, tissue 0.2014) | val 1.2788 | mF1 0.7585 (BC 0.7307, TC 0.7863) | mIoU 0.8662 | 87.2s
+[epoch 22/50] train 0.9213 (cell 0.7444, tissue 0.1769) | val 1.2331 | mF1 0.7550 (BC 0.7365, TC 0.7736) | mIoU 0.8830 | 87.0s
+[epoch 23/50] train 0.9122 (cell 0.7382, tissue 0.1740) | val 1.2528 | mF1 0.7638 (BC 0.7484, TC 0.7792) | mIoU 0.8856 | 86.8s
+[epoch 24/50] train 0.9167 (cell 0.7445, tissue 0.1722) | val 1.2636 | mF1 0.7582 (BC 0.7362, TC 0.7802) | mIoU 0.8719 | 87.3s
+[epoch 25/50] train 0.8888 (cell 0.7191, tissue 0.1697) | val 1.3246 | mF1 0.7655 (BC 0.7558, TC 0.7751) | mIoU 0.8645 | 88.4s
+[epoch 26/50] train 0.8838 (cell 0.7199, tissue 0.1639) | val 1.3965 | mF1 0.7685 (BC 0.7538, TC 0.7832) | mIoU 0.8526 | 87.0s
+[epoch 27/50] train 0.8652 (cell 0.7086, tissue 0.1566) | val 1.3403 | mF1 0.7521 (BC 0.7323, TC 0.7719) | mIoU 0.8722 | 88.2s
+[epoch 28/50] train 0.8609 (cell 0.7048, tissue 0.1561) | val 1.2937 | mF1 0.7304 (BC 0.6998, TC 0.7611) | mIoU 0.8863 | 89.7s
+[epoch 29/50] train 0.8472 (cell 0.6934, tissue 0.1538) | val 1.3851 | mF1 0.7465 (BC 0.7176, TC 0.7754) | mIoU 0.8683 | 86.4s
+[epoch 30/50] train 0.8495 (cell 0.7020, tissue 0.1474) | val 1.2954 | mF1 0.7468 (BC 0.7288, TC 0.7647) | mIoU 0.8766 | 88.0s
+[epoch 31/50] train 0.8370 (cell 0.6963, tissue 0.1407) | val 1.3204 | mF1 0.7506 (BC 0.7264, TC 0.7748) | mIoU 0.8759 | 87.3s
+[epoch 32/50] train 0.8080 (cell 0.6721, tissue 0.1359) | val 1.3191 | mF1 0.7485 (BC 0.7221, TC 0.7749) | mIoU 0.8836 | 86.6s
+[epoch 33/50] train 0.8118 (cell 0.6752, tissue 0.1366) | val 1.3398 | mF1 0.7581 (BC 0.7301, TC 0.7861) | mIoU 0.8803 | 88.0s
+[epoch 34/50] train 0.7982 (cell 0.6662, tissue 0.1320) | val 1.3403 | mF1 0.7513 (BC 0.7244, TC 0.7783) | mIoU 0.8748 | 89.4s
+[epoch 35/50] train 0.7951 (cell 0.6641, tissue 0.1311) | val 1.3269 | mF1 0.7518 (BC 0.7295, TC 0.7741) | mIoU 0.8818 | 87.3s
+[epoch 36/50] train 0.7857 (cell 0.6588, tissue 0.1269) | val 1.3449 | mF1 0.7501 (BC 0.7234, TC 0.7767) | mIoU 0.8821 | 87.3s
+[epoch 37/50] train 0.7789 (cell 0.6537, tissue 0.1252) | val 1.3776 | mF1 0.7560 (BC 0.7357, TC 0.7763) | mIoU 0.8758 | 88.3s
+[epoch 38/50] train 0.7634 (cell 0.6409, tissue 0.1225) | val 1.3401 | mF1 0.7461 (BC 0.7194, TC 0.7728) | mIoU 0.8865 | 88.2s
+[epoch 39/50] train 0.7595 (cell 0.6393, tissue 0.1202) | val 1.3616 | mF1 0.7542 (BC 0.7339, TC 0.7745) | mIoU 0.8767 | 87.4s
+[epoch 40/50] train 0.7617 (cell 0.6429, tissue 0.1188) | val 1.3704 | mF1 0.7578 (BC 0.7380, TC 0.7776) | mIoU 0.8751 | 87.3s
+[epoch 41/50] train 0.7476 (cell 0.6299, tissue 0.1177) | val 1.3835 | mF1 0.7540 (BC 0.7297, TC 0.7783) | mIoU 0.8748 | 87.6s
+[epoch 42/50] train 0.7477 (cell 0.6294, tissue 0.1182) | val 1.3626 | mF1 0.7536 (BC 0.7306, TC 0.7766) | mIoU 0.8803 | 87.6s
+[epoch 43/50] train 0.7598 (cell 0.6449, tissue 0.1149) | val 1.3722 | mF1 0.7511 (BC 0.7270, TC 0.7752) | mIoU 0.8791 | 87.2s
+[epoch 44/50] train 0.7394 (cell 0.6251, tissue 0.1143) | val 1.3755 | mF1 0.7504 (BC 0.7245, TC 0.7763) | mIoU 0.8799 | 87.4s
+[epoch 45/50] train 0.7406 (cell 0.6270, tissue 0.1136) | val 1.3735 | mF1 0.7534 (BC 0.7302, TC 0.7766) | mIoU 0.8790 | 87.0s
+[epoch 46/50] train 0.7472 (cell 0.6323, tissue 0.1149) | val 1.3713 | mF1 0.7515 (BC 0.7282, TC 0.7748) | mIoU 0.8798 | 87.7s
+[epoch 47/50] train 0.7417 (cell 0.6267, tissue 0.1150) | val 1.3731 | mF1 0.7498 (BC 0.7265, TC 0.7731) | mIoU 0.8801 | 87.5s
+[epoch 48/50] train 0.7461 (cell 0.6324, tissue 0.1137) | val 1.3743 | mF1 0.7513 (BC 0.7280, TC 0.7746) | mIoU 0.8793 | 87.4s
+[epoch 49/50] train 0.7521 (cell 0.6385, tissue 0.1136) | val 1.3724 | mF1 0.7506 (BC 0.7267, TC 0.7744) | mIoU 0.8799 | 88.1s
+[epoch 50/50] train 0.7489 (cell 0.6347, tissue 0.1142) | val 1.3723 | mF1 0.7514 (BC 0.7278, TC 0.7749) | mIoU 0.8799 | 87.3s
+[완료] best val mF1 0.7747. 결과: /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9
+
+[실행 2.69h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt --part select --tune
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt (epoch 16) | select 40쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 6.0, 'lambda': 0.9, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 3.0, 'min_distance': 7, 'threshold': 0.4}
+[탐색] 후처리 격자 (select 세포 mF1 기준)
+  σ=2.0 d=3 thr=0.2: mF1 0.7493
+  σ=2.0 d=3 thr=0.3: mF1 0.7648
+  σ=2.0 d=3 thr=0.4: mF1 0.7731
+  σ=2.0 d=3 thr=0.5: mF1 0.6573
+  σ=2.0 d=5 thr=0.2: mF1 0.7560
+  σ=2.0 d=5 thr=0.3: mF1 0.7697
+  σ=2.0 d=5 thr=0.4: mF1 0.7751
+  σ=2.0 d=5 thr=0.5: mF1 0.6576
+  σ=2.0 d=7 thr=0.2: mF1 0.7636
+  σ=2.0 d=7 thr=0.3: mF1 0.7740
+  σ=2.0 d=7 thr=0.4: mF1 0.7768
+  σ=2.0 d=7 thr=0.5: mF1 0.6579
+  σ=2.0 d=9 thr=0.2: mF1 0.7659
+  σ=2.0 d=9 thr=0.3: mF1 0.7747
+  σ=2.0 d=9 thr=0.4: mF1 0.7765
+  σ=2.0 d=9 thr=0.5: mF1 0.6577
+  σ=3.0 d=3 thr=0.2: mF1 0.7668
+  σ=3.0 d=3 thr=0.3: mF1 0.7773
+  σ=3.0 d=3 thr=0.4: mF1 0.7742
+  σ=3.0 d=3 thr=0.5: mF1 0.5450
+  σ=3.0 d=5 thr=0.2: mF1 0.7690
+  σ=3.0 d=5 thr=0.3: mF1 0.7788
+  σ=3.0 d=5 thr=0.4: mF1 0.7746
+  σ=3.0 d=5 thr=0.5: mF1 0.5450
+  σ=3.0 d=7 thr=0.2: mF1 0.7717
+  σ=3.0 d=7 thr=0.3: mF1 0.7799
+  σ=3.0 d=7 thr=0.4: mF1 0.7747
+  σ=3.0 d=7 thr=0.5: mF1 0.5450
+  σ=3.0 d=9 thr=0.2: mF1 0.7713
+  σ=3.0 d=9 thr=0.3: mF1 0.7785
+  σ=3.0 d=9 thr=0.4: mF1 0.7733
+  σ=3.0 d=9 thr=0.5: mF1 0.5452
+  σ=4.0 d=3 thr=0.2: mF1 0.7736
+  σ=4.0 d=3 thr=0.3: mF1 0.7829
+  σ=4.0 d=3 thr=0.4: mF1 0.7535
+  σ=4.0 d=3 thr=0.5: mF1 0.3352
+  σ=4.0 d=5 thr=0.2: mF1 0.7741
+  σ=4.0 d=5 thr=0.3: mF1 0.7824
+  σ=4.0 d=5 thr=0.4: mF1 0.7532
+  σ=4.0 d=5 thr=0.5: mF1 0.3352
+  σ=4.0 d=7 thr=0.2: mF1 0.7739
+  σ=4.0 d=7 thr=0.3: mF1 0.7815
+  σ=4.0 d=7 thr=0.4: mF1 0.7526
+  σ=4.0 d=7 thr=0.5: mF1 0.3353
+  σ=4.0 d=9 thr=0.2: mF1 0.7729
+  σ=4.0 d=9 thr=0.3: mF1 0.7803
+  σ=4.0 d=9 thr=0.4: mF1 0.7520
+  σ=4.0 d=9 thr=0.5: mF1 0.3353
+  σ=5.0 d=3 thr=0.2: mF1 0.7740
+  σ=5.0 d=3 thr=0.3: mF1 0.7811
+  σ=5.0 d=3 thr=0.4: mF1 0.6989
+  σ=5.0 d=3 thr=0.5: mF1 0.1195
+  σ=5.0 d=5 thr=0.2: mF1 0.7732
+  σ=5.0 d=5 thr=0.3: mF1 0.7805
+  σ=5.0 d=5 thr=0.4: mF1 0.6987
+  σ=5.0 d=5 thr=0.5: mF1 0.1195
+  σ=5.0 d=7 thr=0.2: mF1 0.7729
+  σ=5.0 d=7 thr=0.3: mF1 0.7801
+  σ=5.0 d=7 thr=0.4: mF1 0.6988
+  σ=5.0 d=7 thr=0.5: mF1 0.1195
+  σ=5.0 d=9 thr=0.2: mF1 0.7700
+  σ=5.0 d=9 thr=0.3: mF1 0.7773
+  σ=5.0 d=9 thr=0.4: mF1 0.6976
+  σ=5.0 d=9 thr=0.5: mF1 0.1195
+[선택] {'sigma': 4.0, 'min_distance': 3, 'threshold': 0.3, 'precision_BC': 0.7225, 'recall_BC': 0.8219, 'f1_BC': 0.769, 'precision_TC': 0.8026, 'recall_TC': 0.7909, 'f1_TC': 0.7967, 'mF1': 0.7829} → /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/postprocess.json
+[진단] M2
+  BC  0-14:      2개, 누락 0.0%, 오분류 0.0% | 합침 0 / 약함 0
+  BC 14-30:   1160개, 누락 16.7%, 오분류 2.9% | 합침 55 / 약함 139
+  BC   30+:   2000개, 누락 7.4%, 오분류 9.3% | 합침 5 / 약함 143
+  TC  0-14:      8개, 누락 50.0%, 오분류 0.0% | 합침 3 / 약함 1
+  TC 14-30:   1459개, 누락 25.6%, 오분류 1.7% | 합침 86 / 약함 288
+  TC   30+:   2517개, 누락 9.9%, 오분류 7.2% | 합침 24 / 약함 226
+  중복 62 / 오검출 1285 / 예측 7523 | 가까움-멂 누락률 차이 BC +9.3%, TC +15.7%
+[결과] select: 세포 mF1 0.7829 (BC 0.7690, TC 0.7967) | 조직 mIoU 0.8683 (BG 0.8937, CA 0.8430)
+  bladder           8쌍  mF1 0.8330
+  endometrium       8쌍  mF1 0.8248
+  head-and-neck     3쌍  mF1 0.6850
+  kidney           12쌍  mF1 0.6960
+  prostate          4쌍  mF1 0.3129
+  stomach           5쌍  mF1 0.8224
+
+[실행 2.95h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt --part holdout
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt (epoch 16) | holdout 127쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 6.0, 'lambda': 0.9, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 4.0, 'min_distance': 3, 'threshold': 0.3}
+[진단] M2
+  BC  0-14:     14개, 누락 42.9%, 오분류 7.1% | 합침 3 / 약함 3
+  BC 14-30:   1535개, 누락 24.5%, 오분류 10.4% | 합침 63 / 약함 313
+  BC   30+:   6098개, 누락 11.3%, 오분류 11.7% | 합침 45 / 약함 642
+  TC  0-14:     58개, 누락 46.6%, 오분류 1.7% | 합침 11 / 약함 16
+  TC 14-30:   3761개, 누락 28.8%, 오분류 4.4% | 합침 145 / 약함 940
+  TC   30+:   9010개, 누락 11.2%, 오분류 10.1% | 합침 81 / 약함 926
+  중복 205 / 오검출 4027 / 예측 21520 | 가까움-멂 누락률 차이 BC +13.2%, TC +17.7%
+[결과] holdout: 세포 mF1 0.7215 (BC 0.6758, TC 0.7672) | 조직 mIoU 0.8531 (BG 0.8842, CA 0.8221)
+  bladder          26쌍  mF1 0.7507
+  endometrium      28쌍  mF1 0.6908
+  head-and-neck     8쌍  mF1 0.6636
+  kidney           39쌍  mF1 0.7235
+  prostate         16쌍  mF1 0.6414
+  stomach          10쌍  mF1 0.7495
+[후보] search_ha_s6_l0.9: holdout mF1 0.7215 (select 0.7829) | 1.51h
+
+[실행 2.95h] /usr/bin/python scripts/train_m2.py --config configs/m2_search_train.json --seed 42 --target-mode ha --sigma 8.0 --lambda 0.9 --run-name search_ha_s8_l0.9 --split-file configs/train_split_seed42.json --train-part fit --val-part select
+[시작] search_ha_s8_l0.9 | device cuda | amp torch.bfloat16 | 정답 ha σ=8 λ=0.9 | 분할 configs/train_split_seed42.json fit/select | train 233 / val 40 | batch 2×1 | 50 epoch
+[epoch 1/50] (백본 고정) train 2.3019 (cell 1.4367, tissue 0.8652) | val 1.6300 | mF1 0.4757 (BC 0.3160, TC 0.6355) | mIoU 0.8061 | 92.9s
+[저장] best.pt (val mF1 0.4757)
+[epoch 2/50] (백본 고정) train 1.5095 (cell 1.0008, tissue 0.5087) | val 1.4009 | mF1 0.6021 (BC 0.6130, TC 0.5911) | mIoU 0.8314 | 92.0s
+[저장] best.pt (val mF1 0.6021)
+[epoch 3/50] (백본 고정) train 1.3505 (cell 0.9146, tissue 0.4360) | val 1.4061 | mF1 0.6349 (BC 0.5622, TC 0.7076) | mIoU 0.8406 | 94.1s
+[저장] best.pt (val mF1 0.6349)
+[epoch 4/50] train 1.2827 (cell 0.8936, tissue 0.3892) | val 1.3943 | mF1 0.6209 (BC 0.5728, TC 0.6690) | mIoU 0.8189 | 92.3s
+[epoch 5/50] train 1.1882 (cell 0.8431, tissue 0.3451) | val 1.2992 | mF1 0.7241 (BC 0.7120, TC 0.7363) | mIoU 0.8322 | 92.3s
+[저장] best.pt (val mF1 0.7241)
+[epoch 6/50] train 1.1604 (cell 0.8320, tissue 0.3284) | val 1.2313 | mF1 0.7036 (BC 0.6794, TC 0.7278) | mIoU 0.8544 | 93.6s
+[epoch 7/50] train 1.1273 (cell 0.8174, tissue 0.3099) | val 1.2677 | mF1 0.6913 (BC 0.6639, TC 0.7186) | mIoU 0.8499 | 91.4s
+[epoch 8/50] train 1.0632 (cell 0.7593, tissue 0.3040) | val 1.2512 | mF1 0.7422 (BC 0.7276, TC 0.7567) | mIoU 0.8664 | 93.0s
+[저장] best.pt (val mF1 0.7422)
+[epoch 9/50] train 1.0381 (cell 0.7502, tissue 0.2878) | val 1.2583 | mF1 0.7575 (BC 0.7392, TC 0.7758) | mIoU 0.8583 | 91.8s
+[저장] best.pt (val mF1 0.7575)
+[epoch 10/50] train 1.0186 (cell 0.7593, tissue 0.2592) | val 1.3283 | mF1 0.7507 (BC 0.7334, TC 0.7680) | mIoU 0.8290 | 91.7s
+[epoch 11/50] train 0.9798 (cell 0.7292, tissue 0.2506) | val 1.2039 | mF1 0.6431 (BC 0.5877, TC 0.6986) | mIoU 0.8734 | 93.7s
+[epoch 12/50] train 1.0151 (cell 0.7504, tissue 0.2647) | val 1.2221 | mF1 0.7368 (BC 0.7156, TC 0.7580) | mIoU 0.8678 | 92.5s
+[epoch 13/50] train 0.9545 (cell 0.7281, tissue 0.2264) | val 1.2038 | mF1 0.7600 (BC 0.7490, TC 0.7710) | mIoU 0.8675 | 91.8s
+[저장] best.pt (val mF1 0.7600)
+[epoch 14/50] train 0.9300 (cell 0.7035, tissue 0.2266) | val 1.1544 | mF1 0.7677 (BC 0.7537, TC 0.7818) | mIoU 0.8746 | 93.3s
+[저장] best.pt (val mF1 0.7677)
+[epoch 15/50] train 0.9176 (cell 0.6906, tissue 0.2270) | val 1.1774 | mF1 0.7573 (BC 0.7461, TC 0.7685) | mIoU 0.8817 | 93.6s
+[epoch 16/50] train 0.8949 (cell 0.6890, tissue 0.2059) | val 1.2086 | mF1 0.7740 (BC 0.7627, TC 0.7852) | mIoU 0.8755 | 91.9s
+[저장] best.pt (val mF1 0.7740)
+[epoch 17/50] train 0.8811 (cell 0.6751, tissue 0.2060) | val 1.1797 | mF1 0.7441 (BC 0.7195, TC 0.7688) | mIoU 0.8883 | 91.7s
+[epoch 18/50] train 0.8613 (cell 0.6675, tissue 0.1938) | val 1.2361 | mF1 0.7829 (BC 0.7681, TC 0.7977) | mIoU 0.8574 | 93.1s
+[저장] best.pt (val mF1 0.7829)
+[epoch 19/50] train 0.8834 (cell 0.6772, tissue 0.2062) | val 1.1816 | mF1 0.7728 (BC 0.7564, TC 0.7891) | mIoU 0.8689 | 92.3s
+[epoch 20/50] train 0.8539 (cell 0.6545, tissue 0.1994) | val 1.1464 | mF1 0.7606 (BC 0.7453, TC 0.7760) | mIoU 0.8869 | 91.4s
+[epoch 21/50] train 0.8403 (cell 0.6417, tissue 0.1985) | val 1.1454 | mF1 0.7635 (BC 0.7485, TC 0.7785) | mIoU 0.8856 | 91.6s
+[epoch 22/50] train 0.8115 (cell 0.6352, tissue 0.1763) | val 1.1684 | mF1 0.7483 (BC 0.7356, TC 0.7610) | mIoU 0.8860 | 92.5s
+[epoch 23/50] train 0.8097 (cell 0.6357, tissue 0.1740) | val 1.1710 | mF1 0.7657 (BC 0.7488, TC 0.7827) | mIoU 0.8947 | 91.7s
+[epoch 24/50] train 0.8172 (cell 0.6341, tissue 0.1831) | val 1.1793 | mF1 0.7514 (BC 0.7338, TC 0.7690) | mIoU 0.8770 | 91.7s
+[epoch 25/50] train 0.7773 (cell 0.6056, tissue 0.1717) | val 1.2592 | mF1 0.7690 (BC 0.7511, TC 0.7869) | mIoU 0.8555 | 93.1s
+[epoch 26/50] train 0.7716 (cell 0.6043, tissue 0.1673) | val 1.3251 | mF1 0.7614 (BC 0.7422, TC 0.7806) | mIoU 0.8521 | 91.4s
+[epoch 27/50] train 0.7540 (cell 0.5922, tissue 0.1617) | val 1.3184 | mF1 0.7466 (BC 0.7243, TC 0.7690) | mIoU 0.8666 | 92.9s
+[epoch 28/50] train 0.7479 (cell 0.5935, tissue 0.1544) | val 1.2191 | mF1 0.7479 (BC 0.7245, TC 0.7714) | mIoU 0.8887 | 93.2s
+[epoch 29/50] train 0.7323 (cell 0.5794, tissue 0.1529) | val 1.2953 | mF1 0.7596 (BC 0.7360, TC 0.7832) | mIoU 0.8676 | 90.9s
+[epoch 30/50] train 0.7355 (cell 0.5901, tissue 0.1454) | val 1.2406 | mF1 0.7548 (BC 0.7353, TC 0.7743) | mIoU 0.8701 | 91.5s
+[epoch 31/50] train 0.7216 (cell 0.5829, tissue 0.1388) | val 1.2327 | mF1 0.7626 (BC 0.7432, TC 0.7820) | mIoU 0.8772 | 91.6s
+[epoch 32/50] train 0.6932 (cell 0.5591, tissue 0.1341) | val 1.2388 | mF1 0.7510 (BC 0.7253, TC 0.7766) | mIoU 0.8872 | 91.2s
+[epoch 33/50] train 0.6987 (cell 0.5616, tissue 0.1371) | val 1.2711 | mF1 0.7639 (BC 0.7415, TC 0.7862) | mIoU 0.8781 | 92.0s
+[epoch 34/50] train 0.6842 (cell 0.5530, tissue 0.1312) | val 1.2526 | mF1 0.7523 (BC 0.7265, TC 0.7780) | mIoU 0.8810 | 93.2s
+[epoch 35/50] train 0.6815 (cell 0.5513, tissue 0.1302) | val 1.2536 | mF1 0.7537 (BC 0.7315, TC 0.7759) | mIoU 0.8845 | 92.3s
+[epoch 36/50] train 0.6751 (cell 0.5476, tissue 0.1275) | val 1.2774 | mF1 0.7551 (BC 0.7303, TC 0.7799) | mIoU 0.8821 | 91.9s
+[epoch 37/50] train 0.6702 (cell 0.5445, tissue 0.1257) | val 1.3005 | mF1 0.7666 (BC 0.7500, TC 0.7832) | mIoU 0.8727 | 93.2s
+[epoch 38/50] train 0.6543 (cell 0.5317, tissue 0.1225) | val 1.2824 | mF1 0.7559 (BC 0.7339, TC 0.7778) | mIoU 0.8840 | 94.5s
+[epoch 39/50] train 0.6523 (cell 0.5317, tissue 0.1207) | val 1.2799 | mF1 0.7633 (BC 0.7470, TC 0.7795) | mIoU 0.8793 | 91.5s
+[epoch 40/50] train 0.6527 (cell 0.5334, tissue 0.1193) | val 1.2856 | mF1 0.7622 (BC 0.7423, TC 0.7822) | mIoU 0.8792 | 91.2s
+[epoch 41/50] train 0.6425 (cell 0.5240, tissue 0.1185) | val 1.2871 | mF1 0.7592 (BC 0.7399, TC 0.7784) | mIoU 0.8789 | 93.7s
+[epoch 42/50] train 0.6408 (cell 0.5218, tissue 0.1190) | val 1.2745 | mF1 0.7603 (BC 0.7392, TC 0.7814) | mIoU 0.8834 | 91.4s
+[epoch 43/50] train 0.6508 (cell 0.5354, tissue 0.1155) | val 1.2757 | mF1 0.7583 (BC 0.7361, TC 0.7804) | mIoU 0.8824 | 92.3s
+[epoch 44/50] train 0.6316 (cell 0.5170, tissue 0.1146) | val 1.2776 | mF1 0.7560 (BC 0.7337, TC 0.7782) | mIoU 0.8843 | 91.7s
+[epoch 45/50] train 0.6341 (cell 0.5200, tissue 0.1142) | val 1.2745 | mF1 0.7620 (BC 0.7410, TC 0.7831) | mIoU 0.8826 | 92.4s
+[epoch 46/50] train 0.6396 (cell 0.5239, tissue 0.1157) | val 1.2726 | mF1 0.7606 (BC 0.7385, TC 0.7826) | mIoU 0.8836 | 92.6s
+[epoch 47/50] train 0.6358 (cell 0.5199, tissue 0.1159) | val 1.2771 | mF1 0.7600 (BC 0.7388, TC 0.7812) | mIoU 0.8839 | 92.3s
+[epoch 48/50] train 0.6376 (cell 0.5231, tissue 0.1145) | val 1.2765 | mF1 0.7594 (BC 0.7381, TC 0.7808) | mIoU 0.8834 | 91.8s
+[epoch 49/50] train 0.6423 (cell 0.5277, tissue 0.1146) | val 1.2758 | mF1 0.7593 (BC 0.7379, TC 0.7808) | mIoU 0.8839 | 92.8s
+[epoch 50/50] train 0.6409 (cell 0.5256, tissue 0.1153) | val 1.2756 | mF1 0.7593 (BC 0.7377, TC 0.7808) | mIoU 0.8838 | 91.7s
+[완료] best val mF1 0.7829. 결과: /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s8_l0.9
+
+[실행 4.26h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s8_l0.9/best.pt --part select --tune
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s8_l0.9/best.pt (epoch 18) | select 40쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 8.0, 'lambda': 0.9, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 3.0, 'min_distance': 7, 'threshold': 0.4}
+[탐색] 후처리 격자 (select 세포 mF1 기준)
+  σ=2.0 d=3 thr=0.2: mF1 0.7451
+  σ=2.0 d=3 thr=0.3: mF1 0.7587
+  σ=2.0 d=3 thr=0.4: mF1 0.7715
+  σ=2.0 d=3 thr=0.5: mF1 0.7772
+  σ=2.0 d=5 thr=0.2: mF1 0.7540
+  σ=2.0 d=5 thr=0.3: mF1 0.7647
+  σ=2.0 d=5 thr=0.4: mF1 0.7754
+  σ=2.0 d=5 thr=0.5: mF1 0.7794
+  σ=2.0 d=7 thr=0.2: mF1 0.7614
+  σ=2.0 d=7 thr=0.3: mF1 0.7709
+  σ=2.0 d=7 thr=0.4: mF1 0.7794
+  σ=2.0 d=7 thr=0.5: mF1 0.7815
+  σ=2.0 d=9 thr=0.2: mF1 0.7641
+  σ=2.0 d=9 thr=0.3: mF1 0.7723
+  σ=2.0 d=9 thr=0.4: mF1 0.7795
+  σ=2.0 d=9 thr=0.5: mF1 0.7813
+  σ=3.0 d=3 thr=0.2: mF1 0.7616
+  σ=3.0 d=3 thr=0.3: mF1 0.7719
+  σ=3.0 d=3 thr=0.4: mF1 0.7822
+  σ=3.0 d=3 thr=0.5: mF1 0.7781
+  σ=3.0 d=5 thr=0.2: mF1 0.7637
+  σ=3.0 d=5 thr=0.3: mF1 0.7735
+  σ=3.0 d=5 thr=0.4: mF1 0.7830
+  σ=3.0 d=5 thr=0.5: mF1 0.7785
+  σ=3.0 d=7 thr=0.2: mF1 0.7655
+  σ=3.0 d=7 thr=0.3: mF1 0.7744
+  σ=3.0 d=7 thr=0.4: mF1 0.7829
+  σ=3.0 d=7 thr=0.5: mF1 0.7783
+  σ=3.0 d=9 thr=0.2: mF1 0.7673
+  σ=3.0 d=9 thr=0.3: mF1 0.7751
+  σ=3.0 d=9 thr=0.4: mF1 0.7828
+  σ=3.0 d=9 thr=0.5: mF1 0.7782
+  σ=4.0 d=3 thr=0.2: mF1 0.7679
+  σ=4.0 d=3 thr=0.3: mF1 0.7776
+  σ=4.0 d=3 thr=0.4: mF1 0.7857
+  σ=4.0 d=3 thr=0.5: mF1 0.7715
+  σ=4.0 d=5 thr=0.2: mF1 0.7691
+  σ=4.0 d=5 thr=0.3: mF1 0.7780
+  σ=4.0 d=5 thr=0.4: mF1 0.7853
+  σ=4.0 d=5 thr=0.5: mF1 0.7716
+  σ=4.0 d=7 thr=0.2: mF1 0.7689
+  σ=4.0 d=7 thr=0.3: mF1 0.7769
+  σ=4.0 d=7 thr=0.4: mF1 0.7838
+  σ=4.0 d=7 thr=0.5: mF1 0.7710
+  σ=4.0 d=9 thr=0.2: mF1 0.7679
+  σ=4.0 d=9 thr=0.3: mF1 0.7758
+  σ=4.0 d=9 thr=0.4: mF1 0.7826
+  σ=4.0 d=9 thr=0.5: mF1 0.7700
+  σ=5.0 d=3 thr=0.2: mF1 0.7697
+  σ=5.0 d=3 thr=0.3: mF1 0.7793
+  σ=5.0 d=3 thr=0.4: mF1 0.7834
+  σ=5.0 d=3 thr=0.5: mF1 0.7480
+  σ=5.0 d=5 thr=0.2: mF1 0.7703
+  σ=5.0 d=5 thr=0.3: mF1 0.7795
+  σ=5.0 d=5 thr=0.4: mF1 0.7834
+  σ=5.0 d=5 thr=0.5: mF1 0.7477
+  σ=5.0 d=7 thr=0.2: mF1 0.7689
+  σ=5.0 d=7 thr=0.3: mF1 0.7781
+  σ=5.0 d=7 thr=0.4: mF1 0.7823
+  σ=5.0 d=7 thr=0.5: mF1 0.7476
+  σ=5.0 d=9 thr=0.2: mF1 0.7679
+  σ=5.0 d=9 thr=0.3: mF1 0.7766
+  σ=5.0 d=9 thr=0.4: mF1 0.7807
+  σ=5.0 d=9 thr=0.5: mF1 0.7471
+[선택] {'sigma': 4.0, 'min_distance': 3, 'threshold': 0.4, 'precision_BC': 0.6976, 'recall_BC': 0.8615, 'f1_BC': 0.7709, 'precision_TC': 0.8178, 'recall_TC': 0.7839, 'f1_TC': 0.8005, 'mF1': 0.7857} → /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s8_l0.9/postprocess.json
+[진단] M2
+  BC  0-14:      2개, 누락 0.0%, 오분류 0.0% | 합침 0 / 약함 0
+  BC 14-30:   1160개, 누락 16.8%, 오분류 1.8% | 합침 56 / 약함 139
+  BC   30+:   2000개, 누락 6.3%, 오분류 4.8% | 합침 7 / 약함 120
+  TC  0-14:      8개, 누락 50.0%, 오분류 0.0% | 합침 3 / 약함 1
+  TC 14-30:   1459개, 누락 26.0%, 오분류 2.6% | 합침 91 / 약함 288
+  TC   30+:   2517개, 누락 9.2%, 오분류 8.3% | 합침 26 / 약함 205
+  중복 63 / 오검출 1451 / 예측 7724 | 가까움-멂 누락률 차이 BC +10.5%, TC +16.8%
+[결과] select: 세포 mF1 0.7857 (BC 0.7709, TC 0.8005) | 조직 mIoU 0.8574 (BG 0.8869, CA 0.8280)
+  bladder           8쌍  mF1 0.8300
+  endometrium       8쌍  mF1 0.8188
+  head-and-neck     3쌍  mF1 0.6627
+  kidney           12쌍  mF1 0.7459
+  prostate          4쌍  mF1 0.3182
+  stomach           5쌍  mF1 0.8159
+
+[실행 4.52h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s8_l0.9/best.pt --part holdout
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s8_l0.9/best.pt (epoch 18) | holdout 127쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 8.0, 'lambda': 0.9, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 4.0, 'min_distance': 3, 'threshold': 0.4}
+[진단] M2
+  BC  0-14:     14개, 누락 42.9%, 오분류 7.1% | 합침 4 / 약함 2
+  BC 14-30:   1535개, 누락 20.3%, 오분류 9.2% | 합침 68 / 약함 244
+  BC   30+:   6098개, 누락 7.4%, 오분류 10.4% | 합침 66 / 약함 386
+  TC  0-14:     58개, 누락 48.3%, 오분류 3.5% | 합침 17 / 약함 11
+  TC 14-30:   3761개, 누락 29.1%, 오분류 5.1% | 합침 168 / 약함 925
+  TC   30+:   9010개, 누락 10.2%, 오분류 11.4% | 합침 86 / 약함 829
+  중복 193 / 오검출 4804 / 예측 22667 | 가까움-멂 누락률 차이 BC +12.9%, TC +18.9%
+[결과] holdout: 세포 mF1 0.7194 (BC 0.6742, TC 0.7646) | 조직 mIoU 0.8571 (BG 0.8887, CA 0.8255)
+  bladder          26쌍  mF1 0.7423
+  endometrium      28쌍  mF1 0.6807
+  head-and-neck     8쌍  mF1 0.6579
+  kidney           39쌍  mF1 0.7277
+  prostate         16쌍  mF1 0.6497
+  stomach          10쌍  mF1 0.7626
+[후보] search_ha_s8_l0.9: holdout mF1 0.7194 (select 0.7857) | 1.57h
+[coarse 선택] search_ha_s6_l0.9 (holdout mF1 0.7215)
+
+[실행 4.53h] /usr/bin/python scripts/train_m2.py --config configs/m2_search_train.json --seed 42 --target-mode ha --sigma 6.0 --lambda 0.9 --run-name search_ha_s6_l0.9_ft-control --split-file configs/train_split_seed42.json --train-part fit --val-part select --init-from /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt --epochs 10 --freeze-epochs 0 --lr-scale 0.1
+[시작 가중치] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt (epoch 16, 정답 ha σ=6)
+[시작] search_ha_s6_l0.9_ft-control | device cuda | amp torch.bfloat16 | 정답 ha σ=6 λ=0.9 | 분할 configs/train_split_seed42.json fit/select | train 233 / val 40 | batch 2×1 | 10 epoch
+[epoch 1/10] train 0.9685 (cell 0.7733, tissue 0.1952) | val 1.2368 | mF1 0.7680 (BC 0.7537, TC 0.7824) | mIoU 0.8827 | 87.5s
+[저장] best.pt (val mF1 0.7680)
+[epoch 2/10] train 0.9524 (cell 0.7648, tissue 0.1876) | val 1.2418 | mF1 0.7668 (BC 0.7520, TC 0.7817) | mIoU 0.8803 | 87.3s
+[epoch 3/10] train 0.9405 (cell 0.7592, tissue 0.1813) | val 1.2608 | mF1 0.7714 (BC 0.7568, TC 0.7860) | mIoU 0.8782 | 88.4s
+[저장] best.pt (val mF1 0.7714)
+[epoch 4/10] train 0.9439 (cell 0.7658, tissue 0.1781) | val 1.2653 | mF1 0.7699 (BC 0.7535, TC 0.7863) | mIoU 0.8789 | 86.8s
+[epoch 5/10] train 0.9271 (cell 0.7530, tissue 0.1741) | val 1.2709 | mF1 0.7647 (BC 0.7465, TC 0.7828) | mIoU 0.8794 | 87.7s
+[epoch 6/10] train 0.9246 (cell 0.7528, tissue 0.1718) | val 1.2780 | mF1 0.7711 (BC 0.7545, TC 0.7876) | mIoU 0.8739 | 87.8s
+[epoch 7/10] train 0.9235 (cell 0.7512, tissue 0.1723) | val 1.2796 | mF1 0.7707 (BC 0.7544, TC 0.7870) | mIoU 0.8755 | 86.7s
+[epoch 8/10] train 0.9070 (cell 0.7366, tissue 0.1704) | val 1.2845 | mF1 0.7708 (BC 0.7550, TC 0.7866) | mIoU 0.8753 | 88.1s
+[epoch 9/10] train 0.9102 (cell 0.7427, tissue 0.1675) | val 1.2866 | mF1 0.7705 (BC 0.7536, TC 0.7873) | mIoU 0.8748 | 86.7s
+[epoch 10/10] train 0.9068 (cell 0.7384, tissue 0.1684) | val 1.2879 | mF1 0.7706 (BC 0.7535, TC 0.7878) | mIoU 0.8744 | 87.9s
+[완료] best val mF1 0.7714. 결과: /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9_ft-control
+
+[실행 4.78h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9_ft-control/best.pt --part select --tune
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9_ft-control/best.pt (epoch 3) | select 40쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 6.0, 'lambda': 0.9, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 3.0, 'min_distance': 7, 'threshold': 0.4}
+[탐색] 후처리 격자 (select 세포 mF1 기준)
+  σ=2.0 d=3 thr=0.2: mF1 0.7423
+  σ=2.0 d=3 thr=0.3: mF1 0.7577
+  σ=2.0 d=3 thr=0.4: mF1 0.7675
+  σ=2.0 d=3 thr=0.5: mF1 0.7278
+  σ=2.0 d=5 thr=0.2: mF1 0.7503
+  σ=2.0 d=5 thr=0.3: mF1 0.7630
+  σ=2.0 d=5 thr=0.4: mF1 0.7702
+  σ=2.0 d=5 thr=0.5: mF1 0.7289
+  σ=2.0 d=7 thr=0.2: mF1 0.7574
+  σ=2.0 d=7 thr=0.3: mF1 0.7679
+  σ=2.0 d=7 thr=0.4: mF1 0.7732
+  σ=2.0 d=7 thr=0.5: mF1 0.7293
+  σ=2.0 d=9 thr=0.2: mF1 0.7600
+  σ=2.0 d=9 thr=0.3: mF1 0.7688
+  σ=2.0 d=9 thr=0.4: mF1 0.7734
+  σ=2.0 d=9 thr=0.5: mF1 0.7298
+  σ=3.0 d=3 thr=0.2: mF1 0.7595
+  σ=3.0 d=3 thr=0.3: mF1 0.7706
+  σ=3.0 d=3 thr=0.4: mF1 0.7702
+  σ=3.0 d=3 thr=0.5: mF1 0.6788
+  σ=3.0 d=5 thr=0.2: mF1 0.7617
+  σ=3.0 d=5 thr=0.3: mF1 0.7723
+  σ=3.0 d=5 thr=0.4: mF1 0.7710
+  σ=3.0 d=5 thr=0.5: mF1 0.6790
+  σ=3.0 d=7 thr=0.2: mF1 0.7635
+  σ=3.0 d=7 thr=0.3: mF1 0.7730
+  σ=3.0 d=7 thr=0.4: mF1 0.7714
+  σ=3.0 d=7 thr=0.5: mF1 0.6794
+  σ=3.0 d=9 thr=0.2: mF1 0.7653
+  σ=3.0 d=9 thr=0.3: mF1 0.7733
+  σ=3.0 d=9 thr=0.4: mF1 0.7716
+  σ=3.0 d=9 thr=0.5: mF1 0.6795
+  σ=4.0 d=3 thr=0.2: mF1 0.7669
+  σ=4.0 d=3 thr=0.3: mF1 0.7759
+  σ=4.0 d=3 thr=0.4: mF1 0.7624
+  σ=4.0 d=3 thr=0.5: mF1 0.5616
+  σ=4.0 d=5 thr=0.2: mF1 0.7676
+  σ=4.0 d=5 thr=0.3: mF1 0.7758
+  σ=4.0 d=5 thr=0.4: mF1 0.7627
+  σ=4.0 d=5 thr=0.5: mF1 0.5616
+  σ=4.0 d=7 thr=0.2: mF1 0.7685
+  σ=4.0 d=7 thr=0.3: mF1 0.7759
+  σ=4.0 d=7 thr=0.4: mF1 0.7625
+  σ=4.0 d=7 thr=0.5: mF1 0.5616
+  σ=4.0 d=9 thr=0.2: mF1 0.7677
+  σ=4.0 d=9 thr=0.3: mF1 0.7747
+  σ=4.0 d=9 thr=0.4: mF1 0.7625
+  σ=4.0 d=9 thr=0.5: mF1 0.5617
+  σ=5.0 d=3 thr=0.2: mF1 0.7716
+  σ=5.0 d=3 thr=0.3: mF1 0.7773
+  σ=5.0 d=3 thr=0.4: mF1 0.7330
+  σ=5.0 d=3 thr=0.5: mF1 0.3034
+  σ=5.0 d=5 thr=0.2: mF1 0.7711
+  σ=5.0 d=5 thr=0.3: mF1 0.7767
+  σ=5.0 d=5 thr=0.4: mF1 0.7332
+  σ=5.0 d=5 thr=0.5: mF1 0.3034
+  σ=5.0 d=7 thr=0.2: mF1 0.7704
+  σ=5.0 d=7 thr=0.3: mF1 0.7757
+  σ=5.0 d=7 thr=0.4: mF1 0.7328
+  σ=5.0 d=7 thr=0.5: mF1 0.3035
+  σ=5.0 d=9 thr=0.2: mF1 0.7690
+  σ=5.0 d=9 thr=0.3: mF1 0.7740
+  σ=5.0 d=9 thr=0.4: mF1 0.7320
+  σ=5.0 d=9 thr=0.5: mF1 0.3035
+[선택] {'sigma': 5.0, 'min_distance': 3, 'threshold': 0.3, 'precision_BC': 0.7328, 'recall_BC': 0.7903, 'f1_BC': 0.7605, 'precision_TC': 0.798, 'recall_TC': 0.7902, 'f1_TC': 0.794, 'mF1': 0.7773} → /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9_ft-control/postprocess.json
+[진단] M2
+  BC  0-14:      2개, 누락 0.0%, 오분류 50.0% | 합침 0 / 약함 0
+  BC 14-30:   1160개, 누락 20.1%, 오분류 3.5% | 합침 50 / 약함 183
+  BC   30+:   2000개, 누락 9.2%, 오분류 10.2% | 합침 6 / 약함 179
+  TC  0-14:      8개, 누락 50.0%, 오분류 0.0% | 합침 3 / 약함 1
+  TC 14-30:   1459개, 누락 26.4%, 오분류 2.0% | 합침 111 / 약함 274
+  TC   30+:   2517개, 누락 9.8%, 오분류 6.9% | 합침 36 / 약함 210
+  중복 40 / 오검출 1222 / 예측 7355 | 가까움-멂 누락률 차이 BC +10.8%, TC +16.6%
+[결과] select: 세포 mF1 0.7773 (BC 0.7605, TC 0.7940) | 조직 mIoU 0.8782 (BG 0.9013, CA 0.8551)
+  bladder           8쌍  mF1 0.8277
+  endometrium       8쌍  mF1 0.8146
+  head-and-neck     3쌍  mF1 0.6670
+  kidney           12쌍  mF1 0.6939
+  prostate          4쌍  mF1 0.3116
+  stomach           5쌍  mF1 0.8190
+
+[실행 5.04h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9_ft-control/best.pt --part holdout
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9_ft-control/best.pt (epoch 3) | holdout 127쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 6.0, 'lambda': 0.9, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 5.0, 'min_distance': 3, 'threshold': 0.3}
+[진단] M2
+  BC  0-14:     14개, 누락 50.0%, 오분류 7.1% | 합침 3 / 약함 4
+  BC 14-30:   1535개, 누락 26.3%, 오분류 10.0% | 합침 71 / 약함 333
+  BC   30+:   6098개, 누락 12.8%, 오분류 12.5% | 합침 51 / 약함 729
+  TC  0-14:     58개, 누락 48.3%, 오분류 1.7% | 합침 16 / 약함 12
+  TC 14-30:   3761개, 누락 29.9%, 오분류 4.0% | 합침 197 / 약함 927
+  TC   30+:   9010개, 누락 11.0%, 오분류 9.1% | 합침 99 / 약함 892
+  중복 147 / 오검출 3822 / 예측 21111 | 가까움-멂 누락률 차이 BC +13.5%, TC +18.9%
+[결과] holdout: 세포 mF1 0.7237 (BC 0.6759, TC 0.7715) | 조직 mIoU 0.8593 (BG 0.8883, CA 0.8303)
+  bladder          26쌍  mF1 0.7531
+  endometrium      28쌍  mF1 0.6926
+  head-and-neck     8쌍  mF1 0.6750
+  kidney           39쌍  mF1 0.7355
+  prostate         16쌍  mF1 0.6483
+  stomach          10쌍  mF1 0.7396
+[후보] search_ha_s6_l0.9_ft-control: holdout mF1 0.7237 (select 0.7773) | 0.52h
+
+[실행 5.05h] /usr/bin/python scripts/train_m2.py --config configs/m2_search_train.json --seed 42 --target-mode ha --sigma 5.0 --lambda 0.9 --run-name search_ha_s5_l0.9_ft-from-s6 --split-file configs/train_split_seed42.json --train-part fit --val-part select --init-from /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt --epochs 10 --freeze-epochs 0 --lr-scale 0.1
+[시작 가중치] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt (epoch 16, 정답 ha σ=6)
+[시작] search_ha_s5_l0.9_ft-from-s6 | device cuda | amp torch.bfloat16 | 정답 ha σ=5 λ=0.9 | 분할 configs/train_split_seed42.json fit/select | train 233 / val 40 | batch 2×1 | 10 epoch
+[epoch 1/10] train 1.0500 (cell 0.8547, tissue 0.1953) | val 1.2973 | mF1 0.7530 (BC 0.7473, TC 0.7588) | mIoU 0.8826 | 85.3s
+[저장] best.pt (val mF1 0.7530)
+[epoch 2/10] train 1.0311 (cell 0.8435, tissue 0.1876) | val 1.3028 | mF1 0.7555 (BC 0.7429, TC 0.7681) | mIoU 0.8800 | 84.4s
+[저장] best.pt (val mF1 0.7555)
+[epoch 3/10] train 1.0205 (cell 0.8391, tissue 0.1813) | val 1.3198 | mF1 0.7564 (BC 0.7378, TC 0.7749) | mIoU 0.8781 | 86.5s
+[저장] best.pt (val mF1 0.7564)
+[epoch 4/10] train 1.0209 (cell 0.8428, tissue 0.1780) | val 1.3246 | mF1 0.7575 (BC 0.7383, TC 0.7766) | mIoU 0.8787 | 84.1s
+[저장] best.pt (val mF1 0.7575)
+[epoch 5/10] train 1.0032 (cell 0.8291, tissue 0.1741) | val 1.3291 | mF1 0.7440 (BC 0.7208, TC 0.7671) | mIoU 0.8793 | 84.9s
+[epoch 6/10] train 1.0014 (cell 0.8297, tissue 0.1717) | val 1.3380 | mF1 0.7586 (BC 0.7428, TC 0.7744) | mIoU 0.8737 | 85.6s
+[저장] best.pt (val mF1 0.7586)
+[epoch 7/10] train 1.0008 (cell 0.8285, tissue 0.1723) | val 1.3392 | mF1 0.7587 (BC 0.7423, TC 0.7752) | mIoU 0.8753 | 84.4s
+[저장] best.pt (val mF1 0.7587)
+[epoch 8/10] train 0.9838 (cell 0.8134, tissue 0.1703) | val 1.3434 | mF1 0.7553 (BC 0.7373, TC 0.7734) | mIoU 0.8752 | 85.9s
+[epoch 9/10] train 0.9908 (cell 0.8233, tissue 0.1674) | val 1.3453 | mF1 0.7564 (BC 0.7381, TC 0.7747) | mIoU 0.8746 | 84.8s
+[epoch 10/10] train 0.9826 (cell 0.8142, tissue 0.1684) | val 1.3467 | mF1 0.7559 (BC 0.7379, TC 0.7740) | mIoU 0.8743 | 86.2s
+[완료] best val mF1 0.7587. 결과: /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s5_l0.9_ft-from-s6
+
+[실행 5.29h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s5_l0.9_ft-from-s6/best.pt --part select --tune
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s5_l0.9_ft-from-s6/best.pt (epoch 7) | select 40쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 5.0, 'lambda': 0.9, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 3.0, 'min_distance': 7, 'threshold': 0.4}
+[탐색] 후처리 격자 (select 세포 mF1 기준)
+  σ=2.0 d=3 thr=0.2: mF1 0.7481
+  σ=2.0 d=3 thr=0.3: mF1 0.7640
+  σ=2.0 d=3 thr=0.4: mF1 0.7609
+  σ=2.0 d=3 thr=0.5: mF1 0.6535
+  σ=2.0 d=5 thr=0.2: mF1 0.7544
+  σ=2.0 d=5 thr=0.3: mF1 0.7675
+  σ=2.0 d=5 thr=0.4: mF1 0.7634
+  σ=2.0 d=5 thr=0.5: mF1 0.6542
+  σ=2.0 d=7 thr=0.2: mF1 0.7597
+  σ=2.0 d=7 thr=0.3: mF1 0.7708
+  σ=2.0 d=7 thr=0.4: mF1 0.7651
+  σ=2.0 d=7 thr=0.5: mF1 0.6546
+  σ=2.0 d=9 thr=0.2: mF1 0.7623
+  σ=2.0 d=9 thr=0.3: mF1 0.7713
+  σ=2.0 d=9 thr=0.4: mF1 0.7663
+  σ=2.0 d=9 thr=0.5: mF1 0.6548
+  σ=3.0 d=3 thr=0.2: mF1 0.7612
+  σ=3.0 d=3 thr=0.3: mF1 0.7725
+  σ=3.0 d=3 thr=0.4: mF1 0.7570
+  σ=3.0 d=3 thr=0.5: mF1 0.5485
+  σ=3.0 d=5 thr=0.2: mF1 0.7631
+  σ=3.0 d=5 thr=0.3: mF1 0.7739
+  σ=3.0 d=5 thr=0.4: mF1 0.7574
+  σ=3.0 d=5 thr=0.5: mF1 0.5485
+  σ=3.0 d=7 thr=0.2: mF1 0.7664
+  σ=3.0 d=7 thr=0.3: mF1 0.7757
+  σ=3.0 d=7 thr=0.4: mF1 0.7587
+  σ=3.0 d=7 thr=0.5: mF1 0.5486
+  σ=3.0 d=9 thr=0.2: mF1 0.7673
+  σ=3.0 d=9 thr=0.3: mF1 0.7754
+  σ=3.0 d=9 thr=0.4: mF1 0.7586
+  σ=3.0 d=9 thr=0.5: mF1 0.5487
+  σ=4.0 d=3 thr=0.2: mF1 0.7689
+  σ=4.0 d=3 thr=0.3: mF1 0.7757
+  σ=4.0 d=3 thr=0.4: mF1 0.7253
+  σ=4.0 d=3 thr=0.5: mF1 0.3292
+  σ=4.0 d=5 thr=0.2: mF1 0.7699
+  σ=4.0 d=5 thr=0.3: mF1 0.7759
+  σ=4.0 d=5 thr=0.4: mF1 0.7252
+  σ=4.0 d=5 thr=0.5: mF1 0.3293
+  σ=4.0 d=7 thr=0.2: mF1 0.7701
+  σ=4.0 d=7 thr=0.3: mF1 0.7755
+  σ=4.0 d=7 thr=0.4: mF1 0.7250
+  σ=4.0 d=7 thr=0.5: mF1 0.3293
+  σ=4.0 d=9 thr=0.2: mF1 0.7694
+  σ=4.0 d=9 thr=0.3: mF1 0.7745
+  σ=4.0 d=9 thr=0.4: mF1 0.7249
+  σ=4.0 d=9 thr=0.5: mF1 0.3293
+  σ=5.0 d=3 thr=0.2: mF1 0.7734
+  σ=5.0 d=3 thr=0.3: mF1 0.7735
+  σ=5.0 d=3 thr=0.4: mF1 0.6378
+  σ=5.0 d=3 thr=0.5: mF1 0.0718
+  σ=5.0 d=5 thr=0.2: mF1 0.7733
+  σ=5.0 d=5 thr=0.3: mF1 0.7733
+  σ=5.0 d=5 thr=0.4: mF1 0.6376
+  σ=5.0 d=5 thr=0.5: mF1 0.0718
+  σ=5.0 d=7 thr=0.2: mF1 0.7725
+  σ=5.0 d=7 thr=0.3: mF1 0.7725
+  σ=5.0 d=7 thr=0.4: mF1 0.6376
+  σ=5.0 d=7 thr=0.5: mF1 0.0718
+  σ=5.0 d=9 thr=0.2: mF1 0.7712
+  σ=5.0 d=9 thr=0.3: mF1 0.7716
+  σ=5.0 d=9 thr=0.4: mF1 0.6375
+  σ=5.0 d=9 thr=0.5: mF1 0.0718
+[선택] {'sigma': 4.0, 'min_distance': 5, 'threshold': 0.3, 'precision_BC': 0.7191, 'recall_BC': 0.8046, 'f1_BC': 0.7594, 'precision_TC': 0.7931, 'recall_TC': 0.7917, 'f1_TC': 0.7924, 'mF1': 0.7759} → /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s5_l0.9_ft-from-s6/postprocess.json
+[진단] M2
+  BC  0-14:      2개, 누락 100.0%, 오분류 0.0% | 합침 1 / 약함 1
+  BC 14-30:   1160개, 누락 18.2%, 오분류 3.5% | 합침 29 / 약함 182
+  BC   30+:   2000개, 누락 8.5%, 오분류 9.8% | 합침 3 / 약함 167
+  TC  0-14:      8개, 누락 50.0%, 오분류 0.0% | 합침 2 / 약함 2
+  TC 14-30:   1459개, 누락 25.7%, 오분류 2.1% | 합침 56 / 약함 319
+  TC   30+:   2517개, 누락 9.8%, 오분류 7.0% | 합침 23 / 약함 223
+  중복 60 / 오검출 1317 / 예측 7515 | 가까움-멂 누락률 차이 BC +9.7%, TC +15.9%
+[결과] select: 세포 mF1 0.7759 (BC 0.7594, TC 0.7924) | 조직 mIoU 0.8753 (BG 0.8995, CA 0.8512)
+  bladder           8쌍  mF1 0.8279
+  endometrium       8쌍  mF1 0.8161
+  head-and-neck     3쌍  mF1 0.6616
+  kidney           12쌍  mF1 0.6856
+  prostate          4쌍  mF1 0.3107
+  stomach           5쌍  mF1 0.8180
+
+[실행 5.56h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s5_l0.9_ft-from-s6/best.pt --part holdout
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s5_l0.9_ft-from-s6/best.pt (epoch 7) | holdout 127쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 5.0, 'lambda': 0.9, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 4.0, 'min_distance': 5, 'threshold': 0.3}
+[진단] M2
+  BC  0-14:     14개, 누락 42.9%, 오분류 7.1% | 합침 1 / 약함 5
+  BC 14-30:   1535개, 누락 23.4%, 오분류 10.2% | 합침 47 / 약함 312
+  BC   30+:   6098개, 누락 11.1%, 오분류 12.5% | 합침 39 / 약함 636
+  TC  0-14:     58개, 누락 51.7%, 오분류 1.7% | 합침 11 / 약함 19
+  TC 14-30:   3761개, 누락 28.7%, 오분류 4.1% | 합침 85 / 약함 994
+  TC   30+:   9010개, 누락 10.9%, 오분류 9.1% | 합침 50 / 약함 930
+  중복 177 / 오검출 4169 / 예측 21693 | 가까움-멂 누락률 차이 BC +12.3%, TC +17.8%
+[결과] holdout: 세포 mF1 0.7232 (BC 0.6751, TC 0.7714) | 조직 mIoU 0.8573 (BG 0.8874, CA 0.8271)
+  bladder          26쌍  mF1 0.7485
+  endometrium      28쌍  mF1 0.6937
+  head-and-neck     8쌍  mF1 0.6632
+  kidney           39쌍  mF1 0.7345
+  prostate         16쌍  mF1 0.6536
+  stomach          10쌍  mF1 0.7405
+[후보] search_ha_s5_l0.9_ft-from-s6: holdout mF1 0.7232 (select 0.7759) | 0.51h
+
+[실행 5.56h] /usr/bin/python scripts/train_m2.py --config configs/m2_search_train.json --seed 42 --target-mode ha --sigma 7.0 --lambda 0.9 --run-name search_ha_s7_l0.9_ft-from-s6 --split-file configs/train_split_seed42.json --train-part fit --val-part select --init-from /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt --epochs 10 --freeze-epochs 0 --lr-scale 0.1
+[시작 가중치] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt (epoch 16, 정답 ha σ=6)
+[시작] search_ha_s7_l0.9_ft-from-s6 | device cuda | amp torch.bfloat16 | 정답 ha σ=7 λ=0.9 | 분할 configs/train_split_seed42.json fit/select | train 233 / val 40 | batch 2×1 | 10 epoch
+[epoch 1/10] train 0.9089 (cell 0.7136, tissue 0.1953) | val 1.1938 | mF1 0.7681 (BC 0.7532, TC 0.7830) | mIoU 0.8826 | 90.4s
+[저장] best.pt (val mF1 0.7681)
+[epoch 2/10] train 0.8922 (cell 0.7045, tissue 0.1877) | val 1.1982 | mF1 0.7678 (BC 0.7512, TC 0.7844) | mIoU 0.8804 | 90.8s
+[epoch 3/10] train 0.8794 (cell 0.6979, tissue 0.1815) | val 1.2176 | mF1 0.7759 (BC 0.7625, TC 0.7894) | mIoU 0.8783 | 91.4s
+[저장] best.pt (val mF1 0.7759)
+[epoch 4/10] train 0.8809 (cell 0.7027, tissue 0.1782) | val 1.2218 | mF1 0.7724 (BC 0.7575, TC 0.7873) | mIoU 0.8789 | 89.9s
+[epoch 5/10] train 0.8660 (cell 0.6918, tissue 0.1743) | val 1.2284 | mF1 0.7704 (BC 0.7549, TC 0.7858) | mIoU 0.8796 | 90.2s
+[epoch 6/10] train 0.8623 (cell 0.6903, tissue 0.1719) | val 1.2340 | mF1 0.7758 (BC 0.7600, TC 0.7917) | mIoU 0.8740 | 90.9s
+[epoch 7/10] train 0.8614 (cell 0.6890, tissue 0.1724) | val 1.2361 | mF1 0.7750 (BC 0.7595, TC 0.7904) | mIoU 0.8756 | 89.3s
+[epoch 8/10] train 0.8458 (cell 0.6753, tissue 0.1705) | val 1.2410 | mF1 0.7754 (BC 0.7609, TC 0.7899) | mIoU 0.8754 | 91.0s
+[epoch 9/10] train 0.8469 (cell 0.6793, tissue 0.1676) | val 1.2431 | mF1 0.7753 (BC 0.7602, TC 0.7905) | mIoU 0.8749 | 90.3s
+[epoch 10/10] train 0.8459 (cell 0.6773, tissue 0.1686) | val 1.2443 | mF1 0.7749 (BC 0.7593, TC 0.7906) | mIoU 0.8746 | 90.0s
+[완료] best val mF1 0.7759. 결과: /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s7_l0.9_ft-from-s6
+
+[실행 5.82h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s7_l0.9_ft-from-s6/best.pt --part select --tune
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s7_l0.9_ft-from-s6/best.pt (epoch 3) | select 40쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 7.0, 'lambda': 0.9, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 3.0, 'min_distance': 7, 'threshold': 0.4}
+[탐색] 후처리 격자 (select 세포 mF1 기준)
+  σ=2.0 d=3 thr=0.2: mF1 0.7352
+  σ=2.0 d=3 thr=0.3: mF1 0.7522
+  σ=2.0 d=3 thr=0.4: mF1 0.7654
+  σ=2.0 d=3 thr=0.5: mF1 0.7555
+  σ=2.0 d=5 thr=0.2: mF1 0.7441
+  σ=2.0 d=5 thr=0.3: mF1 0.7583
+  σ=2.0 d=5 thr=0.4: mF1 0.7685
+  σ=2.0 d=5 thr=0.5: mF1 0.7574
+  σ=2.0 d=7 thr=0.2: mF1 0.7524
+  σ=2.0 d=7 thr=0.3: mF1 0.7642
+  σ=2.0 d=7 thr=0.4: mF1 0.7721
+  σ=2.0 d=7 thr=0.5: mF1 0.7586
+  σ=2.0 d=9 thr=0.2: mF1 0.7556
+  σ=2.0 d=9 thr=0.3: mF1 0.7659
+  σ=2.0 d=9 thr=0.4: mF1 0.7723
+  σ=2.0 d=9 thr=0.5: mF1 0.7597
+  σ=3.0 d=3 thr=0.2: mF1 0.7529
+  σ=3.0 d=3 thr=0.3: mF1 0.7650
+  σ=3.0 d=3 thr=0.4: mF1 0.7739
+  σ=3.0 d=3 thr=0.5: mF1 0.7395
+  σ=3.0 d=5 thr=0.2: mF1 0.7559
+  σ=3.0 d=5 thr=0.3: mF1 0.7669
+  σ=3.0 d=5 thr=0.4: mF1 0.7748
+  σ=3.0 d=5 thr=0.5: mF1 0.7397
+  σ=3.0 d=7 thr=0.2: mF1 0.7593
+  σ=3.0 d=7 thr=0.3: mF1 0.7695
+  σ=3.0 d=7 thr=0.4: mF1 0.7759
+  σ=3.0 d=7 thr=0.5: mF1 0.7406
+  σ=3.0 d=9 thr=0.2: mF1 0.7608
+  σ=3.0 d=9 thr=0.3: mF1 0.7698
+  σ=3.0 d=9 thr=0.4: mF1 0.7755
+  σ=3.0 d=9 thr=0.5: mF1 0.7410
+  σ=4.0 d=3 thr=0.2: mF1 0.7627
+  σ=4.0 d=3 thr=0.3: mF1 0.7726
+  σ=4.0 d=3 thr=0.4: mF1 0.7735
+  σ=4.0 d=3 thr=0.5: mF1 0.6870
+  σ=4.0 d=5 thr=0.2: mF1 0.7631
+  σ=4.0 d=5 thr=0.3: mF1 0.7722
+  σ=4.0 d=5 thr=0.4: mF1 0.7731
+  σ=4.0 d=5 thr=0.5: mF1 0.6868
+  σ=4.0 d=7 thr=0.2: mF1 0.7644
+  σ=4.0 d=7 thr=0.3: mF1 0.7725
+  σ=4.0 d=7 thr=0.4: mF1 0.7728
+  σ=4.0 d=7 thr=0.5: mF1 0.6869
+  σ=4.0 d=9 thr=0.2: mF1 0.7634
+  σ=4.0 d=9 thr=0.3: mF1 0.7712
+  σ=4.0 d=9 thr=0.4: mF1 0.7718
+  σ=4.0 d=9 thr=0.5: mF1 0.6866
+  σ=5.0 d=3 thr=0.2: mF1 0.7675
+  σ=5.0 d=3 thr=0.3: mF1 0.7749
+  σ=5.0 d=3 thr=0.4: mF1 0.7624
+  σ=5.0 d=3 thr=0.5: mF1 0.5625
+  σ=5.0 d=5 thr=0.2: mF1 0.7669
+  σ=5.0 d=5 thr=0.3: mF1 0.7744
+  σ=5.0 d=5 thr=0.4: mF1 0.7623
+  σ=5.0 d=5 thr=0.5: mF1 0.5624
+  σ=5.0 d=7 thr=0.2: mF1 0.7669
+  σ=5.0 d=7 thr=0.3: mF1 0.7742
+  σ=5.0 d=7 thr=0.4: mF1 0.7621
+  σ=5.0 d=7 thr=0.5: mF1 0.5624
+  σ=5.0 d=9 thr=0.2: mF1 0.7661
+  σ=5.0 d=9 thr=0.3: mF1 0.7730
+  σ=5.0 d=9 thr=0.4: mF1 0.7612
+  σ=5.0 d=9 thr=0.5: mF1 0.5624
+[선택] {'sigma': 3.0, 'min_distance': 7, 'threshold': 0.4, 'precision_BC': 0.7225, 'recall_BC': 0.8071, 'f1_BC': 0.7625, 'precision_TC': 0.7853, 'recall_TC': 0.7934, 'f1_TC': 0.7894, 'mF1': 0.7759} → /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s7_l0.9_ft-from-s6/postprocess.json
+[진단] M2
+  BC  0-14:      2개, 누락 50.0%, 오분류 50.0% | 합침 1 / 약함 0
+  BC 14-30:   1160개, 누락 16.9%, 오분류 3.7% | 합침 27 / 약함 169
+  BC   30+:   2000개, 누락 8.2%, 오분류 10.2% | 합침 5 / 약함 159
+  TC  0-14:      8개, 누락 50.0%, 오분류 0.0% | 합침 1 / 약함 3
+  TC 14-30:   1459개, 누락 25.7%, 오분류 2.0% | 합침 41 / 약함 334
+  TC   30+:   2517개, 누락 9.5%, 오분류 7.0% | 합침 17 / 약함 222
+  중복 67 / 오검출 1323 / 예측 7557 | 가까움-멂 누락률 차이 BC +8.7%, TC +16.2%
+[결과] select: 세포 mF1 0.7759 (BC 0.7625, TC 0.7894) | 조직 mIoU 0.8783 (BG 0.9014, CA 0.8552)
+  bladder           8쌍  mF1 0.8271
+  endometrium       8쌍  mF1 0.8174
+  head-and-neck     3쌍  mF1 0.6617
+  kidney           12쌍  mF1 0.6881
+  prostate          4쌍  mF1 0.3065
+  stomach           5쌍  mF1 0.8181
+
+[실행 6.09h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s7_l0.9_ft-from-s6/best.pt --part holdout
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s7_l0.9_ft-from-s6/best.pt (epoch 3) | holdout 127쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 7.0, 'lambda': 0.9, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 3.0, 'min_distance': 7, 'threshold': 0.4}
+[진단] M2
+  BC  0-14:     14개, 누락 42.9%, 오분류 7.1% | 합침 1 / 약함 5
+  BC 14-30:   1535개, 누락 23.9%, 오분류 10.4% | 합침 34 / 약함 333
+  BC   30+:   6098개, 누락 11.9%, 오분류 12.4% | 합침 28 / 약함 701
+  TC  0-14:     58개, 누락 51.7%, 오분류 1.7% | 합침 11 / 약함 19
+  TC 14-30:   3761개, 누락 28.3%, 오분류 4.3% | 합침 74 / 약함 990
+  TC   30+:   9010개, 누락 10.8%, 오분류 9.2% | 합침 51 / 약함 921
+  중복 211 / 오검출 4100 / 예측 21619 | 가까움-멂 누락률 차이 BC +12.0%, TC +17.5%
+[결과] holdout: 세포 mF1 0.7222 (BC 0.6749, TC 0.7695) | 조직 mIoU 0.8594 (BG 0.8883, CA 0.8305)
+  bladder          26쌍  mF1 0.7510
+  endometrium      28쌍  mF1 0.6898
+  head-and-neck     8쌍  mF1 0.6546
+  kidney           39쌍  mF1 0.7327
+  prostate         16쌍  mF1 0.6565
+  stomach          10쌍  mF1 0.7319
+[후보] search_ha_s7_l0.9_ft-from-s6: holdout mF1 0.7222 (select 0.7759) | 0.53h
+
+[실행 6.10h] /usr/bin/python scripts/train_m2.py --config configs/m2_search_train.json --seed 42 --target-mode ha --sigma 6.0 --lambda 0.5 --run-name search_ha_s6_l0.5_ft-from-l0.9 --split-file configs/train_split_seed42.json --train-part fit --val-part select --init-from /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt --epochs 10 --freeze-epochs 0 --lr-scale 0.1
+[시작 가중치] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.9/best.pt (epoch 16, 정답 ha σ=6)
+[시작] search_ha_s6_l0.5_ft-from-l0.9 | device cuda | amp torch.bfloat16 | 정답 ha σ=6 λ=0.5 | 분할 configs/train_split_seed42.json fit/select | train 233 / val 40 | batch 2×1 | 10 epoch
+[epoch 1/10] train 0.9560 (cell 0.7608, tissue 0.1952) | val 1.2289 | mF1 0.7681 (BC 0.7543, TC 0.7818) | mIoU 0.8826 | 88.7s
+[저장] best.pt (val mF1 0.7681)
+[epoch 2/10] train 0.9402 (cell 0.7525, tissue 0.1876) | val 1.2336 | mF1 0.7691 (BC 0.7521, TC 0.7860) | mIoU 0.8802 | 88.5s
+[저장] best.pt (val mF1 0.7691)
+[epoch 3/10] train 0.9282 (cell 0.7469, tissue 0.1814) | val 1.2524 | mF1 0.7749 (BC 0.7609, TC 0.7890) | mIoU 0.8782 | 88.8s
+[저장] best.pt (val mF1 0.7749)
+[epoch 4/10] train 0.9320 (cell 0.7539, tissue 0.1781) | val 1.2569 | mF1 0.7731 (BC 0.7585, TC 0.7876) | mIoU 0.8789 | 87.2s
+[epoch 5/10] train 0.9151 (cell 0.7410, tissue 0.1741) | val 1.2630 | mF1 0.7685 (BC 0.7502, TC 0.7867) | mIoU 0.8794 | 87.6s
+[epoch 6/10] train 0.9124 (cell 0.7406, tissue 0.1718) | val 1.2693 | mF1 0.7748 (BC 0.7595, TC 0.7901) | mIoU 0.8739 | 87.8s
+[epoch 7/10] train 0.9110 (cell 0.7387, tissue 0.1723) | val 1.2712 | mF1 0.7741 (BC 0.7590, TC 0.7892) | mIoU 0.8755 | 87.0s
+[epoch 8/10] train 0.8951 (cell 0.7247, tissue 0.1704) | val 1.2762 | mF1 0.7742 (BC 0.7585, TC 0.7899) | mIoU 0.8753 | 88.3s
+[epoch 9/10] train 0.8978 (cell 0.7303, tissue 0.1675) | val 1.2783 | mF1 0.7746 (BC 0.7591, TC 0.7901) | mIoU 0.8747 | 88.1s
+[epoch 10/10] train 0.8948 (cell 0.7264, tissue 0.1685) | val 1.2795 | mF1 0.7746 (BC 0.7585, TC 0.7907) | mIoU 0.8744 | 87.5s
+[완료] best val mF1 0.7749. 결과: /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.5_ft-from-l0.9
+
+[실행 6.35h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.5_ft-from-l0.9/best.pt --part select --tune
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.5_ft-from-l0.9/best.pt (epoch 3) | select 40쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 6.0, 'lambda': 0.5, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 3.0, 'min_distance': 7, 'threshold': 0.4}
+[탐색] 후처리 격자 (select 세포 mF1 기준)
+  σ=2.0 d=3 thr=0.2: mF1 0.7399
+  σ=2.0 d=3 thr=0.3: mF1 0.7556
+  σ=2.0 d=3 thr=0.4: mF1 0.7671
+  σ=2.0 d=3 thr=0.5: mF1 0.7381
+  σ=2.0 d=5 thr=0.2: mF1 0.7490
+  σ=2.0 d=5 thr=0.3: mF1 0.7622
+  σ=2.0 d=5 thr=0.4: mF1 0.7704
+  σ=2.0 d=5 thr=0.5: mF1 0.7395
+  σ=2.0 d=7 thr=0.2: mF1 0.7565
+  σ=2.0 d=7 thr=0.3: mF1 0.7675
+  σ=2.0 d=7 thr=0.4: mF1 0.7744
+  σ=2.0 d=7 thr=0.5: mF1 0.7406
+  σ=2.0 d=9 thr=0.2: mF1 0.7595
+  σ=2.0 d=9 thr=0.3: mF1 0.7685
+  σ=2.0 d=9 thr=0.4: mF1 0.7743
+  σ=2.0 d=9 thr=0.5: mF1 0.7410
+  σ=3.0 d=3 thr=0.2: mF1 0.7581
+  σ=3.0 d=3 thr=0.3: mF1 0.7691
+  σ=3.0 d=3 thr=0.4: mF1 0.7735
+  σ=3.0 d=3 thr=0.5: mF1 0.7047
+  σ=3.0 d=5 thr=0.2: mF1 0.7614
+  σ=3.0 d=5 thr=0.3: mF1 0.7715
+  σ=3.0 d=5 thr=0.4: mF1 0.7745
+  σ=3.0 d=5 thr=0.5: mF1 0.7048
+  σ=3.0 d=7 thr=0.2: mF1 0.7637
+  σ=3.0 d=7 thr=0.3: mF1 0.7727
+  σ=3.0 d=7 thr=0.4: mF1 0.7749
+  σ=3.0 d=7 thr=0.5: mF1 0.7052
+  σ=3.0 d=9 thr=0.2: mF1 0.7651
+  σ=3.0 d=9 thr=0.3: mF1 0.7727
+  σ=3.0 d=9 thr=0.4: mF1 0.7748
+  σ=3.0 d=9 thr=0.5: mF1 0.7053
+  σ=4.0 d=3 thr=0.2: mF1 0.7673
+  σ=4.0 d=3 thr=0.3: mF1 0.7759
+  σ=4.0 d=3 thr=0.4: mF1 0.7685
+  σ=4.0 d=3 thr=0.5: mF1 0.6047
+  σ=4.0 d=5 thr=0.2: mF1 0.7676
+  σ=4.0 d=5 thr=0.3: mF1 0.7754
+  σ=4.0 d=5 thr=0.4: mF1 0.7682
+  σ=4.0 d=5 thr=0.5: mF1 0.6047
+  σ=4.0 d=7 thr=0.2: mF1 0.7691
+  σ=4.0 d=7 thr=0.3: mF1 0.7761
+  σ=4.0 d=7 thr=0.4: mF1 0.7683
+  σ=4.0 d=7 thr=0.5: mF1 0.6047
+  σ=4.0 d=9 thr=0.2: mF1 0.7680
+  σ=4.0 d=9 thr=0.3: mF1 0.7745
+  σ=4.0 d=9 thr=0.4: mF1 0.7677
+  σ=4.0 d=9 thr=0.5: mF1 0.6048
+  σ=5.0 d=3 thr=0.2: mF1 0.7706
+  σ=5.0 d=3 thr=0.3: mF1 0.7771
+  σ=5.0 d=3 thr=0.4: mF1 0.7457
+  σ=5.0 d=3 thr=0.5: mF1 0.3658
+  σ=5.0 d=5 thr=0.2: mF1 0.7702
+  σ=5.0 d=5 thr=0.3: mF1 0.7764
+  σ=5.0 d=5 thr=0.4: mF1 0.7459
+  σ=5.0 d=5 thr=0.5: mF1 0.3659
+  σ=5.0 d=7 thr=0.2: mF1 0.7701
+  σ=5.0 d=7 thr=0.3: mF1 0.7757
+  σ=5.0 d=7 thr=0.4: mF1 0.7457
+  σ=5.0 d=7 thr=0.5: mF1 0.3659
+  σ=5.0 d=9 thr=0.2: mF1 0.7685
+  σ=5.0 d=9 thr=0.3: mF1 0.7739
+  σ=5.0 d=9 thr=0.4: mF1 0.7446
+  σ=5.0 d=9 thr=0.5: mF1 0.3659
+[선택] {'sigma': 5.0, 'min_distance': 3, 'threshold': 0.3, 'precision_BC': 0.7303, 'recall_BC': 0.7954, 'f1_BC': 0.7614, 'precision_TC': 0.7945, 'recall_TC': 0.7909, 'f1_TC': 0.7927, 'mF1': 0.7771} → /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.5_ft-from-l0.9/postprocess.json
+[진단] M2
+  BC  0-14:      2개, 누락 0.0%, 오분류 50.0% | 합침 0 / 약함 0
+  BC 14-30:   1160개, 누락 19.0%, 오분류 3.5% | 합침 55 / 약함 165
+  BC   30+:   2000개, 누락 8.9%, 오분류 10.3% | 합침 6 / 약함 173
+  TC  0-14:      8개, 누락 50.0%, 오분류 0.0% | 합침 3 / 약함 1
+  TC 14-30:   1459개, 누락 26.4%, 오분류 2.0% | 합침 127 / 약함 258
+  TC   30+:   2517개, 누락 9.6%, 오분류 7.0% | 합침 41 / 약함 201
+  중복 41 / 오검출 1253 / 예측 7410 | 가까움-멂 누락률 차이 BC +10.0%, TC +16.8%
+[결과] select: 세포 mF1 0.7771 (BC 0.7614, TC 0.7927) | 조직 mIoU 0.8782 (BG 0.9013, CA 0.8551)
+  bladder           8쌍  mF1 0.8286
+  endometrium       8쌍  mF1 0.8155
+  head-and-neck     3쌍  mF1 0.6610
+  kidney           12쌍  mF1 0.6934
+  prostate          4쌍  mF1 0.3100
+  stomach           5쌍  mF1 0.8190
+
+[실행 6.61h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.5_ft-from-l0.9/best.pt --part holdout
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/search_ha_s6_l0.5_ft-from-l0.9/best.pt (epoch 3) | holdout 127쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 6.0, 'lambda': 0.5, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 5.0, 'min_distance': 3, 'threshold': 0.3}
+[진단] M2
+  BC  0-14:     14개, 누락 50.0%, 오분류 7.1% | 합침 3 / 약함 4
+  BC 14-30:   1535개, 누락 25.7%, 오분류 10.0% | 합침 86 / 약함 308
+  BC   30+:   6098개, 누락 12.4%, 오분류 12.5% | 합침 53 / 약함 702
+  TC  0-14:     58개, 누락 48.3%, 오분류 1.7% | 합침 17 / 약함 11
+  TC 14-30:   3761개, 누락 29.6%, 오분류 4.0% | 합침 241 / 약함 874
+  TC   30+:   9010개, 누락 10.8%, 오분류 9.1% | 합침 109 / 약함 867
+  중복 150 / 오검출 3900 / 예측 21251 | 가까움-멂 누락률 차이 BC +13.3%, TC +18.8%
+[결과] holdout: 세포 mF1 0.7241 (BC 0.6768, TC 0.7715) | 조직 mIoU 0.8593 (BG 0.8883, CA 0.8304)
+  bladder          26쌍  mF1 0.7540
+  endometrium      28쌍  mF1 0.6922
+  head-and-neck     8쌍  mF1 0.6753
+  kidney           39쌍  mF1 0.7360
+  prostate         16쌍  mF1 0.6502
+  stomach          10쌍  mF1 0.7391
+[후보] search_ha_s6_l0.5_ft-from-l0.9: holdout mF1 0.7241 (select 0.7771) | 0.52h
+[최종 선택] search_ha_s6_l0.5_ft-from-l0.9 (holdout mF1 0.7241) | 파인튜닝 대조군 0.7237
+
+[실행 6.62h] /usr/bin/python scripts/train_m2.py --config configs/m2_search_train.json --seed 42 --target-mode ha --sigma 6.0 --lambda 0.9 --run-name final_ha_s6_l0.9_base
+[시작] final_ha_s6_l0.9_base | device cuda | amp torch.bfloat16 | 정답 ha σ=6 λ=0.9 | train 400 / val 137 | batch 2×1 | 50 epoch
+[epoch 1/50] (백본 고정) train 2.1718 (cell 1.4770, tissue 0.6949) | val 1.5253 | mF1 0.6419 (BC 0.5950, TC 0.6888) | mIoU 0.7875 | 154.9s
+[저장] best.pt (val mF1 0.6419)
+[epoch 2/50] (백본 고정) train 1.4948 (cell 1.0597, tissue 0.4352) | val 1.4692 | mF1 0.6781 (BC 0.6327, TC 0.7235) | mIoU 0.8011 | 153.3s
+[저장] best.pt (val mF1 0.6781)
+[epoch 3/50] (백본 고정) train 1.4086 (cell 1.0070, tissue 0.4016) | val 1.4442 | mF1 0.6202 (BC 0.6378, TC 0.6026) | mIoU 0.8086 | 155.3s
+[epoch 4/50] train 1.3482 (cell 0.9550, tissue 0.3932) | val 1.3697 | mF1 0.7010 (BC 0.6469, TC 0.7552) | mIoU 0.8129 | 153.6s
+[저장] best.pt (val mF1 0.7010)
+[epoch 5/50] train 1.2880 (cell 0.9286, tissue 0.3593) | val 1.3381 | mF1 0.7287 (BC 0.6680, TC 0.7894) | mIoU 0.8217 | 153.7s
+[저장] best.pt (val mF1 0.7287)
+[epoch 6/50] train 1.2261 (cell 0.9024, tissue 0.3237) | val 1.3882 | mF1 0.7211 (BC 0.6584, TC 0.7839) | mIoU 0.8017 | 153.2s
+[epoch 7/50] train 1.2079 (cell 0.8933, tissue 0.3146) | val 1.4657 | mF1 0.7056 (BC 0.6411, TC 0.7700) | mIoU 0.7792 | 156.7s
+[epoch 8/50] train 1.1589 (cell 0.8711, tissue 0.2878) | val 1.4017 | mF1 0.6930 (BC 0.6280, TC 0.7580) | mIoU 0.7966 | 156.6s
+[epoch 9/50] train 1.1640 (cell 0.8635, tissue 0.3005) | val 1.2874 | mF1 0.7355 (BC 0.6662, TC 0.8047) | mIoU 0.8335 | 154.2s
+[저장] best.pt (val mF1 0.7355)
+[epoch 10/50] train 1.1116 (cell 0.8430, tissue 0.2685) | val 1.3495 | mF1 0.7302 (BC 0.6633, TC 0.7971) | mIoU 0.8096 | 154.0s
+[epoch 11/50] train 1.0987 (cell 0.8327, tissue 0.2661) | val 1.2873 | mF1 0.7349 (BC 0.6661, TC 0.8038) | mIoU 0.8269 | 154.8s
+[epoch 12/50] train 1.0713 (cell 0.8234, tissue 0.2479) | val 1.4680 | mF1 0.7152 (BC 0.6593, TC 0.7711) | mIoU 0.7876 | 153.5s
+[epoch 13/50] train 1.0560 (cell 0.8133, tissue 0.2428) | val 1.6380 | mF1 0.6850 (BC 0.6305, TC 0.7395) | mIoU 0.7629 | 156.6s
+[epoch 14/50] train 1.0322 (cell 0.8039, tissue 0.2283) | val 1.3764 | mF1 0.7357 (BC 0.6698, TC 0.8015) | mIoU 0.8073 | 154.0s
+[저장] best.pt (val mF1 0.7357)
+[epoch 15/50] train 1.0180 (cell 0.7947, tissue 0.2234) | val 1.4121 | mF1 0.6890 (BC 0.6350, TC 0.7430) | mIoU 0.8163 | 153.6s
+[epoch 16/50] train 0.9898 (cell 0.7839, tissue 0.2060) | val 1.4998 | mF1 0.7262 (BC 0.6641, TC 0.7883) | mIoU 0.7896 | 159.5s
+[epoch 17/50] train 0.9735 (cell 0.7733, tissue 0.2002) | val 1.4051 | mF1 0.7306 (BC 0.6528, TC 0.8084) | mIoU 0.8237 | 154.7s
+[epoch 18/50] train 0.9635 (cell 0.7592, tissue 0.2044) | val 1.3338 | mF1 0.7227 (BC 0.6500, TC 0.7955) | mIoU 0.8225 | 154.0s
+[epoch 19/50] train 0.9508 (cell 0.7510, tissue 0.1998) | val 1.3842 | mF1 0.7185 (BC 0.6497, TC 0.7873) | mIoU 0.8085 | 154.2s
+[epoch 20/50] train 0.9462 (cell 0.7510, tissue 0.1952) | val 1.3879 | mF1 0.7233 (BC 0.6563, TC 0.7904) | mIoU 0.8307 | 155.0s
+[epoch 21/50] train 0.9182 (cell 0.7375, tissue 0.1807) | val 1.5117 | mF1 0.6851 (BC 0.6241, TC 0.7462) | mIoU 0.7892 | 154.8s
+[epoch 22/50] train 0.9152 (cell 0.7379, tissue 0.1773) | val 1.4393 | mF1 0.7122 (BC 0.6363, TC 0.7881) | mIoU 0.8209 | 154.3s
+[epoch 23/50] train 0.8925 (cell 0.7199, tissue 0.1726) | val 1.3479 | mF1 0.7090 (BC 0.6477, TC 0.7702) | mIoU 0.8322 | 152.5s
+[epoch 24/50] train 0.8833 (cell 0.7139, tissue 0.1694) | val 1.4303 | mF1 0.6864 (BC 0.6240, TC 0.7488) | mIoU 0.8068 | 153.1s
+[epoch 25/50] train 0.8715 (cell 0.7080, tissue 0.1635) | val 1.4627 | mF1 0.6959 (BC 0.6362, TC 0.7556) | mIoU 0.8078 | 153.8s
+[epoch 26/50] train 0.8538 (cell 0.6974, tissue 0.1565) | val 1.3900 | mF1 0.7293 (BC 0.6653, TC 0.7934) | mIoU 0.8212 | 153.5s
+[epoch 27/50] train 0.8396 (cell 0.6908, tissue 0.1487) | val 1.4123 | mF1 0.7327 (BC 0.6643, TC 0.8010) | mIoU 0.8271 | 154.4s
+[epoch 28/50] train 0.8368 (cell 0.6826, tissue 0.1542) | val 1.3847 | mF1 0.7173 (BC 0.6522, TC 0.7823) | mIoU 0.8330 | 154.2s
+[epoch 29/50] train 0.8257 (cell 0.6803, tissue 0.1453) | val 1.4824 | mF1 0.7393 (BC 0.6744, TC 0.8042) | mIoU 0.8043 | 155.1s
+[저장] best.pt (val mF1 0.7393)
+[epoch 30/50] train 0.8135 (cell 0.6737, tissue 0.1397) | val 1.4034 | mF1 0.7209 (BC 0.6535, TC 0.7884) | mIoU 0.8298 | 154.7s
+[epoch 31/50] train 0.8006 (cell 0.6603, tissue 0.1403) | val 1.4155 | mF1 0.7338 (BC 0.6678, TC 0.7998) | mIoU 0.8285 | 159.1s
+[epoch 32/50] train 0.7929 (cell 0.6579, tissue 0.1350) | val 1.4175 | mF1 0.7278 (BC 0.6623, TC 0.7934) | mIoU 0.8257 | 152.5s
+[epoch 33/50] train 0.7792 (cell 0.6509, tissue 0.1283) | val 1.4127 | mF1 0.7278 (BC 0.6603, TC 0.7952) | mIoU 0.8313 | 154.7s
+[epoch 34/50] train 0.7708 (cell 0.6445, tissue 0.1263) | val 1.4372 | mF1 0.7250 (BC 0.6583, TC 0.7917) | mIoU 0.8250 | 156.9s
+[epoch 35/50] train 0.7628 (cell 0.6397, tissue 0.1230) | val 1.4967 | mF1 0.7303 (BC 0.6630, TC 0.7976) | mIoU 0.8171 | 156.7s
+[epoch 36/50] train 0.7630 (cell 0.6398, tissue 0.1233) | val 1.4688 | mF1 0.7270 (BC 0.6618, TC 0.7922) | mIoU 0.8244 | 156.8s
+[epoch 37/50] train 0.7573 (cell 0.6382, tissue 0.1190) | val 1.4472 | mF1 0.7216 (BC 0.6544, TC 0.7887) | mIoU 0.8321 | 157.0s
+[epoch 38/50] train 0.7408 (cell 0.6235, tissue 0.1173) | val 1.4784 | mF1 0.7265 (BC 0.6588, TC 0.7942) | mIoU 0.8221 | 156.2s
+[epoch 39/50] train 0.7373 (cell 0.6220, tissue 0.1152) | val 1.4953 | mF1 0.7255 (BC 0.6577, TC 0.7932) | mIoU 0.8222 | 155.0s
+[epoch 40/50] train 0.7269 (cell 0.6132, tissue 0.1137) | val 1.4853 | mF1 0.7202 (BC 0.6514, TC 0.7891) | mIoU 0.8247 | 153.6s
+[epoch 41/50] train 0.7305 (cell 0.6187, tissue 0.1118) | val 1.4927 | mF1 0.7225 (BC 0.6532, TC 0.7917) | mIoU 0.8236 | 153.9s
+[epoch 42/50] train 0.7250 (cell 0.6135, tissue 0.1114) | val 1.4825 | mF1 0.7233 (BC 0.6539, TC 0.7926) | mIoU 0.8273 | 155.4s
+[epoch 43/50] train 0.7214 (cell 0.6119, tissue 0.1095) | val 1.4926 | mF1 0.7261 (BC 0.6572, TC 0.7949) | mIoU 0.8253 | 154.8s
+[epoch 44/50] train 0.7202 (cell 0.6110, tissue 0.1093) | val 1.4879 | mF1 0.7232 (BC 0.6536, TC 0.7929) | mIoU 0.8273 | 154.4s
+[epoch 45/50] train 0.7166 (cell 0.6067, tissue 0.1098) | val 1.4945 | mF1 0.7244 (BC 0.6547, TC 0.7940) | mIoU 0.8269 | 153.9s
+[epoch 46/50] train 0.7194 (cell 0.6099, tissue 0.1095) | val 1.4885 | mF1 0.7228 (BC 0.6531, TC 0.7926) | mIoU 0.8276 | 154.0s
+[epoch 47/50] train 0.7153 (cell 0.6056, tissue 0.1097) | val 1.4929 | mF1 0.7230 (BC 0.6538, TC 0.7922) | mIoU 0.8268 | 153.5s
+[epoch 48/50] train 0.7123 (cell 0.6034, tissue 0.1089) | val 1.4890 | mF1 0.7229 (BC 0.6528, TC 0.7930) | mIoU 0.8280 | 153.4s
+[epoch 49/50] train 0.7220 (cell 0.6140, tissue 0.1081) | val 1.4906 | mF1 0.7225 (BC 0.6526, TC 0.7924) | mIoU 0.8278 | 154.5s
+[epoch 50/50] train 0.7177 (cell 0.6091, tissue 0.1086) | val 1.4908 | mF1 0.7223 (BC 0.6523, TC 0.7923) | mIoU 0.8277 | 155.6s
+[완료] best val mF1 0.7393. 결과: /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/final_ha_s6_l0.9_base
+
+[실행 8.79h] /usr/bin/python scripts/train_m2.py --config configs/m2_search_train.json --seed 42 --target-mode ha --sigma 6.0 --lambda 0.5 --run-name final_ha_s6_l0.5_ft-from-s6-l0.9 --init-from /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/final_ha_s6_l0.9_base/best.pt --epochs 10 --freeze-epochs 0 --lr-scale 0.1
+[시작 가중치] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/final_ha_s6_l0.9_base/best.pt (epoch 29, 정답 ha σ=6)
+[시작] final_ha_s6_l0.5_ft-from-s6-l0.9 | device cuda | amp torch.bfloat16 | 정답 ha σ=6 λ=0.5 | train 400 / val 137 | batch 2×1 | 10 epoch
+[epoch 1/10] train 0.7844 (cell 0.6506, tissue 0.1338) | val 1.4344 | mF1 0.7266 (BC 0.6602, TC 0.7930) | mIoU 0.8168 | 154.3s
+[저장] best.pt (val mF1 0.7266)
+[epoch 2/10] train 0.7759 (cell 0.6445, tissue 0.1314) | val 1.4184 | mF1 0.7293 (BC 0.6634, TC 0.7951) | mIoU 0.8248 | 155.9s
+[저장] best.pt (val mF1 0.7293)
+[epoch 3/10] train 0.7644 (cell 0.6345, tissue 0.1300) | val 1.4097 | mF1 0.7317 (BC 0.6646, TC 0.7988) | mIoU 0.8280 | 157.1s
+[저장] best.pt (val mF1 0.7317)
+[epoch 4/10] train 0.7614 (cell 0.6349, tissue 0.1265) | val 1.4118 | mF1 0.7316 (BC 0.6662, TC 0.7970) | mIoU 0.8264 | 154.6s
+[epoch 5/10] train 0.7587 (cell 0.6333, tissue 0.1253) | val 1.4423 | mF1 0.7282 (BC 0.6623, TC 0.7942) | mIoU 0.8225 | 153.5s
+[epoch 6/10] train 0.7520 (cell 0.6274, tissue 0.1246) | val 1.4369 | mF1 0.7289 (BC 0.6624, TC 0.7955) | mIoU 0.8223 | 153.7s
+[epoch 7/10] train 0.7520 (cell 0.6285, tissue 0.1235) | val 1.4333 | mF1 0.7272 (BC 0.6603, TC 0.7941) | mIoU 0.8251 | 155.1s
+[epoch 8/10] train 0.7454 (cell 0.6223, tissue 0.1231) | val 1.4434 | mF1 0.7263 (BC 0.6596, TC 0.7930) | mIoU 0.8227 | 154.1s
+[epoch 9/10] train 0.7510 (cell 0.6293, tissue 0.1217) | val 1.4397 | mF1 0.7267 (BC 0.6605, TC 0.7929) | mIoU 0.8233 | 154.6s
+[epoch 10/10] train 0.7477 (cell 0.6258, tissue 0.1218) | val 1.4408 | mF1 0.7264 (BC 0.6600, TC 0.7928) | mIoU 0.8231 | 155.0s
+[완료] best val mF1 0.7317. 결과: /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/final_ha_s6_l0.5_ft-from-s6-l0.9
+
+[실행 9.22h] /usr/bin/python scripts/eval_m2.py --checkpoint /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/final_ha_s6_l0.5_ft-from-s6-l0.9/best.pt --split val --tune --compare results/m0_dicefix_seed42/eval_val_per_image.json
+[평가] /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/final_ha_s6_l0.5_ft-from-s6-l0.9/best.pt (epoch 3) | val 137쌍 | 정답 {'type': 'center_heatmap', 'mode': 'ha', 'scope': 'classwise', 'sigma': 6.0, 'lambda': 0.5, 'selection': 'σ·λ는 scripts/run_m2_search.py가 후보마다 --sigma/--lambda로 준다. 기본값은 1회 실험 값.'} | 후처리 {'sigma': 3.0, 'min_distance': 7, 'threshold': 0.4}
+[탐색] 후처리 격자 (val 세포 mF1 기준)
+  σ=2.0 d=3 thr=0.2: mF1 0.7030
+  σ=2.0 d=3 thr=0.3: mF1 0.7155
+  σ=2.0 d=3 thr=0.4: mF1 0.7265
+  σ=2.0 d=3 thr=0.5: mF1 0.7270
+  σ=2.0 d=5 thr=0.2: mF1 0.7076
+  σ=2.0 d=5 thr=0.3: mF1 0.7184
+  σ=2.0 d=5 thr=0.4: mF1 0.7281
+  σ=2.0 d=5 thr=0.5: mF1 0.7274
+  σ=2.0 d=7 thr=0.2: mF1 0.7117
+  σ=2.0 d=7 thr=0.3: mF1 0.7208
+  σ=2.0 d=7 thr=0.4: mF1 0.7294
+  σ=2.0 d=7 thr=0.5: mF1 0.7279
+  σ=2.0 d=9 thr=0.2: mF1 0.7148
+  σ=2.0 d=9 thr=0.3: mF1 0.7227
+  σ=2.0 d=9 thr=0.4: mF1 0.7301
+  σ=2.0 d=9 thr=0.5: mF1 0.7282
+  σ=3.0 d=3 thr=0.2: mF1 0.7133
+  σ=3.0 d=3 thr=0.3: mF1 0.7239
+  σ=3.0 d=3 thr=0.4: mF1 0.7308
+  σ=3.0 d=3 thr=0.5: mF1 0.7216
+  σ=3.0 d=5 thr=0.2: mF1 0.7153
+  σ=3.0 d=5 thr=0.3: mF1 0.7250
+  σ=3.0 d=5 thr=0.4: mF1 0.7314
+  σ=3.0 d=5 thr=0.5: mF1 0.7217
+  σ=3.0 d=7 thr=0.2: mF1 0.7173
+  σ=3.0 d=7 thr=0.3: mF1 0.7259
+  σ=3.0 d=7 thr=0.4: mF1 0.7317
+  σ=3.0 d=7 thr=0.5: mF1 0.7219
+  σ=3.0 d=9 thr=0.2: mF1 0.7193
+  σ=3.0 d=9 thr=0.3: mF1 0.7271
+  σ=3.0 d=9 thr=0.4: mF1 0.7321
+  σ=3.0 d=9 thr=0.5: mF1 0.7220
+  σ=4.0 d=3 thr=0.2: mF1 0.7200
+  σ=4.0 d=3 thr=0.3: mF1 0.7286
+  σ=4.0 d=3 thr=0.4: mF1 0.7334
+  σ=4.0 d=3 thr=0.5: mF1 0.6916
+  σ=4.0 d=5 thr=0.2: mF1 0.7207
+  σ=4.0 d=5 thr=0.3: mF1 0.7290
+  σ=4.0 d=5 thr=0.4: mF1 0.7334
+  σ=4.0 d=5 thr=0.5: mF1 0.6915
+  σ=4.0 d=7 thr=0.2: mF1 0.7220
+  σ=4.0 d=7 thr=0.3: mF1 0.7296
+  σ=4.0 d=7 thr=0.4: mF1 0.7333
+  σ=4.0 d=7 thr=0.5: mF1 0.6915
+  σ=4.0 d=9 thr=0.2: mF1 0.7236
+  σ=4.0 d=9 thr=0.3: mF1 0.7303
+  σ=4.0 d=9 thr=0.4: mF1 0.7337
+  σ=4.0 d=9 thr=0.5: mF1 0.6914
+  σ=5.0 d=3 thr=0.2: mF1 0.7255
+  σ=5.0 d=3 thr=0.3: mF1 0.7322
+  σ=5.0 d=3 thr=0.4: mF1 0.7304
+  σ=5.0 d=3 thr=0.5: mF1 0.5230
+  σ=5.0 d=5 thr=0.2: mF1 0.7257
+  σ=5.0 d=5 thr=0.3: mF1 0.7324
+  σ=5.0 d=5 thr=0.4: mF1 0.7304
+  σ=5.0 d=5 thr=0.5: mF1 0.5230
+  σ=5.0 d=7 thr=0.2: mF1 0.7264
+  σ=5.0 d=7 thr=0.3: mF1 0.7324
+  σ=5.0 d=7 thr=0.4: mF1 0.7304
+  σ=5.0 d=7 thr=0.5: mF1 0.5230
+  σ=5.0 d=9 thr=0.2: mF1 0.7268
+  σ=5.0 d=9 thr=0.3: mF1 0.7323
+  σ=5.0 d=9 thr=0.4: mF1 0.7302
+  σ=5.0 d=9 thr=0.5: mF1 0.5230
+[선택] {'sigma': 4.0, 'min_distance': 9, 'threshold': 0.4, 'precision_BC': 0.6213, 'recall_BC': 0.7202, 'f1_BC': 0.6671, 'precision_TC': 0.8095, 'recall_TC': 0.7911, 'f1_TC': 0.8002, 'mF1': 0.7337} → /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/8n2ryxj2vvgj/root/repo/outputs/m2/final_ha_s6_l0.5_ft-from-s6-l0.9/postprocess.json
+[진단] M2
+  BC  0-14:      2개, 누락 50.0%, 오분류 0.0% | 합침 0 / 약함 1
+  BC 14-30:   1895개, 누락 23.8%, 오분류 16.9% | 합침 29 / 약함 423
+  BC   30+:   6503개, 누락 11.6%, 오분류 12.7% | 합침 10 / 약함 741
+  TC  0-14:     56개, 누락 55.4%, 오분류 0.0% | 합침 9 / 약함 22
+  TC 14-30:   5563개, 누락 23.1%, 오분류 5.1% | 합침 76 / 약함 1209
+  TC   30+:  10693개, 누락 7.9%, 오분류 9.0% | 합침 17 / 약함 829
+  중복 75 / 오검출 4259 / 예측 25680 | 가까움-멂 누락률 차이 BC +12.3%, TC +15.2%
+[진단] 비교 (M0, 원인 구분 없음)
+  BC  0-14:      2개, 누락 50.0%, 오분류 0.0%
+  BC 14-30:   1895개, 누락 36.7%, 오분류 14.0%
+  BC   30+:   6503개, 누락 26.3%, 오분류 11.5%
+  TC  0-14:     56개, 누락 62.5%, 오분류 0.0%
+  TC 14-30:   5563개, 누락 32.2%, 오분류 5.9%
+  TC   30+:  10693개, 누락 14.8%, 오분류 7.2%
+  중복 87 / 오검출 2480 / 예측 21464 | 가까움-멂 누락률 차이 BC +10.3%, TC +17.4%
+[결과] val: 세포 mF1 0.7337 (BC 0.6671, TC 0.8002) | 조직 mIoU 0.8280 (BG 0.8559, CA 0.8001)
+  bladder          29쌍  mF1 0.6595
+  endometrium      29쌍  mF1 0.7794
+  head-and-neck     9쌍  mF1 0.6716
+  kidney           41쌍  mF1 0.7099
+  prostate         17쌍  mF1 0.6873
+  stomach          12쌍  mF1 0.7229
+[공식 val] final_ha_s6_l0.5_ft-from-s6-l0.9: mF1 0.7337
+[완료] 10.13h. 결과: /root/m2_search_ha
+[종료] 2026-11-15 18:02:46
+lrwxrwxrwx 1 root root   77 Nov 15 07:50 /root/m2_search_ha -> /mnt/vessl/w4mgiwbkimmo-emptydir-workdir-x0nyb/as9g937wladi/root/m2_search_ha
+
+/root/m2_search_ha/candidates/search_ha_s4_l0.9:
+total 1188
+drwxr-xr-x 2 root root   4096 Nov 15 09:21 .
+drwxr-xr-x 9 root root   4096 Nov 15 14:32 ..
+-rw-r--r-- 1 root root   1962 Nov 15 09:21 close_cells_holdout.json
+-rw-r--r-- 1 root root   1948 Nov 15 09:21 close_cells_select.json
+-rw-r--r-- 1 root root   2730 Nov 15 07:55 config.json
+-rw-r--r-- 1 root root   2307 Nov 15 09:21 eval_holdout.json
+-rw-r--r-- 1 root root 852078 Nov 15 09:21 eval_holdout_per_image.json
+-rw-r--r-- 1 root root   2307 Nov 15 09:21 eval_select.json
+-rw-r--r-- 1 root root 293523 Nov 15 09:21 eval_select_per_image.json
+-rw-r--r-- 1 root root   6903 Nov 15 09:05 history.csv
+-rw-r--r-- 1 root root   7083 Nov 15 09:05 log.txt
+-rw-r--r-- 1 root root  17109 Nov 15 09:20 postprocess.json
+
+/root/m2_search_ha/candidates/search_ha_s5_l0.9_ft-from-s6:
+total 1156
+drwxr-xr-x 2 root root   4096 Nov 15 13:28 .
+drwxr-xr-x 9 root root   4096 Nov 15 14:32 ..
+-rw-r--r-- 1 root root   1973 Nov 15 13:28 close_cells_holdout.json
+-rw-r--r-- 1 root root   1948 Nov 15 13:28 close_cells_select.json
+-rw-r--r-- 1 root root   2861 Nov 15 12:58 config.json
+-rw-r--r-- 1 root root   2320 Nov 15 13:28 eval_holdout.json
+-rw-r--r-- 1 root root 832378 Nov 15 13:28 eval_holdout_per_image.json
+-rw-r--r-- 1 root root   2307 Nov 15 13:28 eval_select.json
+-rw-r--r-- 1 root root 288037 Nov 15 13:28 eval_select_per_image.json
+-rw-r--r-- 1 root root   1487 Nov 15 13:12 history.csv
+-rw-r--r-- 1 root root   1960 Nov 15 13:12 log.txt
+-rw-r--r-- 1 root root  17172 Nov 15 13:28 postprocess.json
+
+/root/m2_search_ha/candidates/search_ha_s6_l0.5_ft-from-l0.9:
+total 252720
+drwxr-xr-x 2 root root      4096 Nov 15 14:32 .
+drwxr-xr-x 9 root root      4096 Nov 15 14:32 ..
+-rw-r--r-- 1 root root 257617100 Nov 15 14:05 best.pt
+-rw-r--r-- 1 root root      1972 Nov 15 14:32 close_cells_holdout.json
+-rw-r--r-- 1 root root      1951 Nov 15 14:31 close_cells_select.json
+-rw-r--r-- 1 root root      2863 Nov 15 14:01 config.json
+-rw-r--r-- 1 root root      2325 Nov 15 14:32 eval_holdout.json
+-rw-r--r-- 1 root root    822223 Nov 15 14:32 eval_holdout_per_image.json
+-rw-r--r-- 1 root root      2307 Nov 15 14:31 eval_select.json
+-rw-r--r-- 1 root root    285674 Nov 15 14:31 eval_select_per_image.json
+-rw-r--r-- 1 root root      1488 Nov 15 14:15 history.csv
+-rw-r--r-- 1 root root      1862 Nov 15 14:15 log.txt
+-rw-r--r-- 1 root root     17154 Nov 15 14:31 postprocess.json
+
+/root/m2_search_ha/candidates/search_ha_s6_l0.9:
+total 1160
+drwxr-xr-x 2 root root   4096 Nov 15 10:52 .
+drwxr-xr-x 9 root root   4096 Nov 15 14:32 ..
+-rw-r--r-- 1 root root   1974 Nov 15 10:52 close_cells_holdout.json
+-rw-r--r-- 1 root root   1948 Nov 15 10:51 close_cells_select.json
+-rw-r--r-- 1 root root   2730 Nov 15 09:21 config.json
+-rw-r--r-- 1 root root   2312 Nov 15 10:52 eval_holdout.json
+-rw-r--r-- 1 root root 828340 Nov 15 10:52 eval_holdout_per_image.json
+-rw-r--r-- 1 root root   2293 Nov 15 10:51 eval_select.json
+-rw-r--r-- 1 root root 288238 Nov 15 10:51 eval_select_per_image.json
+-rw-r--r-- 1 root root   6897 Nov 15 10:36 history.csv
+-rw-r--r-- 1 root root   7015 Nov 15 10:36 log.txt
+-rw-r--r-- 1 root root  17130 Nov 15 10:51 postprocess.json
+
+/root/m2_search_ha/candidates/search_ha_s6_l0.9_ft-control:
+total 1136
+drwxr-xr-x 2 root root   4096 Nov 15 12:58 .
+drwxr-xr-x 9 root root   4096 Nov 15 14:32 ..
+-rw-r--r-- 1 root root   1968 Nov 15 12:58 close_cells_holdout.json
+-rw-r--r-- 1 root root   1950 Nov 15 12:57 close_cells_select.json
+-rw-r--r-- 1 root root   2861 Nov 15 12:27 config.json
+-rw-r--r-- 1 root root   2324 Nov 15 12:58 eval_holdout.json
+-rw-r--r-- 1 root root 819062 Nov 15 12:58 eval_holdout_per_image.json
+-rw-r--r-- 1 root root   2307 Nov 15 12:57 eval_select.json
+-rw-r--r-- 1 root root 284427 Nov 15 12:57 eval_select_per_image.json
+-rw-r--r-- 1 root root   1489 Nov 15 12:41 history.csv
+-rw-r--r-- 1 root root   1824 Nov 15 12:41 log.txt
+-rw-r--r-- 1 root root  17140 Nov 15 12:57 postprocess.json
+
+/root/m2_search_ha/candidates/search_ha_s7_l0.9_ft-from-s6:
+total 1152
+drwxr-xr-x 2 root root   4096 Nov 15 14:00 .
+drwxr-xr-x 9 root root   4096 Nov 15 14:32 ..
+-rw-r--r-- 1 root root   1972 Nov 15 14:00 close_cells_holdout.json
+-rw-r--r-- 1 root root   1944 Nov 15 14:00 close_cells_select.json
+-rw-r--r-- 1 root root   2861 Nov 15 13:29 config.json
+-rw-r--r-- 1 root root   2319 Nov 15 14:00 eval_holdout.json
+-rw-r--r-- 1 root root 830550 Nov 15 14:00 eval_holdout_per_image.json
+-rw-r--r-- 1 root root   2310 Nov 15 14:00 eval_select.json
+-rw-r--r-- 1 root root 288975 Nov 15 14:00 eval_select_per_image.json
+-rw-r--r-- 1 root root   1484 Nov 15 13:44 history.csv
+-rw-r--r-- 1 root root   1824 Nov 15 13:44 log.txt
+-rw-r--r-- 1 root root  17155 Nov 15 14:00 postprocess.json
+
+/root/m2_search_ha/candidates/search_ha_s8_l0.9:
+total 1188
+drwxr-xr-x 2 root root   4096 Nov 15 12:26 .
+drwxr-xr-x 9 root root   4096 Nov 15 14:32 ..
+-rw-r--r-- 1 root root   1974 Nov 15 12:26 close_cells_holdout.json
+-rw-r--r-- 1 root root   1947 Nov 15 12:26 close_cells_select.json
+-rw-r--r-- 1 root root   2730 Nov 15 10:52 config.json
+-rw-r--r-- 1 root root   2313 Nov 15 12:26 eval_holdout.json
+-rw-r--r-- 1 root root 854200 Nov 15 12:26 eval_holdout_per_image.json
+-rw-r--r-- 1 root root   2296 Nov 15 12:26 eval_select.json
+-rw-r--r-- 1 root root 292645 Nov 15 12:26 eval_select_per_image.json
+-rw-r--r-- 1 root root   6890 Nov 15 12:10 history.csv
+-rw-r--r-- 1 root root   7049 Nov 15 12:10 log.txt
+-rw-r--r-- 1 root root  17138 Nov 15 12:26 postprocess.json
+
+/root/m2_search_ha/final/final_ha_s6_l0.5_ft-from-s6-l0.9:
+total 252596
+drwxr-xr-x 2 root root      4096 Nov 15 18:02 .
+drwxr-xr-x 4 root root      4096 Nov 15 18:02 ..
+-rw-r--r-- 1 root root 257616844 Nov 15 16:50 best.pt
+-rw-r--r-- 1 root root      3892 Nov 15 18:02 close_cells_val.json
+-rw-r--r-- 1 root root      2661 Nov 15 16:42 config.json
+-rw-r--r-- 1 root root      2253 Nov 15 18:02 eval_val.json
+-rw-r--r-- 1 root root    989055 Nov 15 18:02 eval_val_per_image.json
+-rw-r--r-- 1 root root      1498 Nov 15 17:08 history.csv
+-rw-r--r-- 1 root root      1829 Nov 15 17:08 log.txt
+-rw-r--r-- 1 root root     17142 Nov 15 18:01 postprocess.json
+
+/root/m2_search_ha/final/final_ha_s6_l0.9_base:
+total 251608
+drwxr-xr-x 2 root root      4096 Nov 15 18:02 .
+drwxr-xr-x 4 root root      4096 Nov 15 18:02 ..
+-rw-r--r-- 1 root root 257616716 Nov 15 15:47 best.pt
+-rw-r--r-- 1 root root      2526 Nov 15 14:32 config.json
+-rw-r--r-- 1 root root      6944 Nov 15 16:42 history.csv
+-rw-r--r-- 1 root root      6954 Nov 15 16:42 log.txt

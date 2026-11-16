@@ -1,0 +1,85 @@
+{
+  "postprocess": {
+    "sigma": 4.0,
+    "min_distance": 5,
+    "threshold": 0.4
+  },
+  "M2": {
+    "by_class_and_neighbor": [
+      {
+        "class": "BC",
+        "neighbor_bin": "0-14",
+        "cells": 14,
+        "missed": 7,
+        "misclassified": 1,
+        "peak_merged": 3,
+        "weak_response": 4,
+        "miss_rate": 0.5,
+        "misclassified_rate": 0.0714
+      },
+      {
+        "class": "BC",
+        "neighbor_bin": "14-30",
+        "cells": 1535,
+        "missed": 386,
+        "misclassified": 128,
+        "peak_merged": 72,
+        "weak_response": 314,
+        "miss_rate": 0.2515,
+        "misclassified_rate": 0.0834
+      },
+      {
+        "class": "BC",
+        "neighbor_bin": "30+",
+        "cells": 6098,
+        "missed": 905,
+        "misclassified": 605,
+        "peak_merged": 50,
+        "weak_response": 855,
+        "miss_rate": 0.1484,
+        "misclassified_rate": 0.0992
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "0-14",
+        "cells": 58,
+        "missed": 29,
+        "misclassified": 3,
+        "peak_merged": 16,
+        "weak_response": 13,
+        "miss_rate": 0.5,
+        "misclassified_rate": 0.0517
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "14-30",
+        "cells": 3761,
+        "missed": 1099,
+        "misclassified": 338,
+        "peak_merged": 181,
+        "weak_response": 918,
+        "miss_rate": 0.2922,
+        "misclassified_rate": 0.0899
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "30+",
+        "cells": 9010,
+        "missed": 1030,
+        "misclassified": 1024,
+        "peak_merged": 69,
+        "weak_response": 961,
+        "miss_rate": 0.1143,
+        "misclassified_rate": 0.1137
+      }
+    ],
+    "totals": {
+      "duplicate": 144,
+      "false_positive": 3800,
+      "predictions": 20964,
+      "BC_close_minus_far_miss_rate": 0.1031,
+      "TC_close_minus_far_miss_rate": 0.1779
+    },
+    "cause_split": true
+  }
+}

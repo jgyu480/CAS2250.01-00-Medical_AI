@@ -1,0 +1,188 @@
+{
+  "files": {
+    "M0": "results/m0_dicefix_seed42/eval_val_per_image.json",
+    "G": "results/m2_sigma_search/gaussian/final/eval_val_per_image.json",
+    "GA": "results/m2_sigma_search/ha/final/eval_val_per_image.json"
+  },
+  "bootstrap": {
+    "unit": "TCGA patient when available, otherwise slide",
+    "repeats": 2000,
+    "seed": 42
+  },
+  "pairs": {
+    "M0:G": {
+      "images": 137,
+      "clusters": 46,
+      "mF1_A": 0.7033,
+      "mF1_B": 0.7339,
+      "diff": 0.0305,
+      "ci95": [
+        0.0103,
+        0.0468
+      ],
+      "missed": {
+        "all": {
+          "cells": 24712,
+          "missed_A": 0.2353,
+          "missed_B": 0.1332,
+          "both": 0.1248,
+          "only_A": 0.1105,
+          "only_B": 0.0084,
+          "overlap": 0.5123
+        },
+        "BC_14-30": {
+          "cells": 1895,
+          "missed_A": 0.3668,
+          "missed_B": 0.2201,
+          "both": 0.2042,
+          "only_A": 0.1625,
+          "only_B": 0.0158,
+          "overlap": 0.5338
+        },
+        "BC_30+": {
+          "cells": 6502,
+          "missed_A": 0.2633,
+          "missed_B": 0.1147,
+          "both": 0.1084,
+          "only_A": 0.1549,
+          "only_B": 0.0063,
+          "overlap": 0.4022
+        },
+        "TC_14-30": {
+          "cells": 5563,
+          "missed_A": 0.3216,
+          "missed_B": 0.2231,
+          "both": 0.2091,
+          "only_A": 0.1125,
+          "only_B": 0.014,
+          "overlap": 0.6229
+        },
+        "TC_30+": {
+          "cells": 10693,
+          "missed_A": 0.1479,
+          "missed_B": 0.08,
+          "both": 0.0747,
+          "only_A": 0.0732,
+          "only_B": 0.0052,
+          "overlap": 0.4878
+        }
+      }
+    },
+    "M0:GA": {
+      "images": 137,
+      "clusters": 46,
+      "mF1_A": 0.7033,
+      "mF1_B": 0.7337,
+      "diff": 0.0303,
+      "ci95": [
+        0.0095,
+        0.0468
+      ],
+      "missed": {
+        "all": {
+          "cells": 24712,
+          "missed_A": 0.2353,
+          "missed_B": 0.1362,
+          "both": 0.1261,
+          "only_A": 0.1092,
+          "only_B": 0.0101,
+          "overlap": 0.514
+        },
+        "BC_14-30": {
+          "cells": 1895,
+          "missed_A": 0.3668,
+          "missed_B": 0.2385,
+          "both": 0.2195,
+          "only_A": 0.1472,
+          "only_B": 0.019,
+          "overlap": 0.5691
+        },
+        "BC_30+": {
+          "cells": 6502,
+          "missed_A": 0.2633,
+          "missed_B": 0.1153,
+          "both": 0.1084,
+          "only_A": 0.1549,
+          "only_B": 0.0069,
+          "overlap": 0.4013
+        },
+        "TC_14-30": {
+          "cells": 5563,
+          "missed_A": 0.3216,
+          "missed_B": 0.231,
+          "both": 0.2127,
+          "only_A": 0.1089,
+          "only_B": 0.0183,
+          "overlap": 0.6256
+        },
+        "TC_30+": {
+          "cells": 10693,
+          "missed_A": 0.1479,
+          "missed_B": 0.0791,
+          "both": 0.0729,
+          "only_A": 0.075,
+          "only_B": 0.0062,
+          "overlap": 0.4733
+        }
+      }
+    },
+    "G:GA": {
+      "images": 137,
+      "clusters": 46,
+      "mF1_A": 0.7339,
+      "mF1_B": 0.7337,
+      "diff": -0.0002,
+      "ci95": [
+        -0.0054,
+        0.0056
+      ],
+      "missed": {
+        "all": {
+          "cells": 24712,
+          "missed_A": 0.1332,
+          "missed_B": 0.1362,
+          "both": 0.1187,
+          "only_A": 0.0145,
+          "only_B": 0.0175,
+          "overlap": 0.7874
+        },
+        "BC_14-30": {
+          "cells": 1895,
+          "missed_A": 0.2201,
+          "missed_B": 0.2385,
+          "both": 0.1995,
+          "only_A": 0.0206,
+          "only_B": 0.0391,
+          "overlap": 0.7699
+        },
+        "BC_30+": {
+          "cells": 6502,
+          "missed_A": 0.1147,
+          "missed_B": 0.1153,
+          "both": 0.095,
+          "only_A": 0.0197,
+          "only_B": 0.0203,
+          "overlap": 0.7039
+        },
+        "TC_14-30": {
+          "cells": 5563,
+          "missed_A": 0.2231,
+          "missed_B": 0.231,
+          "both": 0.2082,
+          "only_A": 0.0149,
+          "only_B": 0.0228,
+          "overlap": 0.8465
+        },
+        "TC_30+": {
+          "cells": 10693,
+          "missed_A": 0.08,
+          "missed_B": 0.0791,
+          "both": 0.07,
+          "only_A": 0.0099,
+          "only_B": 0.0091,
+          "overlap": 0.7868
+        }
+      }
+    }
+  }
+}

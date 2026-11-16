@@ -1,0 +1,85 @@
+{
+  "postprocess": {
+    "sigma": 2.0,
+    "min_distance": 9,
+    "threshold": 0.4
+  },
+  "M2": {
+    "by_class_and_neighbor": [
+      {
+        "class": "BC",
+        "neighbor_bin": "0-14",
+        "cells": 14,
+        "missed": 6,
+        "misclassified": 0,
+        "peak_merged": 1,
+        "weak_response": 5,
+        "miss_rate": 0.4286,
+        "misclassified_rate": 0.0
+      },
+      {
+        "class": "BC",
+        "neighbor_bin": "14-30",
+        "cells": 1535,
+        "missed": 368,
+        "misclassified": 157,
+        "peak_merged": 29,
+        "weak_response": 339,
+        "miss_rate": 0.2397,
+        "misclassified_rate": 0.1023
+      },
+      {
+        "class": "BC",
+        "neighbor_bin": "30+",
+        "cells": 6098,
+        "missed": 845,
+        "misclassified": 687,
+        "peak_merged": 20,
+        "weak_response": 825,
+        "miss_rate": 0.1386,
+        "misclassified_rate": 0.1127
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "0-14",
+        "cells": 58,
+        "missed": 28,
+        "misclassified": 2,
+        "peak_merged": 9,
+        "weak_response": 19,
+        "miss_rate": 0.4828,
+        "misclassified_rate": 0.0345
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "14-30",
+        "cells": 3761,
+        "missed": 1090,
+        "misclassified": 215,
+        "peak_merged": 100,
+        "weak_response": 990,
+        "miss_rate": 0.2898,
+        "misclassified_rate": 0.0572
+      },
+      {
+        "class": "TC",
+        "neighbor_bin": "30+",
+        "cells": 9010,
+        "missed": 1072,
+        "misclassified": 1039,
+        "peak_merged": 49,
+        "weak_response": 1023,
+        "miss_rate": 0.119,
+        "misclassified_rate": 0.1153
+      }
+    ],
+    "totals": {
+      "duplicate": 180,
+      "false_positive": 4062,
+      "predictions": 21309,
+      "BC_close_minus_far_miss_rate": 0.1011,
+      "TC_close_minus_far_miss_rate": 0.1708
+    },
+    "cause_split": true
+  }
+}

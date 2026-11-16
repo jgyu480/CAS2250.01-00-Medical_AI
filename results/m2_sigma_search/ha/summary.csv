@@ -1,0 +1,8 @@
+name,stage,sigma,lambda,init_from_name,status,select_mF1,mF1,f1_BC,f1_TC,BC_miss_14_30,TC_miss_14_30,BC_miss_30,TC_miss_30,false_positive,postprocess,hours
+search_ha_s4_l0.9,coarse,4.0,0.9,,done,0.7607,0.7144,0.665,0.7639,0.2085,0.2752,0.0818,0.0956,4694,"{""sigma"": 3.0, ""min_distance"": 9, ""threshold"": 0.3}",1.44
+search_ha_s6_l0.9,coarse,6.0,0.9,,done,0.7829,0.7215,0.6758,0.7672,0.245,0.2885,0.1127,0.1118,4027,"{""sigma"": 4.0, ""min_distance"": 3, ""threshold"": 0.3}",1.51
+search_ha_s8_l0.9,coarse,8.0,0.9,,done,0.7857,0.7194,0.6742,0.7646,0.2033,0.2906,0.0741,0.1016,4804,"{""sigma"": 4.0, ""min_distance"": 3, ""threshold"": 0.4}",1.57
+search_ha_s6_l0.9_ft-control,ft-control,6.0,0.9,search_ha_s6_l0.9,done,0.7773,0.7237,0.6759,0.7715,0.2632,0.2989,0.1279,0.11,3822,"{""sigma"": 5.0, ""min_distance"": 3, ""threshold"": 0.3}",0.52
+search_ha_s5_l0.9_ft-from-s6,ft,5.0,0.9,search_ha_s6_l0.9,done,0.7759,0.7232,0.6751,0.7714,0.2339,0.2869,0.1107,0.1088,4169,"{""sigma"": 4.0, ""min_distance"": 5, ""threshold"": 0.3}",0.51
+search_ha_s7_l0.9_ft-from-s6,ft,7.0,0.9,search_ha_s6_l0.9,done,0.7759,0.7222,0.6749,0.7695,0.2391,0.2829,0.1195,0.1079,4100,"{""sigma"": 3.0, ""min_distance"": 7, ""threshold"": 0.4}",0.53
+search_ha_s6_l0.5_ft-from-l0.9,ft,6.0,0.5,search_ha_s6_l0.9,done,0.7771,0.7241,0.6768,0.7715,0.2567,0.2965,0.1238,0.1083,3900,"{""sigma"": 5.0, ""min_distance"": 3, ""threshold"": 0.3}",0.52

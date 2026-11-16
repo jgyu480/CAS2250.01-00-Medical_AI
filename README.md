@@ -12,7 +12,7 @@ M0~M3로 두 작업 사이의 정보 전달 방식과 gradient 처리 효과를 
 | M0 | [구현 문서](docs/m0_implementation.md) | [Dice 수정 실험](results/m0_dicefix_seed42/) |
 | M1 | [모델](models/M1/) | [Validation 결과](results/m1_dicefix_seed42/) |
 | M1-1 | [모델](models/M1_1/) · [설치 안내](INSTALL_M1_1.md) | [평가·게이트 분석](results/m1_1/) |
-| M2 | [실행 안내](models/M2/README.md) · [VESSL 설정](vessl/m2_run.yaml) | [세 조건 비교](results/m2_s6_l0.9_seed42/comparison.json) · [전체 결과](results/m2_s6_l0.9_seed42/) |
+| M2 | [실행 안내](models/M2/README.md) · [VESSL 설정](vessl/m2_run.yaml) | [세 조건 비교](results/m2_s6_l0.9_seed42/comparison.json) · [전체 결과](results/m2_s6_l0.9_seed42/) · [G·GA 계수 탐색](results/m2_sigma_search/) |
 
 별도 실험 브랜치 — [M0 Dual Gate](../../tree/experiment/m0-dual-gate) · [M0 PCGrad Gate](../../tree/experiment/m0-pcgrad-gate)
 
@@ -315,11 +315,26 @@ python scripts/eval_m2.py --checkpoint outputs/m2/<run>/best.pt --split val --tu
 - 남은 누락은 대부분 피크 합침이 아니라 약한 반응이다.
 - val로 checkpoint·후처리를 골랐고 seed 1개다.
 
+### 확인한 결과 (11/14~16, G·GA 계수 탐색)
+
+앙상블에 쓸 G와 GA의 σ·λ를 골랐다. 공식 val·test를 쓰지 않으려고 공식 train을 환자 단위로 fit 233 / select 40 / holdout 127장으로 나눠 holdout mF1로 골랐고, 고른 계수로 공식 train에서 다시 학습해 공식 val을 한 번 계산했다.
+결과 파일 `results/m2_sigma_search/`, 실행 `scripts/run_m2_search.sh` (`vessl/m2_search_g.yaml`, `m2_search_ga.yaml`, `m2_confirm.yaml`), 쌍 비교 `scripts/compare_m2_pairs.py`.
+
+| | M0 | G (σ=6 → σ=5 파인튜닝) | GA (σ=6, λ=0.9 → 0.5 파인튜닝) |
+|---|---|---|---|
+| holdout mF1 (계수 선택) | – | 0.7247 | 0.7241 |
+| 공식 val mF1 | 0.7033 | 0.7339 | 0.7337 |
+| 14–30px 누락률 BC / TC (공식 val) | 36.7% / 32.2% | 22.0% / 22.3% | 23.9% / 23.1% |
+
+- σ 5~8에서는 성능이 평탄하다. 후보 간 차이(0.003~0.005)가 seed만 바꿨을 때의 차이(최대 0.010)보다 작다. 고른 계수는 규칙(holdout 최고)에 따른 것이다.
+- G와 GA는 공식 val 성능이 같고(차이 −0.0002, 95% 구간 −0.0054 ~ +0.0056) 놓치는 세포도 79%가 겹친다. G를 GA로 바꾸는 것보다 seed를 바꾸는 쪽이 모델을 더 다르게 만든다.
+- 후처리 격자를 넓혀도 고른 값은 바뀌지 않았다.
+
 ### 남은 작업
 
-- 민규 점검 후 방향 결정
-- 후처리 격자 넓히기, H_A 같은 후처리 재진단, M0 확률지도 원인 구분
-- 방향을 정한 조건만 seed 43·44, 이후 test 1회
+- 앙상블에 넣을 모델 확정 (민규)
+- 가까운 세포 사례 분석 (점수 지도, `best.pt` 필요)
+- 설정 고정 후 test 1회
 
 자세한 내용: [models/M2/README.md](models/M2/README.md)
 <!-- M2_HEATMAP_END -->

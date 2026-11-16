@@ -1,0 +1,218 @@
+{
+  "mode": "gaussian",
+  "split_file": "configs/train_split_seed42.json",
+  "parts": {
+    "train": "fit",
+    "select": "select",
+    "compare": "holdout"
+  },
+  "rule": "holdout 세포 mF1이 가장 높은 후보 (공식 val·test 미사용)",
+  "hours": 9.62,
+  "candidates": [
+    {
+      "name": "search_gaussian_s4_l0.9",
+      "stage": "coarse",
+      "sigma": 4.0,
+      "lambda": 0.9,
+      "init_from": null,
+      "init_from_name": null,
+      "status": "done",
+      "hours": 1.44,
+      "select_mF1": 0.7787,
+      "mF1": 0.7046,
+      "f1_BC": 0.6617,
+      "f1_TC": 0.7474,
+      "epoch": 19,
+      "BC_miss_14_30": 0.2326,
+      "TC_miss_14_30": 0.3031,
+      "BC_miss_30": 0.1358,
+      "TC_miss_30": 0.1281,
+      "false_positive": 3829,
+      "postprocess": {
+        "sigma": 3.0,
+        "min_distance": 7,
+        "threshold": 0.3
+      }
+    },
+    {
+      "name": "search_gaussian_s6_l0.9",
+      "stage": "coarse",
+      "sigma": 6.0,
+      "lambda": 0.9,
+      "init_from": null,
+      "init_from_name": null,
+      "status": "done",
+      "hours": 1.53,
+      "select_mF1": 0.779,
+      "mF1": 0.7175,
+      "f1_BC": 0.6682,
+      "f1_TC": 0.7669,
+      "epoch": 16,
+      "BC_miss_14_30": 0.2749,
+      "TC_miss_14_30": 0.3129,
+      "BC_miss_30": 0.1541,
+      "TC_miss_30": 0.1343,
+      "false_positive": 3353,
+      "postprocess": {
+        "sigma": 3.0,
+        "min_distance": 7,
+        "threshold": 0.4
+      }
+    },
+    {
+      "name": "search_gaussian_s8_l0.9",
+      "stage": "coarse",
+      "sigma": 8.0,
+      "lambda": 0.9,
+      "init_from": null,
+      "init_from_name": null,
+      "status": "done",
+      "hours": 1.58,
+      "select_mF1": 0.7796,
+      "mF1": 0.7125,
+      "f1_BC": 0.6666,
+      "f1_TC": 0.7584,
+      "epoch": 18,
+      "BC_miss_14_30": 0.2339,
+      "TC_miss_14_30": 0.2927,
+      "BC_miss_30": 0.1089,
+      "TC_miss_30": 0.1079,
+      "false_positive": 4383,
+      "postprocess": {
+        "sigma": 2.0,
+        "min_distance": 9,
+        "threshold": 0.5
+      }
+    },
+    {
+      "name": "search_gaussian_s6_l0.9_ft-control",
+      "stage": "ft-control",
+      "sigma": 6.0,
+      "lambda": 0.9,
+      "init_from": "/mnt/vessl/y5b8cg989v47-emptydir-workdir-vmb1d/jn49hdfkufnj/root/repo/outputs/m2/search_gaussian_s6_l0.9/best.pt",
+      "init_from_name": "search_gaussian_s6_l0.9",
+      "status": "done",
+      "hours": 0.54,
+      "select_mF1": 0.7811,
+      "mF1": 0.7223,
+      "f1_BC": 0.673,
+      "f1_TC": 0.7715,
+      "epoch": 6,
+      "BC_miss_14_30": 0.2202,
+      "TC_miss_14_30": 0.2856,
+      "BC_miss_30": 0.12,
+      "TC_miss_30": 0.1138,
+      "false_positive": 4061,
+      "postprocess": {
+        "sigma": 3.0,
+        "min_distance": 7,
+        "threshold": 0.4
+      }
+    },
+    {
+      "name": "search_gaussian_s5_l0.9_ft-from-s6",
+      "stage": "ft",
+      "sigma": 5.0,
+      "lambda": 0.9,
+      "init_from": "/mnt/vessl/y5b8cg989v47-emptydir-workdir-vmb1d/jn49hdfkufnj/root/repo/outputs/m2/search_gaussian_s6_l0.9/best.pt",
+      "init_from_name": "search_gaussian_s6_l0.9",
+      "status": "done",
+      "hours": 0.51,
+      "select_mF1": 0.7814,
+      "mF1": 0.7247,
+      "f1_BC": 0.6767,
+      "f1_TC": 0.7728,
+      "epoch": 6,
+      "BC_miss_14_30": 0.2208,
+      "TC_miss_14_30": 0.2797,
+      "BC_miss_30": 0.1086,
+      "TC_miss_30": 0.1082,
+      "false_positive": 4187,
+      "postprocess": {
+        "sigma": 4.0,
+        "min_distance": 5,
+        "threshold": 0.3
+      }
+    },
+    {
+      "name": "search_gaussian_s7_l0.9_ft-from-s6",
+      "stage": "ft",
+      "sigma": 7.0,
+      "lambda": 0.9,
+      "init_from": "/mnt/vessl/y5b8cg989v47-emptydir-workdir-vmb1d/jn49hdfkufnj/root/repo/outputs/m2/search_gaussian_s6_l0.9/best.pt",
+      "init_from_name": "search_gaussian_s6_l0.9",
+      "status": "done",
+      "hours": 0.54,
+      "select_mF1": 0.7811,
+      "mF1": 0.7221,
+      "f1_BC": 0.6722,
+      "f1_TC": 0.7721,
+      "epoch": 8,
+      "BC_miss_14_30": 0.23,
+      "TC_miss_14_30": 0.2901,
+      "BC_miss_30": 0.1235,
+      "TC_miss_30": 0.1132,
+      "false_positive": 3965,
+      "postprocess": {
+        "sigma": 4.0,
+        "min_distance": 3,
+        "threshold": 0.4
+      }
+    }
+  ],
+  "chosen": {
+    "name": "search_gaussian_s5_l0.9_ft-from-s6",
+    "stage": "ft",
+    "sigma": 5.0,
+    "lambda": 0.9,
+    "init_from": "/mnt/vessl/y5b8cg989v47-emptydir-workdir-vmb1d/jn49hdfkufnj/root/repo/outputs/m2/search_gaussian_s6_l0.9/best.pt",
+    "init_from_name": "search_gaussian_s6_l0.9",
+    "status": "done",
+    "hours": 0.51,
+    "select_mF1": 0.7814,
+    "mF1": 0.7247,
+    "f1_BC": 0.6767,
+    "f1_TC": 0.7728,
+    "epoch": 6,
+    "BC_miss_14_30": 0.2208,
+    "TC_miss_14_30": 0.2797,
+    "BC_miss_30": 0.1086,
+    "TC_miss_30": 0.1082,
+    "false_positive": 4187,
+    "postprocess": {
+      "sigma": 4.0,
+      "min_distance": 5,
+      "threshold": 0.3
+    }
+  },
+  "final": {
+    "name": "final_gaussian_s5_l0.9_ft-from-s6-l0.9",
+    "recipe": [
+      "final_gaussian_s6_l0.9_base",
+      "final_gaussian_s5_l0.9_ft-from-s6-l0.9"
+    ],
+    "status": "done",
+    "hours": 3.49,
+    "val": {
+      "loss_cell": 0.9337,
+      "loss_tissue": 0.5555,
+      "loss_total": 1.4891,
+      "precision_BC": 0.6215,
+      "recall_BC": 0.7208,
+      "f1_BC": 0.6675,
+      "precision_TC": 0.8074,
+      "recall_TC": 0.7932,
+      "f1_TC": 0.8002,
+      "mF1": 0.7339,
+      "iou_BG": 0.8526,
+      "iou_CA": 0.7933,
+      "mIoU": 0.823
+    },
+    "postprocess": {
+      "sigma": 3.0,
+      "min_distance": 9,
+      "threshold": 0.4
+    },
+    "epoch": 4
+  }
+}
