@@ -1,0 +1,337 @@
+{
+  "model_order": [
+    "G",
+    "GA",
+    "M0",
+    "M1",
+    "M1-1"
+  ],
+  "checkpoint_sha256": {
+    "G": "971745b587e21d09a6fa4a673bf70329b491b6b9dbbf22d27553d94e149c272e",
+    "GA": "c826b136ff398a970843ed1d540bf60d31595452f54805d8b52b5280eae0a4f6",
+    "M0": "cf446d10c3d0ff86475161912fb2de4eb7a529b604d67e2852f624561e0415a9",
+    "M1": "af5edb37e557696facd90d89fb3fdb53c4fc88a61ea3567e1e8d1146ab15e176",
+    "M1-1": "ed816aaa96764e6ace8595f8b13132e3bfa5946b2f27ff9635f6b4afe7b959bd"
+  },
+  "metadata_sha256": "aec904e02a1724d38963f5f8571d2b21af9bf36012c05c6580e8f94c432d656f",
+  "audit_manifest_sha256": "a7239bbcfa7d1193d67661ddbf1988bb58a5cc2f818b14e275e73e71a4ac90cf",
+  "repo_commit": "14f930ac47d69bb9abc6d86c6abcb5bdaf35a8da",
+  "adapter_commit": "f20e9c6e1b39aa9b0774456744f77b210fe705ab",
+  "implementation_sha256": "63b5eacd6bd3044cac78a21cf0bcdfb4a5cb982dfc087d294b8415a7ffa7187e",
+  "runtime": {
+    "torch": "2.3.1+cu121",
+    "cuda": "12.1",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 3090"
+  },
+  "tta": "D4: identity plus 7 spatial transforms for both cell and tissue",
+  "cache_layout": "1024 BC/TC fp16 per model; 256 full and aligned CA fp16 per model; full cell TTA mean fp32",
+  "data_root": "/root/m2_overnight/assets/ocelot2023_v1.0.1",
+  "source_run_json_sha256": "97ee3e670e0c30d8ddaff6a758aca9613451938a7ff6e18b33fe0c4163bf4a2b",
+  "checkpoint_paths": {
+    "G": "/root/ocelot_ensemble/experiments/m3_context_d4_retrained_val_seed42/m2_training/m2/final_gaussian_s5_l0.9_ft-from-s6-l0.9/best.pt",
+    "GA": "/root/ocelot_ensemble/experiments/m3_context_d4_retrained_val_seed42/m2_training/m2/final_ha_s6_l0.5_ft-from-s6-l0.9/best.pt",
+    "M0": "/root/ocelot_ensemble/outputs/m0/M0_recovery_seed42/best.pt",
+    "M1": "/root/ocelot_ensemble/outputs/m1/M1_recovery_seed42/best.pt",
+    "M1-1": "/root/ocelot_ensemble/outputs/m1_1/M1_1_recovery_seed42/best.pt"
+  },
+  "cache": "/root/ocelot_ensemble/m3_d4_cache/21d9e7f8184edcc1500f4ec4",
+  "seed": 42,
+  "epochs": 12,
+  "fit_ids": [
+    "401",
+    "402",
+    "403",
+    "404",
+    "405",
+    "406",
+    "407",
+    "412",
+    "413",
+    "414",
+    "415",
+    "416",
+    "417",
+    "418",
+    "419",
+    "420",
+    "424",
+    "425",
+    "426",
+    "427",
+    "428",
+    "429",
+    "430",
+    "431",
+    "432",
+    "433",
+    "434",
+    "435",
+    "436",
+    "437",
+    "438",
+    "439",
+    "440",
+    "441",
+    "442",
+    "443",
+    "444",
+    "445",
+    "446",
+    "447",
+    "448",
+    "449",
+    "450",
+    "451",
+    "452",
+    "453",
+    "454",
+    "455",
+    "456",
+    "457",
+    "458",
+    "459",
+    "473",
+    "474",
+    "475",
+    "476",
+    "477",
+    "478",
+    "479",
+    "480",
+    "481",
+    "482",
+    "486",
+    "487",
+    "488",
+    "489",
+    "490",
+    "491",
+    "492",
+    "493",
+    "497",
+    "498",
+    "499",
+    "500",
+    "501",
+    "502",
+    "503",
+    "504",
+    "505",
+    "506",
+    "507",
+    "508",
+    "509",
+    "510",
+    "511",
+    "512",
+    "513",
+    "514",
+    "515",
+    "516",
+    "517",
+    "518",
+    "522",
+    "523",
+    "527",
+    "528",
+    "534",
+    "535",
+    "536"
+  ],
+  "tune_ids": [
+    "408",
+    "409",
+    "410",
+    "411",
+    "421",
+    "422",
+    "423",
+    "460",
+    "461",
+    "462",
+    "463",
+    "464",
+    "465",
+    "466",
+    "467",
+    "468",
+    "469",
+    "470",
+    "471",
+    "472",
+    "483",
+    "484",
+    "485",
+    "494",
+    "495",
+    "496",
+    "519",
+    "520",
+    "521",
+    "524",
+    "525",
+    "526",
+    "529",
+    "530",
+    "531",
+    "532",
+    "533",
+    "537"
+  ],
+  "m2_selection_commit": "7ff09e00fe7e296f11abad5e4e6b1e1841613e77",
+  "m2_final_checkpoints": {
+    "G": {
+      "mode": "gaussian",
+      "sigma": 5.0,
+      "lambda": 0.9,
+      "run_name": "final_gaussian_s5_l0.9_ft-from-s6-l0.9",
+      "best_epoch": 4,
+      "seed": 42
+    },
+    "GA": {
+      "mode": "ha",
+      "sigma": 6.0,
+      "lambda": 0.5,
+      "run_name": "final_ha_s6_l0.5_ft-from-s6-l0.9",
+      "best_epoch": 5,
+      "seed": 42
+    }
+  },
+  "evaluation_splits": [
+    "val"
+  ],
+  "split_rule": "case_grouped_seed42",
+  "validation_note": "Combiner uses official val split; it may overlap base checkpoint selection.",
+  "fixed_ring_offsets": [
+    [
+      -30,
+      0
+    ],
+    [
+      -22,
+      0
+    ],
+    [
+      -21,
+      -21
+    ],
+    [
+      -21,
+      21
+    ],
+    [
+      -20,
+      -8
+    ],
+    [
+      -20,
+      8
+    ],
+    [
+      -16,
+      -16
+    ],
+    [
+      -16,
+      16
+    ],
+    [
+      -14,
+      0
+    ],
+    [
+      -10,
+      -10
+    ],
+    [
+      -10,
+      10
+    ],
+    [
+      -8,
+      -20
+    ],
+    [
+      -8,
+      20
+    ],
+    [
+      0,
+      -30
+    ],
+    [
+      0,
+      -22
+    ],
+    [
+      0,
+      -14
+    ],
+    [
+      0,
+      14
+    ],
+    [
+      0,
+      22
+    ],
+    [
+      0,
+      30
+    ],
+    [
+      8,
+      -20
+    ],
+    [
+      8,
+      20
+    ],
+    [
+      10,
+      -10
+    ],
+    [
+      10,
+      10
+    ],
+    [
+      14,
+      0
+    ],
+    [
+      16,
+      -16
+    ],
+    [
+      16,
+      16
+    ],
+    [
+      20,
+      -8
+    ],
+    [
+      20,
+      8
+    ],
+    [
+      21,
+      -21
+    ],
+    [
+      21,
+      21
+    ],
+    [
+      22,
+      0
+    ],
+    [
+      30,
+      0
+    ]
+  ],
+  "postprocess": "Shared baseline-tuned settings and separately val-tuned settings; never tuned on test."
+}

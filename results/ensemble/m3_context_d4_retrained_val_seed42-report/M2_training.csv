@@ -1,0 +1,3 @@
+model,split,checkpoint,mode,sigma,lambda,run_name,best_epoch,seed,mF1
+G,val,/root/ocelot_ensemble/experiments/m3_context_d4_retrained_val_seed42/m2_training/m2/final_gaussian_s5_l0.9_ft-from-s6-l0.9/best.pt,gaussian,5.0,0.9,final_gaussian_s5_l0.9_ft-from-s6-l0.9,4,42,0.743
+GA,val,/root/ocelot_ensemble/experiments/m3_context_d4_retrained_val_seed42/m2_training/m2/final_ha_s6_l0.5_ft-from-s6-l0.9/best.pt,ha,6.0,0.5,final_ha_s6_l0.5_ft-from-s6-l0.9,5,42,0.7436

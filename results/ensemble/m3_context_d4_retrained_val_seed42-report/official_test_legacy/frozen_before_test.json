@@ -1,0 +1,67 @@
+{
+  "validation_run_sha256": "78cec0949e79d6b870bec84e4f03e259fae4a7c90e1ea357f9c1f13d2016fa6c",
+  "base_checkpoint_sha256": {
+    "G": "971745b587e21d09a6fa4a673bf70329b491b6b9dbbf22d27553d94e149c272e",
+    "GA": "c826b136ff398a970843ed1d540bf60d31595452f54805d8b52b5280eae0a4f6",
+    "M0": "cf446d10c3d0ff86475161912fb2de4eb7a529b604d67e2852f624561e0415a9",
+    "M1": "af5edb37e557696facd90d89fb3fdb53c4fc88a61ea3567e1e8d1146ab15e176",
+    "M1-1": "ed816aaa96764e6ace8595f8b13132e3bfa5946b2f27ff9635f6b4afe7b959bd"
+  },
+  "test_data_root": "/root/m2_overnight/assets/ocelot2023_v1.0.1",
+  "device": "cuda",
+  "selected_method": "pixel_mlp",
+  "validation_scores": {
+    "map_mean": 0.7192331650722785,
+    "pixel_mlp": 0.7214848891906176,
+    "local_aspp": 0.7131902571440387,
+    "local_aspp_cell_tissue": 0.72023536816119
+  },
+  "postprocess": {
+    "base:G": [
+      3.0,
+      7,
+      0.4
+    ],
+    "base:GA": [
+      3.0,
+      7,
+      0.4
+    ],
+    "base:M0": [
+      1.0,
+      7,
+      0.0
+    ],
+    "base:M1": [
+      1.0,
+      7,
+      0.0
+    ],
+    "base:M1-1": [
+      0.0,
+      7,
+      0.0
+    ],
+    "map_mean": [
+      3.0,
+      7,
+      0.4
+    ],
+    "pixel_mlp": [
+      3.0,
+      7,
+      0.4
+    ],
+    "local_aspp": [
+      3.0,
+      7,
+      0.4
+    ],
+    "local_aspp_cell_tissue": [
+      3.0,
+      3,
+      0.4
+    ]
+  },
+  "fusion_sha256": "7059155c7d08865c799b792fe67ec02d20d5d4416ecc14224a635fdcf94db2bf"
+}
