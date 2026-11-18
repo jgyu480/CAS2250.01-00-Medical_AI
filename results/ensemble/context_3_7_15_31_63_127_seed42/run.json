@@ -1,0 +1,27 @@
+{
+  "scales": [
+    3,
+    7,
+    15,
+    31,
+    63,
+    127
+  ],
+  "vector_size": 16,
+  "crop": 128,
+  "crops_per_image": 4,
+  "source_run_sha256": "78cec0949e79d6b870bec84e4f03e259fae4a7c90e1ea357f9c1f13d2016fa6c",
+  "epochs": 12,
+  "ae_epochs": 5,
+  "weight_radius": 0.1,
+  "device": "cuda",
+  "source_script_sha256": "63b5eacd6bd3044cac78a21cf0bcdfb4a5cb982dfc087d294b8415a7ffa7187e",
+  "torch": "2.3.1+cu121",
+  "methods": [
+    "tta_mean",
+    "pointwise",
+    "fixed",
+    "learned",
+    "ae"
+  ]
+}
