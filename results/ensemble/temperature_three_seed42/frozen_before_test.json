@@ -1,0 +1,86 @@
+{
+  "source_run_sha256": "78cec0949e79d6b870bec84e4f03e259fae4a7c90e1ea357f9c1f13d2016fa6c",
+  "epochs": 12,
+  "ae_epochs": 5,
+  "weight_radius": 0.1,
+  "device": "cuda",
+  "source_script_sha256": "63b5eacd6bd3044cac78a21cf0bcdfb4a5cb982dfc087d294b8415a7ffa7187e",
+  "torch": "2.3.1+cu121",
+  "methods": [
+    "tta_mean",
+    "pointwise",
+    "fixed",
+    "learned",
+    "ae"
+  ],
+  "selected_method": "pointwise",
+  "postprocess": {
+    "shared": {
+      "tta_mean": [
+        3.0,
+        7,
+        0.4
+      ],
+      "pointwise": [
+        3.0,
+        7,
+        0.4
+      ],
+      "fixed": [
+        3.0,
+        7,
+        0.4
+      ],
+      "learned": [
+        3.0,
+        7,
+        0.4
+      ],
+      "ae": [
+        3.0,
+        7,
+        0.4
+      ]
+    },
+    "per_method": {
+      "tta_mean": [
+        3.0,
+        7,
+        0.4
+      ],
+      "pointwise": [
+        3.0,
+        7,
+        0.4
+      ],
+      "fixed": [
+        3.0,
+        7,
+        0.4
+      ],
+      "learned": [
+        3.0,
+        7,
+        0.4
+      ],
+      "ae": [
+        3.0,
+        7,
+        0.4
+      ]
+    }
+  },
+  "base_sha256": {
+    "G": "971745b587e21d09a6fa4a673bf70329b491b6b9dbbf22d27553d94e149c272e",
+    "GA": "c826b136ff398a970843ed1d540bf60d31595452f54805d8b52b5280eae0a4f6",
+    "M0": "cf446d10c3d0ff86475161912fb2de4eb7a529b604d67e2852f624561e0415a9",
+    "M1": "af5edb37e557696facd90d89fb3fdb53c4fc88a61ea3567e1e8d1146ab15e176",
+    "M1-1": "ed816aaa96764e6ace8595f8b13132e3bfa5946b2f27ff9635f6b4afe7b959bd"
+  },
+  "gate_sha256": {
+    "pointwise": "2b78d53d84f2cec0ff05cb4383783d6cc86007194a3320ff17f7f89aa3094bb1",
+    "fixed": "c80e2c4ac435091c596445e61fa0397e01c8672a88d68ef8a917c3ab163558a2",
+    "learned": "8021994ede4f6dd6a742e8dd1e2dfecbd8244fe6c743474a924a314bdcbdb591",
+    "ae": "4370357f56e6963cddf233af3729da8712c644d2c0420e9ae6f50ca4b9b16246"
+  }
+}
