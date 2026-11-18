@@ -1,0 +1,5 @@
+method,max_initial_prediction_difference,parameters
+spatial_ft,0.0,29484
+scale_select,0.0,30648
+local_detail,0.0,52684
+disagreement,0.0,54888

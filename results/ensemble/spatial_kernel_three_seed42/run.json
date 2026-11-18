@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "source_run_sha256": "78cec0949e79d6b870bec84e4f03e259fae4a7c90e1ea357f9c1f13d2016fa6c",
+  "original_spatial_sha256": "29231c166d5b15ea5ca224c8a41368355f554c43ce13dd1d40bcbd2aeaac47b3",
+  "original_postprocess": {
+    "tta_mean": [
+      3.0,
+      7,
+      0.4
+    ],
+    "pointwise": [
+      3.0,
+      7,
+      0.4
+    ],
+    "softmax": [
+      3.0,
+      7,
+      0.4
+    ],
+    "pool": [
+      3.0,
+      7,
+      0.4
+    ],
+    "spatial": [
+      3.0,
+      5,
+      0.4
+    ],
+    "gain": [
+      3.0,
+      7,
+      0.4
+    ]
+  },
+  "script_sha256": "64e81135821c04925bea36bb245b1b43bb20339c4ccb11ed092b2545da61fb69",
+  "epochs": 12,
+  "learning_rate": 0.0001,
+  "optimizer": "AdamW",
+  "seed": 42,
+  "scales": [
+    3,
+    7,
+    15,
+    31,
+    63,
+    127
+  ],
+  "crop": 128,
+  "crops_per_image": 4,
+  "methods": [
+    "tta_mean",
+    "spatial",
+    "spatial_ft",
+    "scale_select",
+    "local_detail",
+    "disagreement"
+  ],
+  "test_enabled": true,
+  "prior_test_exposure": true,
+  "objective": "unchanged sampled weighted BCE to sigma6 Gaussian",
+  "initialization": "exact original spatial predictions"
+}

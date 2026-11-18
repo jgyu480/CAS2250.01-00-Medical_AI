@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "source_run_sha256": "78cec0949e79d6b870bec84e4f03e259fae4a7c90e1ea357f9c1f13d2016fa6c",
+  "original_spatial_sha256": "29231c166d5b15ea5ca224c8a41368355f554c43ce13dd1d40bcbd2aeaac47b3",
+  "original_postprocess": {
+    "tta_mean": [
+      3.0,
+      7,
+      0.4
+    ],
+    "pointwise": [
+      3.0,
+      7,
+      0.4
+    ],
+    "softmax": [
+      3.0,
+      7,
+      0.4
+    ],
+    "pool": [
+      3.0,
+      7,
+      0.4
+    ],
+    "spatial": [
+      3.0,
+      5,
+      0.4
+    ],
+    "gain": [
+      3.0,
+      7,
+      0.4
+    ]
+  },
+  "script_sha256": "64e81135821c04925bea36bb245b1b43bb20339c4ccb11ed092b2545da61fb69",
+  "epochs": 12,
+  "learning_rate": 0.0001,
+  "optimizer": "AdamW",
+  "seed": 42,
+  "scales": [
+    3,
+    7,
+    15,
+    31,
+    63,
+    127
+  ],
+  "crop": 128,
+  "crops_per_image": 4,
+  "methods": [
+    "tta_mean",
+    "spatial",
+    "spatial_ft",
+    "scale_select",
+    "local_detail",
+    "disagreement"
+  ],
+  "test_enabled": true,
+  "prior_test_exposure": true,
+  "objective": "unchanged sampled weighted BCE to sigma6 Gaussian",
+  "initialization": "exact original spatial predictions",
+  "selected_method": "tta_mean",
+  "postprocess": {
+    "shared": {
+      "tta_mean": [
+        3.0,
+        7,
+        0.4
+      ],
+      "spatial": [
+        3.0,
+        7,
+        0.4
+      ],
+      "spatial_ft": [
+        3.0,
+        7,
+        0.4
+      ],
+      "scale_select": [
+        3.0,
+        7,
+        0.4
+      ],
+      "local_detail": [
+        3.0,
+        7,
+        0.4
+      ],
+      "disagreement": [
+        3.0,
+        7,
+        0.4
+      ]
+    },
+    "per_method": {
+      "tta_mean": [
+        3.0,
+        7,
+        0.4
+      ],
+      "spatial": [
+        3.0,
+        5,
+        0.4
+      ],
+      "spatial_ft": [
+        3.0,
+        5,
+        0.4
+      ],
+      "scale_select": [
+        3.0,
+        7,
+        0.4
+      ],
+      "local_detail": [
+        3.0,
+        5,
+        0.4
+      ],
+      "disagreement": [
+        3.0,
+        5,
+        0.4
+      ]
+    }
+  },
+  "adapted_sha256": {
+    "spatial_ft": "6fe844de86bbf64e24402f283e23002b4dfe42848d1a841e790f3f95006e4dac",
+    "scale_select": "889ca7e5ae97ea9c9df272f6a50546862475d8882b76b924526474ee4f81a414",
+    "local_detail": "dce798a9ba1708fcf0c047a097b603ad5cccc9a61cc7d5fec636e91aeb3cc499",
+    "disagreement": "0c02f87f0c4027b741e1ecea7884f6d74952df5495a4d3e7add3ad49ed85ab45"
+  }
+}
