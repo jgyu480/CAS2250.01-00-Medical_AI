@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "source_run_sha256": "78cec0949e79d6b870bec84e4f03e259fae4a7c90e1ea357f9c1f13d2016fa6c",
+  "kernel_run_sha256": "ab798420e73500eb6cb7c298b1cca242e7d5e325b8c229f83885b65b5cc6af82",
+  "checkpoint_sha256": {
+    "spatial": "29231c166d5b15ea5ca224c8a41368355f554c43ce13dd1d40bcbd2aeaac47b3",
+    "spatial_ft": "6fe844de86bbf64e24402f283e23002b4dfe42848d1a841e790f3f95006e4dac",
+    "scale_select": "889ca7e5ae97ea9c9df272f6a50546862475d8882b76b924526474ee4f81a414",
+    "local_detail": "dce798a9ba1708fcf0c047a097b603ad5cccc9a61cc7d5fec636e91aeb3cc499",
+    "disagreement": "0c02f87f0c4027b741e1ecea7884f6d74952df5495a4d3e7add3ad49ed85ab45"
+  },
+  "script_sha256": "f4f7c95d906ce295b0162c1ea4d37a23043627252790ce641d689ca6017f37fd",
+  "methods": [
+    "tta_mean",
+    "spatial",
+    "spatial_ft",
+    "scale_select",
+    "local_detail",
+    "disagreement",
+    "spatial_d4",
+    "spatial_ft_d4",
+    "scale_select_d4",
+    "local_detail_d4",
+    "disagreement_d4"
+  ],
+  "test_enabled": true,
+  "inference": "base-model D4 cached maps, followed by joint spatial-gate D4 probability average",
+  "retraining": false,
+  "prior_test_exposure": true,
+  "tile_core": 128,
+  "halo": 63
+}

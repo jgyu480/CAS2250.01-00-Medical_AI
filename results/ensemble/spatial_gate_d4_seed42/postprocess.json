@@ -1,0 +1,116 @@
+{
+  "shared": {
+    "tta_mean": [
+      3.0,
+      7,
+      0.4
+    ],
+    "spatial": [
+      3.0,
+      7,
+      0.4
+    ],
+    "spatial_ft": [
+      3.0,
+      7,
+      0.4
+    ],
+    "scale_select": [
+      3.0,
+      7,
+      0.4
+    ],
+    "local_detail": [
+      3.0,
+      7,
+      0.4
+    ],
+    "disagreement": [
+      3.0,
+      7,
+      0.4
+    ],
+    "spatial_d4": [
+      3.0,
+      7,
+      0.4
+    ],
+    "spatial_ft_d4": [
+      3.0,
+      7,
+      0.4
+    ],
+    "scale_select_d4": [
+      3.0,
+      7,
+      0.4
+    ],
+    "local_detail_d4": [
+      3.0,
+      7,
+      0.4
+    ],
+    "disagreement_d4": [
+      3.0,
+      7,
+      0.4
+    ]
+  },
+  "per_method": {
+    "tta_mean": [
+      3.0,
+      7,
+      0.4
+    ],
+    "spatial": [
+      3.0,
+      5,
+      0.4
+    ],
+    "spatial_ft": [
+      3.0,
+      5,
+      0.4
+    ],
+    "scale_select": [
+      3.0,
+      7,
+      0.4
+    ],
+    "local_detail": [
+      3.0,
+      5,
+      0.4
+    ],
+    "disagreement": [
+      3.0,
+      5,
+      0.4
+    ],
+    "spatial_d4": [
+      3.0,
+      7,
+      0.4
+    ],
+    "spatial_ft_d4": [
+      3.0,
+      7,
+      0.4
+    ],
+    "scale_select_d4": [
+      3.0,
+      7,
+      0.4
+    ],
+    "local_detail_d4": [
+      3.0,
+      7,
+      0.4
+    ],
+    "disagreement_d4": [
+      3.0,
+      7,
+      0.4
+    ]
+  }
+}
