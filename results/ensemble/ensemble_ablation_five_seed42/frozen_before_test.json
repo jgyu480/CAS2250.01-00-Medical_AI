@@ -1,0 +1,111 @@
+{
+  "source_run_sha256": "78cec0949e79d6b870bec84e4f03e259fae4a7c90e1ea357f9c1f13d2016fa6c",
+  "script_sha256": "1b16383bc816114c00cba230f9116ed513d90c6bbadfa24aa90e724defb913a4",
+  "epochs": 12,
+  "seed": 42,
+  "methods": [
+    "tta_mean",
+    "pointwise",
+    "softmax",
+    "pool",
+    "spatial",
+    "gain"
+  ],
+  "scales": [
+    3,
+    7,
+    15,
+    31,
+    63,
+    127
+  ],
+  "crop": 128,
+  "crops_per_image": 4,
+  "crop_sampling": "uniform cores including image borders",
+  "routing_weight": 0.2,
+  "preserve_weight": 1.0,
+  "router_target": "local center-event BCE soft teacher; positives <=2px, negatives >=15px",
+  "test_enabled": true,
+  "prior_test_exposure": true,
+  "selected_method": "pointwise",
+  "postprocess": {
+    "shared": {
+      "tta_mean": [
+        3.0,
+        7,
+        0.4
+      ],
+      "pointwise": [
+        3.0,
+        7,
+        0.4
+      ],
+      "softmax": [
+        3.0,
+        7,
+        0.4
+      ],
+      "pool": [
+        3.0,
+        7,
+        0.4
+      ],
+      "spatial": [
+        3.0,
+        7,
+        0.4
+      ],
+      "gain": [
+        3.0,
+        7,
+        0.4
+      ]
+    },
+    "per_method": {
+      "tta_mean": [
+        3.0,
+        7,
+        0.4
+      ],
+      "pointwise": [
+        3.0,
+        7,
+        0.4
+      ],
+      "softmax": [
+        3.0,
+        7,
+        0.4
+      ],
+      "pool": [
+        3.0,
+        7,
+        0.4
+      ],
+      "spatial": [
+        3.0,
+        5,
+        0.4
+      ],
+      "gain": [
+        3.0,
+        7,
+        0.4
+      ]
+    }
+  },
+  "gate_sha256": {
+    "pointwise": "c076d2e992846decbb220e69f9f218087857e7c9c2714dfdb3c13507d8e34e4d",
+    "softmax": "24a2f9b563d676a19b70b7fd29a12572b5b6fad3430da7a9aae077a04b5335f8",
+    "pool": "9cc0841ea8969ae83346dcc12fb3dd7d219ec1ed0a456251284874cde2bb62fb",
+    "spatial": "29231c166d5b15ea5ca224c8a41368355f554c43ce13dd1d40bcbd2aeaac47b3",
+    "gain": "a10411705e5865f8e75cdc0f6a05f86b6b759a2fd301a23e8a0cd678985d1dc9"
+  },
+  "base_sha256": {
+    "G": "971745b587e21d09a6fa4a673bf70329b491b6b9dbbf22d27553d94e149c272e",
+    "GA": "c826b136ff398a970843ed1d540bf60d31595452f54805d8b52b5280eae0a4f6",
+    "M0": "cf446d10c3d0ff86475161912fb2de4eb7a529b604d67e2852f624561e0415a9",
+    "M1": "af5edb37e557696facd90d89fb3fdb53c4fc88a61ea3567e1e8d1146ab15e176",
+    "M1-1": "ed816aaa96764e6ace8595f8b13132e3bfa5946b2f27ff9635f6b4afe7b959bd"
+  }
+}

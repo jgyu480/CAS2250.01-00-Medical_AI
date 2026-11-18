@@ -1,0 +1,30 @@
+{
+  "source_run_sha256": "78cec0949e79d6b870bec84e4f03e259fae4a7c90e1ea357f9c1f13d2016fa6c",
+  "script_sha256": "1b16383bc816114c00cba230f9116ed513d90c6bbadfa24aa90e724defb913a4",
+  "epochs": 12,
+  "seed": 42,
+  "methods": [
+    "tta_mean",
+    "pointwise",
+    "softmax",
+    "pool",
+    "spatial",
+    "gain"
+  ],
+  "scales": [
+    3,
+    7,
+    15,
+    31,
+    63,
+    127
+  ],
+  "crop": 128,
+  "crops_per_image": 4,
+  "crop_sampling": "uniform cores including image borders",
+  "routing_weight": 0.2,
+  "preserve_weight": 1.0,
+  "router_target": "local center-event BCE soft teacher; positives <=2px, negatives >=15px",
+  "test_enabled": true,
+  "prior_test_exposure": true
+}
