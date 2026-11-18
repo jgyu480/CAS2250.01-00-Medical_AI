@@ -1,0 +1,95 @@
+{
+  "scales": [
+    8,
+    16,
+    32,
+    64,
+    128
+  ],
+  "vector_size": 16,
+  "feature_grid": 64,
+  "source_run_sha256": "78cec0949e79d6b870bec84e4f03e259fae4a7c90e1ea357f9c1f13d2016fa6c",
+  "epochs": 12,
+  "ae_epochs": 5,
+  "weight_radius": 0.1,
+  "device": "cuda",
+  "source_script_sha256": "63b5eacd6bd3044cac78a21cf0bcdfb4a5cb982dfc087d294b8415a7ffa7187e",
+  "torch": "2.3.1+cu121",
+  "methods": [
+    "tta_mean",
+    "pointwise",
+    "fixed",
+    "learned",
+    "ae"
+  ],
+  "selected_method": "pointwise",
+  "postprocess": {
+    "shared": {
+      "tta_mean": [
+        3.0,
+        7,
+        0.4
+      ],
+      "pointwise": [
+        3.0,
+        7,
+        0.4
+      ],
+      "fixed": [
+        3.0,
+        7,
+        0.4
+      ],
+      "learned": [
+        3.0,
+        7,
+        0.4
+      ],
+      "ae": [
+        3.0,
+        7,
+        0.4
+      ]
+    },
+    "per_method": {
+      "tta_mean": [
+        3.0,
+        7,
+        0.4
+      ],
+      "pointwise": [
+        3.0,
+        7,
+        0.4
+      ],
+      "fixed": [
+        3.0,
+        7,
+        0.4
+      ],
+      "learned": [
+        3.0,
+        7,
+        0.4
+      ],
+      "ae": [
+        3.0,
+        7,
+        0.4
+      ]
+    }
+  },
+  "base_sha256": {
+    "G": "971745b587e21d09a6fa4a673bf70329b491b6b9dbbf22d27553d94e149c272e",
+    "GA": "c826b136ff398a970843ed1d540bf60d31595452f54805d8b52b5280eae0a4f6",
+    "M0": "cf446d10c3d0ff86475161912fb2de4eb7a529b604d67e2852f624561e0415a9",
+    "M1": "af5edb37e557696facd90d89fb3fdb53c4fc88a61ea3567e1e8d1146ab15e176",
+    "M1-1": "ed816aaa96764e6ace8595f8b13132e3bfa5946b2f27ff9635f6b4afe7b959bd"
+  },
+  "gate_sha256": {
+    "pointwise": "2b78d53d84f2cec0ff05cb4383783d6cc86007194a3320ff17f7f89aa3094bb1",
+    "fixed": "86de5694a26cdc8d361b9f765a467e21601b4ec0bf4fc34a8944e040392361a4",
+    "learned": "0d23ee9e7cf4056bb444d6e31c969961f8cd55f8db0e76fc8c0059889d98a058",
+    "ae": "c612d5fd0628b0ed8e9693f8079cdda729f246a534626d83877e2b8f408747c3"
+  }
+}
