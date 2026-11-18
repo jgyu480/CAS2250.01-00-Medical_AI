@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "source_run_sha256": "78cec0949e79d6b870bec84e4f03e259fae4a7c90e1ea357f9c1f13d2016fa6c",
+  "prior_run_sha256": "25b75103bfdc5f41418b1cf6281742dd68199d6ec21e775a26707df25767ec83",
+  "implementation_sha256": "c73cdd3552da6cec67eebe59c385fe2a6a3e3ce1bd3e0de47bf62ab4d581b4d1",
+  "gate_sha256": {
+    "softmax": "24a2f9b563d676a19b70b7fd29a12572b5b6fad3430da7a9aae077a04b5335f8",
+    "spatial": "29231c166d5b15ea5ca224c8a41368355f554c43ce13dd1d40bcbd2aeaac47b3"
+  },
+  "epochs": 20,
+  "seed": 42,
+  "feature_dim": 235,
+  "proposal_pp": [
+    3.0,
+    3,
+    0.05
+  ],
+  "merge_radius": 3.0,
+  "matching_radius": 15.0,
+  "test_enabled": true,
+  "prior_test_exposure": true,
+  "feature_encoder": "frozen spatial RF3,7,15,31,63,127,cell16+tissue16 each"
+}

@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "source_run_sha256": "78cec0949e79d6b870bec84e4f03e259fae4a7c90e1ea357f9c1f13d2016fa6c",
+  "prior_run_sha256": "25b75103bfdc5f41418b1cf6281742dd68199d6ec21e775a26707df25767ec83",
+  "implementation_sha256": "c73cdd3552da6cec67eebe59c385fe2a6a3e3ce1bd3e0de47bf62ab4d581b4d1",
+  "gate_sha256": {
+    "softmax": "24a2f9b563d676a19b70b7fd29a12572b5b6fad3430da7a9aae077a04b5335f8",
+    "spatial": "29231c166d5b15ea5ca224c8a41368355f554c43ce13dd1d40bcbd2aeaac47b3"
+  },
+  "epochs": 20,
+  "seed": 42,
+  "feature_dim": 235,
+  "proposal_pp": [
+    3.0,
+    3,
+    0.05
+  ],
+  "merge_radius": 3.0,
+  "matching_radius": 15.0,
+  "test_enabled": true,
+  "prior_test_exposure": true,
+  "feature_encoder": "frozen spatial RF3,7,15,31,63,127,cell16+tissue16 each",
+  "selected_method": "tta_mean",
+  "postprocess": {
+    "verify": [
+      0.2,
+      0.95,
+      7
+    ],
+    "balanced": [
+      0.2,
+      0.4,
+      7
+    ],
+    "dual": [
+      0.2,
+      0.55,
+      7
+    ]
+  },
+  "baseline_postprocess": {
+    "tta_mean": [
+      3.0,
+      7,
+      0.4
+    ],
+    "softmax": [
+      3.0,
+      7,
+      0.4
+    ],
+    "spatial": [
+      3.0,
+      5,
+      0.4
+    ]
+  },
+  "verifier_sha256": {
+    "verify": "e2ecdaaafd1bae6d6a35cc89d577aa04f3b3b1bdef25e044f7cc3d5db4b3b71f",
+    "balanced": "566d9317ec687ce8440f2e40d3160c4d0b3efef3d32a030c324ffd0c580af94b",
+    "dual": "5b42cc93cf4217a136f28d6cae7b8412948571e84e757c16d0e2b23af7550b93"
+  }
+}
